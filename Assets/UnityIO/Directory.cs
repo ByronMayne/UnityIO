@@ -2,6 +2,7 @@
 using UnityIO.Interfaces;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace UnityIO.Classes
 {
@@ -58,8 +59,13 @@ namespace UnityIO.Classes
                     }
                     workingPath += IO.PATH_SPLITTER + paths[i];
                 }
+                directory = new Directory(workingPath);
             }
-            directory = new Directory(workingPath);
+            else
+            {
+                directory = new Directory(m_Path + IO.PATH_SPLITTER + directoryPath);
+            }
+       
             return directory;
         }
 

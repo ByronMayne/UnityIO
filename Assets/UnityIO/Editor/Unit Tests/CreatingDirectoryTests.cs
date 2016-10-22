@@ -28,4 +28,23 @@ public class CreatingDirectory
         Assert.True(IO.Root.DirectoryExists("CreateNestedDirectoryMultiStep/Folder One/Folder Two"));
         IO.Root.DeleteSubDirectory("CreateNestedDirectoryMultiStep");
     }
+
+    [Test]
+    public void CreateNestedPreExistingRoot()
+    {
+        // Create the root by itself. 
+        IO.Root.CreateDirectory("CreateNestedDirectoryMultiStep");
+        // Create it again with a child 
+        IO.Root.CreateDirectory("CreateNestedDirectoryMultiStep").CreateDirectory("MultiFolder_Temp");
+        // Check if the child exists at the root
+        bool failed = IO.Root.DirectoryExists("MultiFolder_Temp");
+        // Clean up the root folder
+        IO.Root["CreateNestedDirectoryMultiStep"].Delete();
+        // If the test failed this folder will exist so we want to cleanup 
+        IO.Root.IfDirectoryExists("CreateNestedDirectoryMultiStep").Delete();
+        // Fail or pass the test.
+        Assert.True(failed);
+    }
+
+
 }
