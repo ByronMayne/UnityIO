@@ -37,10 +37,12 @@ namespace UnityIO.Classes
         {
         }
 
-        public bool DirectoryExists(string directoryName)
+        public bool SubDirectoryExists(string directoryName)
         {
             return false;
         }
+
+
 
         public void Duplicate()
         {
@@ -95,7 +97,12 @@ namespace UnityIO.Classes
             return SHARED_INSTANCE;
         }
 
-        public IDirectory IfDirectoryExists(string name)
+        public IDirectory IfSubDirectoryExists(string name)
+        {
+            return SHARED_INSTANCE;
+        }
+
+        public IDirectory IfSubDirectoryDoesNotExist(string directoryName)
         {
             return SHARED_INSTANCE;
         }

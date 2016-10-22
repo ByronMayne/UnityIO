@@ -8,7 +8,7 @@ public class CreatingDirectory
     public void CreateRootLevelDirectory()
     {
         IO.Root.CreateDirectory("CreateRootLevelDirectory");
-        Assert.True(IO.Root.DirectoryExists("CreateRootLevelDirectory"));
+        Assert.True(IO.Root.SubDirectoryExists("CreateRootLevelDirectory"));
         IO.Root.DeleteSubDirectory("CreateRootLevelDirectory");
     }
 
@@ -16,7 +16,7 @@ public class CreatingDirectory
     public void CreateNestedDirectoryOneStep()
     {
         IO.Root.CreateDirectory("CreateNestedDirectoryOneStep/Folder One");
-        Assert.True(IO.Root.DirectoryExists("CreateNestedDirectoryOneStep/Folder One"));
+        Assert.True(IO.Root.SubDirectoryExists("CreateNestedDirectoryOneStep/Folder One"));
         IO.Root.DeleteSubDirectory("CreateNestedDirectoryOneStep");
     }
 
@@ -24,8 +24,8 @@ public class CreatingDirectory
     public void CreateNestedDirectoryMultiStep()
     {
         IO.Root.CreateDirectory("CreateNestedDirectoryMultiStep").CreateDirectory("Folder One").CreateDirectory("Folder Two");
-        Assert.True(IO.Root.DirectoryExists("CreateNestedDirectoryMultiStep/Folder One"));
-        Assert.True(IO.Root.DirectoryExists("CreateNestedDirectoryMultiStep/Folder One/Folder Two"));
+        Assert.True(IO.Root.SubDirectoryExists("CreateNestedDirectoryMultiStep/Folder One"));
+        Assert.True(IO.Root.SubDirectoryExists("CreateNestedDirectoryMultiStep/Folder One/Folder Two"));
         IO.Root.DeleteSubDirectory("CreateNestedDirectoryMultiStep");
     }
 
@@ -37,11 +37,11 @@ public class CreatingDirectory
         // Create it again with a child 
         IO.Root.CreateDirectory("CreateNestedDirectoryMultiStep").CreateDirectory("MultiFolder_Temp");
         // Check if the child exists at the root
-        bool failed = IO.Root.DirectoryExists("MultiFolder_Temp");
+        bool failed = IO.Root.SubDirectoryExists("MultiFolder_Temp");
         // Clean up the root folder
         IO.Root["CreateNestedDirectoryMultiStep"].Delete();
         // If the test failed this folder will exist so we want to cleanup 
-        IO.Root.IfDirectoryExists("CreateNestedDirectoryMultiStep").Delete();
+        IO.Root.IfSubDirectoryExists("CreateNestedDirectoryMultiStep").Delete();
         // Fail or pass the test.
         Assert.True(failed);
     }

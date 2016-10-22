@@ -12,7 +12,7 @@ namespace UnityIO.Interfaces
         void Rename(string newName);
 
         void DeleteSubDirectory(string directroyName);
-        bool DirectoryExists(string directoryName);
+        bool SubDirectoryExists(string directoryName);
 
         bool IsEmpty(bool assetsOnly);
 
@@ -21,7 +21,8 @@ namespace UnityIO.Interfaces
         IDirectory CreateDirectory(string name);
 
         // Conditionals 
-        IDirectory IfDirectoryExists(string name);
+        IDirectory IfSubDirectoryExists(string name);
+        IDirectory IfSubDirectoryDoesNotExist(string name);
         IFile IfFileExists(string name);
         IDirectory IfEmpty(bool assetsOnly);
         IDirectory IfNotEmpty(bool assetsOnly);

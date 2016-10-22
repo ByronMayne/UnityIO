@@ -5,7 +5,7 @@ using UnityIO.Classes;
 namespace UnityIO
 {
 
-    public class IO : MonoBehaviour
+    public class IO
     {
         public const char PATH_SPLITTER = '/';
 

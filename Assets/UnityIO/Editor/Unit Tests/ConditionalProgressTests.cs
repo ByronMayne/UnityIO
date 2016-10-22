@@ -10,17 +10,17 @@ public class ConditionalProgressTests
     public void ConditionFolderRoot()
     {
         // Only create Sub Directory if Conditional Progress exists.
-        IO.Root.IfDirectoryExists("Conditional Progress").CreateDirectory("Sub Directory");
+        IO.Root.IfSubDirectoryExists("Conditional Progress").CreateDirectory("Sub Directory");
         // It should not exists
-        Assert.False(IO.Root.DirectoryExists("Conditional Progress/Sub Directory"));
+        Assert.False(IO.Root.SubDirectoryExists("Conditional Progress/Sub Directory"));
         // Then really create it
         IO.Root.CreateDirectory("Conditional Progress");
         // Then try conditional again
-        IO.Root.IfDirectoryExists("Conditional Progress").CreateDirectory("Sub Directory");
+        IO.Root.IfSubDirectoryExists("Conditional Progress").CreateDirectory("Sub Directory");
         // It should not exists since we created the parent directory
-        Assert.True(IO.Root.DirectoryExists("Conditional Progress/Sub Directory"));
+        Assert.True(IO.Root.SubDirectoryExists("Conditional Progress/Sub Directory"));
         // Cleanup
-        IO.Root.IfDirectoryExists("Conditional Progress").Delete();
+        IO.Root.IfSubDirectoryExists("Conditional Progress").Delete();
     }
 
     [Test]
@@ -48,12 +48,15 @@ public class ConditionalProgressTests
         // Destroy it if it's empty (it's not).
         IO.Root["Conditional Empty"].IfEmpty(assetsOnly: false).Delete();
         // Check if it was deleted (it should not have been).
-        Assert.True(IO.Root.DirectoryExists("Conditional Empty"), "The folder should not have been deleted");
+        Assert.True(IO.Root.SubDirectoryExists("Conditional Empty"), "The folder should not have been deleted");
         // Delete the next level instead this should work.
         IO.Root["Conditional Empty/Sub Directory"].IfEmpty(assetsOnly: false).Delete();
-
         // Check if it was deleted (it should have been).
-        //Assert.False(IO.Root.DirectoryExists("Conditional Empty/Sub Directory"), "The folder should have been deleted");
+        bool directroyStillExists = IO.Root.SubDirectoryExists("Conditional Empty/Sub Directory");
+        // Clean up if the test failed
+        IO.Root["Conditional Empty"].Delete();
+        // Finish Test
+        Assert.False(directroyStillExists);
 
     }
 }

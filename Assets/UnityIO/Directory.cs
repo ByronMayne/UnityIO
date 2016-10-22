@@ -27,7 +27,7 @@ namespace UnityIO.Classes
             get
             {
                 IO.ValidatePath(directoryPath);
-                if (DirectoryExists(directoryPath))
+                if (SubDirectoryExists(directoryPath))
                 {
                     return new Directory(m_Path + IO.PATH_SPLITTER + directoryPath);
                 }
@@ -48,12 +48,12 @@ namespace UnityIO.Classes
         {
             string workingPath = m_Path;
             IDirectory directory = null;
-            if (!DirectoryExists(directoryPath))
+            if (!SubDirectoryExists(directoryPath))
             {
                 string[] paths = directoryPath.Split(IO.PATH_SPLITTER);
                 for (int i = 0; i < paths.Length; i++)
                 {
-                    if (!DirectoryExists(workingPath + IO.PATH_SPLITTER + paths[i]))
+                    if (!SubDirectoryExists(workingPath + IO.PATH_SPLITTER + paths[i]))
                     {
                         AssetDatabase.CreateFolder(workingPath, paths[i]);
                     }
@@ -74,7 +74,7 @@ namespace UnityIO.Classes
         /// </summary>
         public void Delete()
         {
-            FileUtil.DeleteFileOrDirectory(m_Path);
+            AssetDatabase.DeleteAsset(m_Path);
         }
 
         /// <summary>
@@ -141,11 +141,29 @@ namespace UnityIO.Classes
         /// </summary>
         /// <param name="directoryPath">The path to the directory you are trying to find.</param>
         /// <returns>The IDirectory class or a NullFile if ti does not exist.</returns>
-        public IDirectory IfDirectoryExists(string directoryPath)
+        public IDirectory IfSubDirectoryExists(string directoryPath)
         {
-            if (DirectoryExists(directoryPath))
+            if (SubDirectoryExists(directoryPath))
             {
                 return this[directoryPath];
+            }
+            else
+            {
+                return NullFile.SHARED_INSTANCE;
+            }
+        }
+
+        /// <summary>
+        /// If the directory does not exist this will return the current directory otherwise if it
+        /// does it will return a null file. 
+        /// </summary>
+        /// <param name="directoryPath">The path to the directory you are trying to find.</param>
+        /// <returns>This directory class or a NullFile if ti does exist.</returns>
+        public IDirectory IfSubDirectoryDoesNotExist(string directoryPath)
+        {
+            if (!SubDirectoryExists(directoryPath))
+            {
+                return this;
             }
             else
             {
@@ -164,7 +182,7 @@ namespace UnityIO.Classes
         /// </summary>
         /// <param name="directoryName">The directory you want to check if it exists.</param>
         /// <returns>True if it exists and false if it does not.</returns>
-        public bool DirectoryExists(string directoryPath)
+        public bool SubDirectoryExists(string directoryPath)
         {
             IO.ValidatePath(directoryPath);
             return AssetDatabase.IsValidFolder(m_Path + '/' + directoryPath);
@@ -175,7 +193,7 @@ namespace UnityIO.Classes
         /// or any of it's sub folder. 
         /// </summary>
         /// <param name="assetOnly">If this directory contains only other empty sub directories it will be considered empty otherwise it will not be.</param>
-        /// <returns>Ture if it's empty and false if it's not</returns>
+        /// <returns>true if it's empty and false if it's not</returns>
         public bool IsEmpty(bool assetOnly = false)
         {
             // This is the only way in Unity to check if a folder has anything.
