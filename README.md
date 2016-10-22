@@ -25,7 +25,7 @@ public void CreatingRootDirectory()
 	IO.Root.CreateDirectory("Favorite Animals");
 }
 ```
-```IO.Root``` is the ```/Assets``` folder at the root of your Unity project. In the example above we are asking UnityIO to create a new folder called Favorite Animales at ```Assets/Favorite Animales```. 
+```IO.Root``` is the ```/Assets``` folder at the root of your Unity project. In the example above we are asking UnityIO to create a new folder called Favorite Animals  at ```Assets/Favorite Animales```. 
 ``` csharp
 /// <summary>
 /// A few more ways to create folders
@@ -46,10 +46,10 @@ public void CreateNestedCatFolder()
     var catsFolder4 = IO.Root.CreateDirectory("Favorite Animals" + IO.PATH_SPLITTER + "Cats");
 }
 ```
-This code is doing the same above but it will also create a sub directory called Cats. When you want to create sub directories you have a few ways to do it. It all really depends how you want to do it but they all have the same result. If the code were to run above only two folders would be created and all of the variables would point to the same one.
+This code is doing the same above but it will also create a subdirectory called Cats. When you want to create subdirectories you have a few ways to do it. It all really depends how you want to do it but they all have the same result. If the code were to run above only two folders would be created and all of the variables would point to the same one.
 
 #### Notes
-* The paths <b>do not end</b> with a leading slash ```/```. Unity has a habbit of switching this up but UnityIO will throw a planned exception letting you know. 
+* The paths <b>do not end</b> with a leading slash ```/```. Unity has a habit of switching this up but UnityIO will throw a planned exception letting you know. 
 * All directories are split using the ```/``` character. You can use the constant ```IO.PATH_SPLITTER```.
 
 
@@ -57,7 +57,7 @@ This code is doing the same above but it will also create a sub directory called
 Well it turns out all our hard work we did was for nothing! Turns out you hate cats, don't worry I get it you are a monster. I will not judge lets destroy that directory.
 ```csharp
 /// <summary>
-/// Lets blow some things up
+/// Let's blow some things up
 /// </summary>
 public void Destroy()
 {
@@ -68,15 +68,15 @@ public void Destroy()
     IO.Root.DeleteSubDirectory("Favorite Animals/Cats");
 }
 ```
-As with creating folder there are more then way  to do things. The first example we are just finding our cats directory and tell it to kill itself with the ```Delete()``` function. The second way we are starting from the root and it will look for  the sub directroy at the path we sent in. The ```DeleteSubDirectory(string name)``` just calls ```Delete()``` on the folder behind the scenes. 
+As with creating folder there are more than way to do things. The first example we are just finding our cats directory and tell it to kill itself with the ```Delete()``` function. The second way we are starting from the root and it will look for  the subdirectory at the path we sent in. The ```DeleteSubDirectory(string name)``` just calls ```Delete()``` on the folder behind the scenes. 
 
 Take that cats!
 
-You might be asking what happens if you tell it to delete a directroy that does not exist.
+You might be asking what happens if you tell it to delete a directory  that does not exist.
 
 ```scharp
 /// <summary>
-/// Lets see some explosions
+/// This should do nothing.
 /// </summary>
 public void DeleteSomethingNotReal()
 {
@@ -108,7 +108,7 @@ public void EasyValidateBeforeDelete()
     IO.Root["Favorite Animals"].IfDirectoryExists("Dogs").Delete();
 }
 ```
-"Wait what does ```IfDirectoryExists()``` do?" Well I am glad you asked. One of the really cool features of UnityIO is conditionals. In this case if the directroy exists the function ```Delete()``` will be called on the Dogs directroy. If it does not exist the function will take no effect. 
+"Wait what does ```IfDirectoryExists()``` do?" Well I am glad you asked. One of the really cool features of UnityIO is conditionals. In this case if the directory exists the function ```Delete()``` will be called on the Dogs directory. If it does not exist the function will take no effect. 
 ```csharp
 /// <summary>
 /// Look at the length of that things!
@@ -118,7 +118,7 @@ public void ILikeChains()
     IO.Root["Favorite Animals"].IfDirectoryExists("Dogs").IfDirectoryExists("With Four Legs").IfDirectoryExists("Who stink").Delete();
 }
 ```
- In this case only the first folder exists so the first conditional will return a NullFile class which has all the same functions but none of them have any effect. So that way your code will execuate only as far as it can get. You don't have to worry about null checking since the code can't break if a file is missing. You have the power to chain as many of these as you want. 
+ In this case only the first folder exists so the first conditional will return a NullFile class which has all the same functions but none of them have any effect. So that way your code will execute only as far as it can get. You don't have to worry about null checking since the code can't break if a file is missing. You have the power to chain as many of these as you want. 
  ``` csharp
 /// <summary>
 /// Find, Create, and Destroy
@@ -130,4 +130,4 @@ public void CreateAndDestroy()
  ```
 
 #### Notes
-* You <b>CAN</b> delete your whole project with ```IO.Root.Delete()```. I don't suggest you do that. 
+* You can delete your whole project with ```IO.Root.Delete()```. I don't suggest you do that. 
