@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityIO.Interfaces;
 
 namespace UnityIO.Classes
 {
-    public class NullFile : IFile, IDirectory
+    public class NullFile : IDirectory, IFile
     {
         public static NullFile SHARED_INSTANCE = new NullFile();
 
@@ -30,22 +31,23 @@ namespace UnityIO.Classes
 
         public void Delete()
         {
-
         }
 
-        public void DeleteSubDirectory(string directoryPath)
+        public void DeleteSubDirectory(string directroyName)
         {
-
         }
 
-        public IFile Duplicate()
+        public bool DirectoryExists(string directoryName)
         {
-            return SHARED_INSTANCE;
+            return false;
         }
 
-        public IFile Duplicate(string newName)
+        public void Duplicate()
         {
-            return SHARED_INSTANCE;
+        }
+
+        public void Duplicate(string newName)
+        {
         }
 
         public IDirectory GetDirectory(string name)
@@ -98,19 +100,43 @@ namespace UnityIO.Classes
             return SHARED_INSTANCE;
         }
 
+        public IDirectory IfEmpty(bool assetsOnly)
+        {
+            return SHARED_INSTANCE;
+        }
+
+        public bool IsEmpty(bool assetsOnly)
+        {
+            return true;
+        }
+
         public IFile IfFileExists(string name)
         {
             return SHARED_INSTANCE;
         }
 
-        public void Rename(string name)
+        public IDirectory IfNotEmpty(bool assetsOnly)
+        {
+            return SHARED_INSTANCE;
+        }
+
+        public void Move(string newPath)
         {
 
         }
 
-        public bool DirectoryExists(string directoryName)
+        public void Rename(string newName)
         {
-            return false;
+        }
+
+        IFile IFile.Duplicate()
+        {
+            return SHARED_INSTANCE;
+        }
+
+        IFile IFile.Duplicate(string newName)
+        {
+            return SHARED_INSTANCE;
         }
     }
 }

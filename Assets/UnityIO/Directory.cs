@@ -143,7 +143,7 @@ namespace UnityIO.Classes
         /// <returns>The IDirectory class or a NullFile if ti does not exist.</returns>
         public IDirectory IfDirectoryExists(string directoryPath)
         {
-            if(DirectoryExists(directoryPath))
+            if (DirectoryExists(directoryPath))
             {
                 return this[directoryPath];
             }
@@ -170,6 +170,81 @@ namespace UnityIO.Classes
             return AssetDatabase.IsValidFolder(m_Path + '/' + directoryPath);
         }
 
+        /// <summary>
+        /// Checks this directory to see if any assets are contained inside of it
+        /// or any of it's sub folder. 
+        /// </summary>
+        /// <param name="assetOnly">If this directory contains only other empty sub directories it will be considered empty otherwise it will not be.</param>
+        /// <returns>Ture if it's empty and false if it's not</returns>
+        public bool IsEmpty(bool assetOnly = false)
+        {
+            // This is the only way in Unity to check if a folder has anything.
+            int assetCount = AssetDatabase.FindAssets(string.Empty, new string[] { m_Path }).Length;
 
+            if (!assetOnly)
+            {
+                assetCount += AssetDatabase.GetSubFolders(m_Path).Length;
+            }
+
+            return assetCount == 0;
+        }
+
+        public void Duplicate()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Duplicate(string newName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Move(string newPath)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Rename(string newName)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Returns this directory if it's empty otherwise it returns
+        /// a null directory which will then ignore all other commands. 
+        /// </summary>
+        /// <param name="assetsOnly">If false sub directories folders will not count as content inside the folder. If true a folder
+        /// just filled with empty folders will count as not being empty.</param>
+        /// <returns>This directory if it's not empty otherwise a null file directory.</returns>
+        public IDirectory IfEmpty(bool assetsOnly)
+        {
+            if(IsEmpty(assetsOnly))
+            {
+                return this;
+            }
+            else
+            {
+                return NullFile.SHARED_INSTANCE;
+            }
+        }
+
+        /// <summary>
+        /// Returns this directory if it's not empty otherwise it returns
+        /// a null directory which will then ignore all other commands. 
+        /// </summary>
+        /// <param name="assetsOnly">If false sub directories folders will not count as content inside the folder. If true a folder
+        /// just filled with empty folders will count as not being empty.</param>
+        /// <returns>This directory if it's not empty otherwise a null file directory.</returns>
+        public IDirectory IfNotEmpty(bool assetsOnly)
+        {
+            if (!IsEmpty(assetsOnly))
+            {
+                return this;
+            }
+            else
+            {
+                return NullFile.SHARED_INSTANCE;
+            }
+        }
     }
 }
