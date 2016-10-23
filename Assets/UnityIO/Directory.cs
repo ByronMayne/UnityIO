@@ -15,12 +15,19 @@ namespace UnityIO.Classes
     {
         private string m_Path;
 
-
+        /// <summary>
+        /// Gets the full path to this directory starting from the root of the 
+        /// Unity project. 
+        /// </summary>
         public string Path
         {
             get { return m_Path; }
         }
 
+        /// <summary>
+        /// Creates a new Directory objects.
+        /// </summary>
+        /// <param name="directoryPath"></param>
         public Directory(string directoryPath)
         {
             IO.ValidatePath(directoryPath);
