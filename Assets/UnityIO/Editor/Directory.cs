@@ -51,7 +51,7 @@ namespace UnityIO.Classes
                 }
                 else
                 {
-                    throw  new DirectoryNotFoundException("UnityUI: A directory was not found at " + directoryPath);
+                    throw  new DirectoryNotFoundException("UnityIO: A directory was not found at " + directoryPath);
                 }
             }
         }
