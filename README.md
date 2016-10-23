@@ -1,7 +1,8 @@
+ [![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/ByronMayne/UnityIO/blob/master/LICENSE)
 # Unity IO
 
 ### Description
-Unity IO is made to try to remove the pain of working with Unity's file system. For anyone who has done extended work has figured out Unity makes this a huge pain. All the functionaililty you need is spread across multiple classes including [FileUtil](https://docs.unity3d.com/ScriptReference/FileUtil.html), [AssetDatabase](https://docs.unity3d.com/ScriptReference/AssetDatabase.html), [Resources](https://docs.unity3d.com/ScriptReference/Resources.html), [File](https://msdn.microsoft.com/en-us/library/system.io.file(v=vs.110).aspx) ,[FileInfo](https://msdn.microsoft.com/en-us/library/system.io.fileinfo(v=vs.110).aspx), [Path](https://msdn.microsoft.com/en-us/library/system.io.path(v=vs.110).aspx), [Directroy](https://msdn.microsoft.com/en-us/library/system.io.directory(v=vs.110).aspx), [Directory Info](https://msdn.microsoft.com/en-us/library/system.io.directoryinfo(v=vs.110).aspx), ect. 
+Unity IO is made to try to remove the pain of working with Unity's file system. For anyone who has done extended work has figured out Unity makes this a huge pain. All the functionaililty you need is spread across multiple classes including [FileUtil](https://docs.unity3d.com/ScriptReference/FileUtil.html), [AssetDatabase](https://docs.unity3d.com/ScriptReference/AssetDatabase.html), [Resources](https://docs.unity3d.com/ScriptReference/Resources.html), [File](https://msdn.microsoft.com/en-us/library/system.io.file(v=vs.110).aspx), [FileInfo](https://msdn.microsoft.com/en-us/library/system.io.fileinfo(v=vs.110).aspx), [Path](https://msdn.microsoft.com/en-us/library/system.io.path(v=vs.110).aspx), [Directroy](https://msdn.microsoft.com/en-us/library/system.io.directory(v=vs.110).aspx), [Directory Info](https://msdn.microsoft.com/en-us/library/system.io.directoryinfo(v=vs.110).aspx), ect. 
 
 ### Goals
 
@@ -12,7 +13,7 @@ Unity IO is made to try to remove the pain of working with Unity's file system. 
 
 
 
-## The Basics
+## Directory Basics
 UnityIO works with the Unity asset path so all paths start from the ```Assets/``` folder. To start using UnityIO in your classes you must include the namespace ```UnityIO```
 
 ### Creating a Directory
@@ -131,3 +132,40 @@ public void CreateAndDestroy()
 
 #### Notes
 * You can delete your whole project with ```IO.Root.Delete()```. I don't suggest you do that. 
+
+### Renaming a Directory
+Sometimes there are cases where you want to rename you directory. To do this is pretty simple.
+```csharp
+/// <summary>
+/// Pick any name that is valid
+/// </summary>
+public void RenameDirectory()
+{
+    IO.Root["My Dir"].Rename("Super Dir");
+}
+```
+This is all you have to do just make sure you don't include any ```/``` in your name as they are already preserved. If a directory already exists with that name this function will throw an ```DirectroyAlreadyExistsException()``` so make sure you check before you try to create one.
+
+### Duplicate a Directory
+As with moving duplicate is just as easy.
+```CSHARP
+public void DuplicateADirectory()
+{
+    var cheeseDrive = IO.Root["Types of Cheese"];
+    // Creates a copy
+    cheeseDrive.Duplicate();
+    // Creates a copy with a set name
+    cheeseDrive.Duplicate("Other Types of Cheese");
+}
+```
+The ```cheeseDrive.Duplicate()``` function will create a new copy of the cheeseDrive and all it's contents. It will then rename that drive with a number on the end to make it unique. If you want more control you can just use the overloaded function to pick a valid name. If the name is already taken you well get an exception. 
+## File Basics
+
+### Deleting a File
+//TODO: 
+
+### Renaming a File
+//TODO: 
+
+### Moving a File
+//TODO: 
