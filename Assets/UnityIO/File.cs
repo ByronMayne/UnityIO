@@ -29,9 +29,13 @@ namespace UnityIO.Classes
             }
         }
 
+        /// <summary>
+        /// Delete this file from disk.
+        /// </summary>
         public void Delete()
         {
-            throw new System.NotImplementedException();
+            // Deletes the asset
+            AssetDatabase.DeleteAsset(m_Path);
         }
 
         public IFile Duplicate()

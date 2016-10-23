@@ -89,6 +89,20 @@ public class FileChangesTests
         Assert.IsNotNull(AssetDatabase.LoadAssetAtPath<GameObject>(m_WorkingDirectroy.Path + "/MoveTo/Plane.prefab"), "The renamed prefab could not be found");
     }
 
+    [Test]
+    [Description("Tests to make sure we can delete files.")]
+    public void DeleteFile()
+    {
+        // Create a prefab to delete. 
+        PrefabUtility.CreatePrefab(m_WorkingDirectroy.Path + "/Delete Me.prefab", GameObject.CreatePrimitive(PrimitiveType.Plane));
+        // Get our file
+        var deleteMeFile = m_WorkingDirectroy.GetFiles("*Delete Me*").FirstOrDefault();
+        // Delete it
+        deleteMeFile.Delete();
+        // Check to make sure the original item does not exist
+        Assert.IsNull(AssetDatabase.LoadAssetAtPath<GameObject>(m_WorkingDirectroy.Path + "/Delete Me.prefab"), "Our old prefab still exists");
+    }
+
 
 
     [TearDown]
