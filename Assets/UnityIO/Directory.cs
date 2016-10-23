@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using sIO = System.IO;
 using UnityIO.Exceptions;
+using UnityEditorInternal;
 
 namespace UnityIO.Classes
 {
@@ -300,7 +301,14 @@ namespace UnityIO.Classes
         /// </summary>
         public void Rename(string newName)
         {
-            if (!UnityEditorInternal.InternalEditorUtility.IsValidFileName(newName))
+            // Make sure we sent an argument.
+            if (string.IsNullOrEmpty(newName))
+            {
+                throw new System.ArgumentNullException("You can't send a empty or null string to rename an asset. Trying to rename " + m_Path);
+            }
+
+            // And it's a valid name./
+            if (!InternalEditorUtility.IsValidFileName(newName))
             {
                 throw new InvalidNameException("The name '" + newName + "' contains invalid characters");
             }

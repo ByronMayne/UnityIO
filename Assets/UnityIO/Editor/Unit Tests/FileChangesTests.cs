@@ -18,6 +18,7 @@ public class FileChangesTests
         // Create a prefab to work with.
         PrefabUtility.CreatePrefab(m_WorkingDirectroy.Path + "/Cube.prefab", GameObject.CreatePrimitive(PrimitiveType.Cube));
         PrefabUtility.CreatePrefab(m_WorkingDirectroy.Path + "/Cylinder.prefab", GameObject.CreatePrimitive(PrimitiveType.Cylinder));
+        PrefabUtility.CreatePrefab(m_WorkingDirectroy.Path + "/Plane.prefab", GameObject.CreatePrimitive(PrimitiveType.Plane));
     }
 
     [Test]
@@ -36,6 +37,22 @@ public class FileChangesTests
         Assert.IsNotNull(AssetDatabase.LoadAssetAtPath<GameObject>(secondCube.Path));
     }
 
+    [Test]
+    [Description("Tests to see if we can duplicate a file and give it a new name")]
+    public void DuplicateFileWithNewName()
+    {
+        // Get our file
+        IFile cube = m_WorkingDirectroy.GetFiles("*Cube*").FirstOrDefault();
+        // Should not be null;
+        Assert.IsNotInstanceOf<NullFile>(cube);
+        // Duplicate our prefab
+        var secondCube = cube.Duplicate("Super Box");
+        // Check if our first one still exists
+        Assert.IsNotNull(AssetDatabase.LoadAssetAtPath<GameObject>(m_WorkingDirectroy.Path + "/Cube.prefab"));
+        // And our second one is alive.
+        Assert.IsNotNull(AssetDatabase.LoadAssetAtPath<GameObject>(m_WorkingDirectroy.Path + "/Super Box.prefab"));
+    }
+
 
     [Test]
     [Description("Tests to see if a file can be renamed.")]
@@ -51,6 +68,25 @@ public class FileChangesTests
         Assert.IsNull(AssetDatabase.LoadAssetAtPath<GameObject>(m_WorkingDirectroy.Path + "/Cylinder.prefab"), "Our old prefab still exists");
         // Check if the rename happened.
         Assert.IsNotNull(AssetDatabase.LoadAssetAtPath<GameObject>(m_WorkingDirectroy.Path + "/Super Tube.prefab"), "The renamed prefab could not be found");
+    }
+
+
+    [Test]
+    [Description("Tests to see if a file can be moved.")]
+    public void MoveFile()
+    {
+        // Create directory to move stuff into.
+        var moveTo = m_WorkingDirectroy.CreateDirectory("MoveTo");
+        // Get our file
+        IFile cube = m_WorkingDirectroy.GetFiles("*Plane*").FirstOrDefault();
+        // Should not be null;
+        Assert.IsNotInstanceOf<NullFile>(cube);
+        // Duplicate our prefab
+        cube.Move(moveTo.Path);
+        // Check to make sure the original item does not exist
+        Assert.IsNull(AssetDatabase.LoadAssetAtPath<GameObject>(m_WorkingDirectroy.Path + "/Plane.prefab"), "Our old prefab still exists");
+        // Check if the rename happened.
+        Assert.IsNotNull(AssetDatabase.LoadAssetAtPath<GameObject>(m_WorkingDirectroy.Path + "/MoveTo/Plane.prefab"), "The renamed prefab could not be found");
     }
 
 

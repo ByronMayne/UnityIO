@@ -6,6 +6,7 @@ namespace UnityIO.Interfaces
     {
         void Delete();
         void Rename(string name);
+        void Move(string directroy);
         IFile Duplicate();
         IFile Duplicate(string newName);
         string Path { get; }

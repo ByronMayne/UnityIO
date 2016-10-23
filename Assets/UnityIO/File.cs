@@ -2,6 +2,8 @@
 using UnityEngine;
 using UnityEditor;
 using UnityIO.Exceptions;
+using sIO = System.IO;
+using UnityEditorInternal;
 
 namespace UnityIO.Classes
 {
@@ -37,14 +39,79 @@ namespace UnityIO.Classes
             // Get our path. 
             string copyDir = AssetDatabase.GenerateUniqueAssetPath(m_Path);
             // Copy our asset
+            AssetDatabase.CopyAsset(m_Path, copyDir);
+            // Return new IFile
+            return new File(copyDir);
+        }
+
+        /// <summary>
+        /// Creates a copy of this file with a new name. The new name should not contain the extension
+        /// that will be preserved automatically. 
+        /// </summary>
+        /// <param name="newName">The new name of the file (excluding the extension)</param>
+        /// <returns></returns>
+        public IFile Duplicate(string newName)
+        {
+            if(string.IsNullOrEmpty(newName))
+            {
+                throw new System.ArgumentNullException("You can't send a empty or null string to rename an asset. Trying to rename " + m_Path);
+            }
+            // Make sure we don't have an extension. 
+            if(!string.IsNullOrEmpty(sIO.Path.GetExtension(newName)))
+            {
+                throw new InvalidNameException("When you duplicate an asset it should not have an extension " + newName);
+            }
+            // Make sure it's a valid name. 
+            if (!InternalEditorUtility.IsValidFileName(newName))
+            {
+                throw new InvalidNameException("The name '" + newName + "' contains invalid characters");
+            }
+            // Get our current directory
+            string directory = System.IO.Path.GetDirectoryName(m_Path);
+            // and the extension
+            string extension = System.IO.Path.GetExtension(m_Path);
+            // Get our path. 
+            string copyDir = AssetDatabase.GenerateUniqueAssetPath(directory + "/" + newName + extension);
+            // Copy our asset
             Debug.Log(AssetDatabase.CopyAsset(m_Path, copyDir));
             // Return new IFile
             return new File(copyDir);
         }
 
-        public IFile Duplicate(string newName)
+        /// <summary>
+        /// Moves the files from it's current directory to another. 
+        /// </summary>
+        /// <param name="directroy">The directory you want to move it too</param>
+        public void Move(string targetDirectory)
         {
-            throw new System.NotImplementedException();
+            // Make sure we have a valid path
+            IO.ValidatePath(targetDirectory);
+            // And the directory exists
+            if(!AssetDatabase.IsValidFolder(targetDirectory))
+            {
+                throw new DirectoryNotFoundException("Unable to find the directory at " + targetDirectory);
+            }
+
+            // Get the current name of our file.
+            string name = System.IO.Path.GetFileName(m_Path);
+
+            // Append the name to the end. Move can't rename.
+            targetDirectory = targetDirectory + "/" + name;
+
+            // Check to see if there will be an error.
+            string error = AssetDatabase.ValidateMoveAsset(m_Path, targetDirectory);
+
+            // CHeck
+            if (!string.IsNullOrEmpty(error))
+            {
+                // We messed up.
+                throw new MoveException(error, m_Path, targetDirectory);
+            }
+            else
+            {
+                // Move it we are good to go.
+                AssetDatabase.MoveAsset(m_Path, targetDirectory);
+            }
         }
 
         /// <summary>
