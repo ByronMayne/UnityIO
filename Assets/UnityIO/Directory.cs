@@ -6,6 +6,7 @@ using Object = UnityEngine.Object;
 using System.Collections;
 using System.Collections.Generic;
 using sIO = System.IO;
+using UnityIO.Exceptions;
 
 namespace UnityIO.Classes
 {
@@ -42,7 +43,7 @@ namespace UnityIO.Classes
                 }
                 else
                 {
-                    throw new System.IO.DirectoryNotFoundException("UnityUI: A directory was not found at " + directoryPath);
+                    throw  new DirectoryNotFoundException("UnityUI: A directory was not found at " + directoryPath);
                 }
             }
         }
@@ -266,8 +267,25 @@ namespace UnityIO.Classes
         /// <param name="moveDirectroy">The directory you want to move too</param>
         public void Move(string moveDirectroy)
         {
-            string uniquePath = AssetDatabase.GenerateUniqueAssetPath(moveDirectroy);
-            Debug.LogError(AssetDatabase.MoveAsset(m_Path, uniquePath));
+            int start = moveDirectroy.LastIndexOf('/');
+            int length = moveDirectroy.Length - start;
+            string name = moveDirectroy.Substring(start, length);
+
+            if (!UnityEditorInternal.InternalEditorUtility.IsValidFileName(name))
+            {
+                throw new InvalidNameException("The name '" + name + "' contains invalid characters");
+            }
+
+            string error = AssetDatabase.ValidateMoveAsset(m_Path, moveDirectroy);
+
+            if(!string.IsNullOrEmpty(error))
+            {
+                throw new MoveException(error, m_Path, moveDirectroy);
+            }
+            else
+            {
+                AssetDatabase.MoveAsset(m_Path, moveDirectroy);
+            }
         }
 
         /// <summary>
@@ -275,7 +293,29 @@ namespace UnityIO.Classes
         /// </summary>
         public void Rename(string newName)
         {
-            AssetDatabase.RenameAsset(m_Path, newName);
+
+            if (!UnityEditorInternal.InternalEditorUtility.IsValidFileName(newName))
+            {
+                throw new InvalidNameException("The name '" + newName + "' contains invalid characters");
+            }
+
+            if (newName.Contains("/"))
+            {
+                throw new RenameException("Rename can't be used to change a files location use Move(string newPath) instead.", m_Path, newName);
+            }
+
+            int slashIndex = m_Path.LastIndexOf('/') + 1;
+            string subPath = m_Path.Substring(0, slashIndex);
+            string newPath = subPath + newName;
+
+            Object preExistingAsset = AssetDatabase.LoadAssetAtPath<Object>(newPath);
+
+            if(preExistingAsset != null)
+            {
+                throw new DirectroyAlreadyExistsException("Rename can't be completed since an asset already exists with that name at path " + newPath);
+            }
+
+            Debug.Log(AssetDatabase.RenameAsset(m_Path, newName));
         }
 
         /// <summary>

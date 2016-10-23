@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using UnityEditor;
 using UnityIO;
+using UnityIO.Exceptions;
 
 public class DirectoryChangesTests
 {
@@ -45,9 +46,8 @@ public class DirectoryChangesTests
     }
 
     [Test]
-    [Repeat(2)]
     [Description("Checks to see if a directory can be renamed")]
-    public void RenameTest()
+    public void Rename()
     {
         // Create a folder
         var newFolder = IO.Root.CreateDirectory("RNT");
@@ -61,6 +61,94 @@ public class DirectoryChangesTests
         Assert.True(IO.Root.SubDirectoryExists("RNT Renamed"), "The original folder should not exist anymore");
     }
 
+    [Test]
+    [ExpectedException(ExpectedException = typeof(DirectroyAlreadyExistsException))]
+    [Description("Checks to see if an exception is thrown when we try to rename a directory and one already exists with that name")]
+    public void RenameWithConflict()
+    {
+        // Create a folder
+        var rwc = IO.Root.CreateDirectory("RWC");
+        // Create a second one
+        var rwc2 = IO.Root.CreateDirectory("RWC2");
+        // Rename the second one to cause an exception since that directory already exists.
+        rwc2.Rename("RWC");
+    }
+
+    [Test]
+    [Sequential]
+    [Description("Checks to see if an exception is thrown when we try to rename a directory and the name has invalid characters.")]
+    public void RenameWithInvalidName([Values("/", "\\", "<", ">", ":", "|", "\"")] string charactersToTest)
+    {
+        // The exception that was thrown.
+        System.Exception thorwnException = null;
+        // Create a working directory
+        var rwc = IO.Root.CreateDirectory("RWIN");
+        // Create a file to rename
+        var newDir = rwc.CreateDirectory("Awesome");
+        // Rename it with invalid characters.
+        try
+        {
+            newDir.Rename(charactersToTest);
+        }
+        catch (System.Exception e)
+        {
+            thorwnException = e;
+        }
+
+        if (thorwnException is InvalidNameException)
+        {
+            Assert.Pass("The correct exception was thrown for the invalid character '" + charactersToTest + "'.");
+        }
+        else
+        {
+            if(thorwnException != null)
+            {
+                Assert.Fail("The expected exception was not captured for the invalid character '" + charactersToTest + "'. The Exception thrown was " + thorwnException.ToString());
+            }
+            else
+            {
+                Assert.Fail("No exception was thrown for invalid character '" + charactersToTest + "'");
+            }
+        }
+    }
+
+    [Test]
+    [Sequential]
+    [Description("Checks to see if an exception is thrown when we try to rename a directory and the name has invalid characters.")]
+    public void MoveWithInvalidName([Values("/", "\\", "<", ">", ":", "|", "\"")] string charactersToTest)
+    {
+        // The exception that was thrown.
+        System.Exception thorwnException = null;
+        // Create a working directory
+        var rwc = IO.Root.CreateDirectory("RWIN");
+        // Create a file to rename
+        var newDir = rwc.CreateDirectory("Awesome");
+        // Rename it with invalid characters.
+        try
+        {
+            newDir.Move(rwc.Path + "/" + charactersToTest);
+        }
+        catch (System.Exception e)
+        {
+            thorwnException = e;
+        }
+
+        if (thorwnException is InvalidNameException)
+        {
+            Assert.Pass("The correct exception was thrown for the invalid character '" + charactersToTest + "'.");
+        }
+        else
+        {
+            if (thorwnException != null)
+            {
+                Assert.Fail("The expected exception was not captured for the invalid character '" + charactersToTest + "'. The Exception thrown was " + thorwnException.ToString());
+            }
+            else
+            {
+                Assert.Fail("No exception was thrown for invalid character '" + charactersToTest + "'");
+            }
+        }
+    }
 
 
 
@@ -71,7 +159,10 @@ public class DirectoryChangesTests
         IO.Root.IfSubDirectoryExists("DD 1").Delete();
         IO.Root.IfSubDirectoryExists("DDWN").Delete();
         IO.Root.IfSubDirectoryExists("New DDWN").Delete();
-        //IO.Root.IfSubDirectoryExists("RNT").Delete();
-        //IO.Root.IfSubDirectoryExists("RNT Renamed").Delete();
+        IO.Root.IfSubDirectoryExists("RNT").Delete();
+        IO.Root.IfSubDirectoryExists("RNT Renamed").Delete();
+        IO.Root.IfSubDirectoryExists("RWC").Delete();
+        IO.Root.IfSubDirectoryExists("RWC2").Delete();
+        IO.Root.IfSubDirectoryExists("RWIN").Delete();
     }
 }
