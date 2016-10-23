@@ -23,7 +23,7 @@ GameObject:
   - 135: {fileID: 135000012790499214}
   - 23: {fileID: 23000010649922698}
   m_Layer: 0
-  m_Name: Sphere
+  m_Name: Misc Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

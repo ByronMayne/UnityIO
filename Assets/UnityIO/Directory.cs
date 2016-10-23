@@ -6,16 +6,9 @@ using Object = UnityEngine.Object;
 using System.Collections;
 using System.Collections.Generic;
 using sIO = System.IO;
+
 namespace UnityIO.Classes
 {
-
-
-    public interface IFileIterator
-    {
-        bool Next(bool enterSubDirectories);
-    }
-
-
     public class Directory : IDirectory
     {
         private string m_Path;
@@ -102,11 +95,6 @@ namespace UnityIO.Classes
         {
             IDirectory directoryToDelete = this[directroyName];
             directoryToDelete.Delete();
-        }
-
-        public IDirectory GetDirectory(string name)
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -251,24 +239,43 @@ namespace UnityIO.Classes
             return assetCount == 0;
         }
 
+        /// <summary>
+        /// Duplicates the current directory in the same place but gives it a unique
+        /// name by adding an incrementing number at the end. 
+        /// </summary>
         public void Duplicate()
         {
-            throw new NotImplementedException();
+            string copyDir = AssetDatabase.GenerateUniqueAssetPath(m_Path);
+            AssetDatabase.CopyAsset(m_Path, copyDir);
         }
 
-        public void Duplicate(string newName)
+        /// <summary>
+        /// Duplicates a directory and renames it. The new name is the full name
+        /// mapped from the root of the assets folder.
+        /// </summary>
+        public void Duplicate(string copyDirectroy)
         {
-            throw new NotImplementedException();
+            string uniquePath = AssetDatabase.GenerateUniqueAssetPath(copyDirectroy);
+            AssetDatabase.CopyAsset(m_Path, uniquePath);
         }
 
-        public void Move(string newPath)
+        /// <summary>
+        /// Moves a directory from one path to another. If a directory of the 
+        /// same name already exists there it will give it a unique name. 
+        /// </summary>
+        /// <param name="moveDirectroy">The directory you want to move too</param>
+        public void Move(string moveDirectroy)
         {
-            throw new NotImplementedException();
+            string uniquePath = AssetDatabase.GenerateUniqueAssetPath(moveDirectroy);
+            Debug.LogError(AssetDatabase.MoveAsset(m_Path, uniquePath));
         }
 
+        /// <summary>
+        /// Renames our directory to the name of our choice.
+        /// </summary>
         public void Rename(string newName)
         {
-            throw new NotImplementedException();
+            AssetDatabase.RenameAsset(m_Path, newName);
         }
 
         /// <summary>

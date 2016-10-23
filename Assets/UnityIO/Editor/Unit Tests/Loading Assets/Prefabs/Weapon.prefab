@@ -23,7 +23,7 @@ GameObject:
   - 65: {fileID: 65000013194829368}
   - 23: {fileID: 23000010245363816}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

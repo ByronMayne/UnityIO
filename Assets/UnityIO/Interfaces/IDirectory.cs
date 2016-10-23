@@ -20,7 +20,6 @@ namespace UnityIO.Interfaces
         bool IsEmpty(bool assetsOnly);
 
         IDirectory this[string name] { get; }
-        IDirectory GetDirectory(string name);
         IDirectory CreateDirectory(string name);
 
 
