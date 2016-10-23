@@ -3,12 +3,28 @@ using UnityIO.Interfaces;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
-
+using System.Collections;
+using System.Collections.Generic;
+using sIO = System.IO;
 namespace UnityIO.Classes
 {
+
+
+    public interface IFileIterator
+    {
+        bool Next(bool enterSubDirectories);
+    }
+
+
     public class Directory : IDirectory
     {
         private string m_Path;
+
+
+        public string Path
+        {
+            get { return m_Path; }
+        }
 
         public Directory(string directoryPath)
         {
@@ -93,44 +109,72 @@ namespace UnityIO.Classes
             throw new NotImplementedException();
         }
 
-        public IFile GetFiles()
+        /// <summary>
+        /// Our internal function which is used by all of the GetFilesFunctions. Used to search
+        /// for files in the current directory. 
+        /// </summary>
+        /// <param name="filter">Which filter should be used to search</param>
+        /// <param name="recursive">If we should also search sub directoires.</param>
+        /// <returns></returns>
+        private IFiles GetFiles_Internal(string filter, bool recursive)
         {
-            throw new NotImplementedException();
+            sIO.SearchOption options;
+            if (recursive)
+            {
+                options = sIO.SearchOption.AllDirectories;
+            }
+            else
+            {
+                options = sIO.SearchOption.TopDirectoryOnly;
+            }
+
+            string systemPath = Application.dataPath.Replace("Assets", m_Path);
+
+            IFiles iFiles = new Files();
+
+            string[] serachResult = sIO.Directory.GetFiles(systemPath, filter, options);
+            for (int i = 0; i < serachResult.Length; i++)
+            {
+                if (!serachResult[i].EndsWith(".meta"))
+                {
+                    string unityPath = FileUtil.GetProjectRelativePath(serachResult[i]);
+                    iFiles.Add(new File(unityPath));
+                }
+            }
+
+            return iFiles;
         }
 
-        public IFile GetFiles(string filter)
+        /// <summary>
+        /// Gets all the Unity files that are at the top level of this directory.
+        /// </summary>
+        public IFiles GetFiles()
         {
-            throw new NotImplementedException();
+            return GetFiles_Internal("*", recursive:false);
         }
 
-        public IFile GetFiles(bool recursive)
+        /// <summary>
+        /// Gets all the Unity files that are at the top level of this directory with a filter.
+        /// </summary>
+        public IFiles GetFiles(string filter)
         {
-            throw new NotImplementedException();
+            return GetFiles_Internal(filter, recursive:false);
         }
 
-        public IFile GetFiles(string filter, bool recursive)
+        /// <summary>
+        /// Gets all the Unity files that are in this directory with an option to look recessively.
+        /// </summary>
+        public IFiles GetFiles(bool recursive)
         {
-            throw new NotImplementedException();
+            return GetFiles_Internal("*", recursive);
         }
 
-        public IFile GetFiles<T>() where T : UnityEngine.Object
+        /// <summary>
+        /// Gets all the Unity files that are in this directory with an option to look recessively with a filter.
+        /// </summary>
+        public IFiles GetFiles(string filter, bool recursive)
         {
-            return NullFile.SHARED_INSTANCE;
-        }
-
-        public IFile GetFiles<T>(string fileter) where T : UnityEngine.Object
-        {
-            return NullFile.SHARED_INSTANCE;
-        }
-
-        public IFile GetFiles<T>(bool recursive) where T : UnityEngine.Object
-        {
-            return NullFile.SHARED_INSTANCE;
-        }
-
-        public IFile GetFiles<T>(string filter, bool recursive)
-        {
-            return NullFile.SHARED_INSTANCE;
+            return GetFiles_Internal(filter, recursive);
         }
 
         /// <summary>
@@ -262,6 +306,34 @@ namespace UnityIO.Classes
             else
             {
                 return NullFile.SHARED_INSTANCE;
+            }
+        }
+
+        /// <summary>
+        /// Loops over our directory recessively. 
+        /// </summary>
+        IEnumerator<IDirectory> IEnumerable<IDirectory>.GetEnumerator()
+        {
+            string[] subFolder = AssetDatabase.GetSubFolders(m_Path);
+            yield return this;
+            for (int i = 0; i < subFolder.Length; i++)
+            {
+                IEnumerable<IDirectory> enumerable = new Directory(subFolder[i]);
+                IEnumerator<IDirectory> enumerator = enumerable.GetEnumerator();
+                while (enumerator.MoveNext())
+                {
+                    yield return enumerator.Current;
+                }
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            string[] subFolder = AssetDatabase.GetSubFolders(m_Path);
+
+            for (int i = 0; i < subFolder.Length; i++)
+            {
+                yield return new Directory(subFolder[i]);
             }
         }
     }

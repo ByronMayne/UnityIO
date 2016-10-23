@@ -1,20 +1,28 @@
 ﻿using UnityIO.Interfaces;
 using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
 
 namespace UnityIO.Classes
 {
-    public class Files : List<File>
+    public class Files : List<File>, IFiles
     {
-        public File FirstOrDefault()
+        /// <summary>
+        /// Returns a list of all assets contained within that
+        /// are of the type T.
+        /// </summary>
+        public List<T> LoadAllofType<T>() where T : Object
         {
-            if (Count > 0)
+            List<T> result = new List<T>();
+            for (int i = 0; i < Count; i++)
             {
-                return this[0];
+                T loadedObj = this[i].LoadAsset<T>();
+                if (loadedObj != null)
+                {
+                    result.Add(loadedObj);
+                }
             }
-            else
-            {
-                return null;
-            }
+            return result;
         }
     }
 }

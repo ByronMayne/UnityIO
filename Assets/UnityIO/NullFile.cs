@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityIO.Interfaces;
 
@@ -7,6 +9,11 @@ namespace UnityIO.Classes
     public class NullFile : IDirectory, IFile
     {
         public static NullFile SHARED_INSTANCE = new NullFile();
+
+        public string Path
+        {
+            get { return "Null"; }
+        }
 
         public IDirectory this[string name]
         {
@@ -57,44 +64,44 @@ namespace UnityIO.Classes
             return SHARED_INSTANCE;
         }
 
-        public IFile GetFiles()
+        public IFiles GetFiles()
         {
-            return SHARED_INSTANCE;
+            throw new NotImplementedException();
         }
 
-        public IFile GetFiles(string filter)
+        public IFiles GetFiles(string filter)
         {
-            return SHARED_INSTANCE;
+            throw new NotImplementedException();
         }
 
-        public IFile GetFiles(bool recursive)
+        public IFiles GetFiles(bool recursive)
         {
-            return SHARED_INSTANCE;
+            throw new NotImplementedException();
         }
 
-        public IFile GetFiles(string filter, bool recursive)
+        public IFiles GetFiles(string filter, bool recursive)
         {
-            return SHARED_INSTANCE;
+            throw new NotImplementedException();
         }
 
-        public IFile GetFiles<T>() where T : UnityEngine.Object
+        public IFiles GetFiles<T>() where T : UnityEngine.Object
         {
-            return SHARED_INSTANCE;
+            throw new NotImplementedException();
         }
 
-        public IFile GetFiles<T>(string filter) where T : UnityEngine.Object
+        public IFiles GetFiles<T>(string filter) where T : UnityEngine.Object
         {
-            return SHARED_INSTANCE;
+            throw new NotImplementedException();
         }
 
-        public IFile GetFiles<T>(bool recursive) where T : UnityEngine.Object
+        public IFiles GetFiles<T>(bool recursive) where T : UnityEngine.Object
         {
-            return SHARED_INSTANCE;
+            throw new NotImplementedException();
         }
 
-        public IFile GetFiles<T>(string filter, bool recursive)
+        public IFiles GetFiles<T>(string filter, bool recursive)
         {
-            return SHARED_INSTANCE;
+            throw new NotImplementedException();
         }
 
         public IDirectory IfSubDirectoryExists(string name)
@@ -144,6 +151,26 @@ namespace UnityIO.Classes
         IFile IFile.Duplicate(string newName)
         {
             return SHARED_INSTANCE;
+        }
+
+        public IEnumerator<IDirectory> GetEnumerator()
+        {
+            yield return null;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            yield return null;
+        }
+
+        public UnityEngine.Object LoadAsset()
+        {
+            throw new NotImplementedException();
+        }
+
+        public T LoadAsset<T>() where T : UnityEngine.Object
+        {
+            throw new NotImplementedException();
         }
     }
 }

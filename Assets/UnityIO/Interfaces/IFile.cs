@@ -9,5 +9,7 @@ namespace UnityIO.Interfaces
         IFile Duplicate();
         IFile Duplicate(string newName);
         IDirectory Directory { get; }
+        Object LoadAsset();
+        T LoadAsset<T>() where T : Object;
     }
 }

@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 namespace UnityIO.Interfaces
 {
-    public interface IDirectory
+    public interface IDirectory : IEnumerable<IDirectory>
     {
+        string Path { get; }
+
         void Delete();
         void Duplicate();
         void Duplicate(string newName);
@@ -20,6 +23,7 @@ namespace UnityIO.Interfaces
         IDirectory GetDirectory(string name);
         IDirectory CreateDirectory(string name);
 
+
         // Conditionals 
         IDirectory IfSubDirectoryExists(string name);
         IDirectory IfSubDirectoryDoesNotExist(string name);
@@ -27,14 +31,9 @@ namespace UnityIO.Interfaces
         IDirectory IfEmpty(bool assetsOnly);
         IDirectory IfNotEmpty(bool assetsOnly);
 
-        IFile GetFiles();
-        IFile GetFiles(bool recursive);
-        IFile GetFiles(string filter);
-        IFile GetFiles(string filter, bool recursive);
-        IFile GetFiles<T>() where T : UnityEngine.Object;
-        IFile GetFiles<T>(bool recursive) where T : UnityEngine.Object;
-        IFile GetFiles<T>(string filter) where T : UnityEngine.Object;
-        IFile GetFiles<T>(string filter, bool recursive);
- 
+        IFiles GetFiles();
+        IFiles GetFiles(bool recursive);
+        IFiles GetFiles(string filter);
+        IFiles GetFiles(string filter, bool recursive);
     }
 }
