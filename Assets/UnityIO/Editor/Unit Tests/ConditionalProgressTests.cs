@@ -57,6 +57,23 @@ public class ConditionalProgressTests
         IO.Root["Conditional Empty"].Delete();
         // Finish Test
         Assert.False(directroyStillExists);
+    }
 
+    [Test]
+    [Description("Tests to see if we can cancel execution if a file does not exist. Tests both loading a valid fail and an invalid one.")]
+    public void IfFileExists()
+    {
+        // Get our testingDir
+        var testingDir = GetFilesTests.SetupTest();
+        // Load our asset only if it exists.
+        GameObject loadedAsset = testingDir.IfFileExists("Misc Prefab").LoadAsset<GameObject>();
+        // Our Asset should exist
+        Assert.IsNotNull(loadedAsset, "We should have been able to load this asset");
+        // Log output
+        System.Console.WriteLine("Loaded " + loadedAsset.name + " successfully");
+        // Load an invalid object.
+        GameObject invalidObject = testingDir.IfFileExists("Fake Prefab").LoadAsset<GameObject>();
+        // It should be null
+        Assert.IsNull(invalidObject, "We should not have been able to load the asset named.");
     }
 }

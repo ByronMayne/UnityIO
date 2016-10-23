@@ -48,7 +48,7 @@ public class Documention
     public void Destroy()
     {
         // Get our directory and nuke it
-        IO.Root["Favorite Animals"].GetDirectory("Cats").Delete();
+        IO.Root["Favorite Animals"]["Cats"].Delete();
 
         // Delete our cats folder. 
         IO.Root.DeleteSubDirectory("Favorite Animals/Cats");
@@ -59,7 +59,7 @@ public class Documention
     /// </summary>
     public void DeleteSomethingNotReal()
     {
-        IO.Root["Favorite Animals"].GetDirectory("Dogs").Delete(); // Does not exist
+        IO.Root["Favorite Animals"]["Dogs"].Delete(); // Does not exist
     }
 
     /// <summary>

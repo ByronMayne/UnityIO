@@ -6,6 +6,9 @@ namespace UnityIO.Interfaces
 {
     public interface IFiles : IList<File>
     {
-        List<T> LoadAllofType<T>() where T : Object;
+        IList<T> LoadAllofType<T>() where T : Object;
+        IFile FirstOrDefault();
     }
+
+
 }

@@ -204,9 +204,16 @@ namespace UnityIO.Classes
             }
         }
 
-        public IFile IfFileExists(string name)
+        /// <summary>
+        /// Finds if this files exists in this directory. 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public IFile IfFileExists(string fileName)
         {
-            return NullFile.SHARED_INSTANCE;
+            // Get all files with our filter
+            IFile file = GetFiles(filter:"*" + fileName + "*", recursive: false).FirstOrDefault();
+            return file;
         }
 
         /// <summary>
@@ -293,7 +300,6 @@ namespace UnityIO.Classes
         /// </summary>
         public void Rename(string newName)
         {
-
             if (!UnityEditorInternal.InternalEditorUtility.IsValidFileName(newName))
             {
                 throw new InvalidNameException("The name '" + newName + "' contains invalid characters");
@@ -315,7 +321,7 @@ namespace UnityIO.Classes
                 throw new DirectroyAlreadyExistsException("Rename can't be completed since an asset already exists with that name at path " + newPath);
             }
 
-            Debug.Log(AssetDatabase.RenameAsset(m_Path, newName));
+            AssetDatabase.RenameAsset(m_Path, newName);
         }
 
         /// <summary>

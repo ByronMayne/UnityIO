@@ -8,6 +8,7 @@ namespace UnityIO.Interfaces
         void Rename(string name);
         IFile Duplicate();
         IFile Duplicate(string newName);
+        string Path { get; }
         IDirectory Directory { get; }
         Object LoadAsset();
         T LoadAsset<T>() where T : Object;

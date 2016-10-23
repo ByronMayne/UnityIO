@@ -1,6 +1,5 @@
 ﻿using UnityIO.Interfaces;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 namespace UnityIO.Classes
@@ -11,7 +10,7 @@ namespace UnityIO.Classes
         /// Returns a list of all assets contained within that
         /// are of the type T.
         /// </summary>
-        public List<T> LoadAllofType<T>() where T : Object
+        public IList<T> LoadAllofType<T>() where T : Object
         {
             List<T> result = new List<T>();
             for (int i = 0; i < Count; i++)
@@ -23,6 +22,22 @@ namespace UnityIO.Classes
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// Returns the first file in the list of files or if no files
+        /// exist returns a null file.
+        /// </summary>
+        public IFile FirstOrDefault()
+        {
+            if (Count > 0)
+            {
+                return this[0];
+            }
+            else
+            {
+                return NullFile.SHARED_INSTANCE;
+            }
         }
     }
 }
