@@ -9,7 +9,7 @@ public class GetFilesTests
     public const string UNIT_TEST_LOADING_TEST_ASSETS = "UnityIO/Editor/Unit Tests/Loading Assets";
 
 
-    private IDirectory SetupTest()
+    public static IDirectory SetupTest()
     {
         // We can only test if our testing directory exists
         Assume.That(IO.Root.SubDirectoryExists(UNIT_TEST_LOADING_TEST_ASSETS), "The testing directory this test is looking for does not exists at path '" + UNIT_TEST_LOADING_TEST_ASSETS + "'.");
@@ -26,7 +26,6 @@ public class GetFilesTests
         var files = loadingDir.GetFiles();
         // Should only be root level which has a total of 3 files.
         Assert.AreEqual(files.Count, 3, "There should be 3 files in the root of the testing directory");
-
     }
 
     [Test(Description = "Check if you can find assets only at the top level with filter in " + UNIT_TEST_LOADING_TEST_ASSETS)]

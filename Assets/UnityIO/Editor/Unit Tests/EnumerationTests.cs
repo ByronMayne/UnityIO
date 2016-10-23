@@ -2,15 +2,23 @@
 using UnityEngine;
 using UnityIO;
 
-public class EnumerationTests
+public class EnumerationTests : AssertionHelper
 {
 
     [Test]
-    public void LoopOver()
+    [Description("This test looks inside the " + GetFilesTests.UNIT_TEST_LOADING_TEST_ASSETS + " directory and counts the total files. It should be constant")]
+    public void EnumerationCount()
     {
-        foreach(var directory in IO.Root)
+        var dir = GetFilesTests.SetupTest();
+
+        int count = 0;
+        foreach(var directory in dir)
         {
-            Debug.Log(directory.Path);
+
+     
+            count++;
         }
+        // Test if our count is correct.
+        Assert.AreEqual(count, 4, "There should be four files in the testing directory at " + GetFilesTests.UNIT_TEST_LOADING_TEST_ASSETS);
     }
 }

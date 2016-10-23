@@ -37,14 +37,13 @@ public class CreatingDirectory
         // Create it again with a child 
         IO.Root.CreateDirectory("CreateNestedDirectoryMultiStep").CreateDirectory("MultiFolder_Temp");
         // Check if the child exists at the root
-        bool failed = IO.Root.SubDirectoryExists("MultiFolder_Temp");
+        bool directroyExistsInRoot = IO.Root.SubDirectoryExists("MultiFolder_Temp");
         // Clean up the root folder
         IO.Root["CreateNestedDirectoryMultiStep"].Delete();
         // If the test failed this folder will exist so we want to cleanup 
         IO.Root.IfSubDirectoryExists("CreateNestedDirectoryMultiStep").Delete();
         // Fail or pass the test.
-        Assert.True(failed);
+        Assert.False(directroyExistsInRoot);
     }
-
 
 }
