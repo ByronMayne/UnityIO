@@ -1,4 +1,7 @@
- [![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/ByronMayne/UnityIO/blob/master/LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/ByronMayne/UnityIO/blob/master/LICENSE)
+(https://img.shields.io/badge/Tested-Mac-green.svg)
+(https://img.shields.io/badge/Tested-Windows-green.svg)
+
 # Unity IO
 
 ### Description
