@@ -1,17 +1,17 @@
 [![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/ByronMayne/UnityIO/blob/master/LICENSE)
-[Mac](https://img.shields.io/badge/Tested-Mac-green.svg)
-[Windows](https://img.shields.io/badge/Tested-Windows-green.svg)
+![Mac](https://img.shields.io/badge/Tested-Mac-green.svg)
+![Windows](https://img.shields.io/badge/Tested-Windows-green.svg)
 
 # Unity IO
 
 ### Description
-Unity IO is made to try to remove the pain of working with Unity's file system. For anyone who has done extended work has figured out Unity makes this a huge pain. All the functionaililty you need is spread across multiple classes including [FileUtil](https://docs.unity3d.com/ScriptReference/FileUtil.html), [AssetDatabase](https://docs.unity3d.com/ScriptReference/AssetDatabase.html), [Resources](https://docs.unity3d.com/ScriptReference/Resources.html), [File](https://msdn.microsoft.com/en-us/library/system.io.file(v=vs.110).aspx), [FileInfo](https://msdn.microsoft.com/en-us/library/system.io.fileinfo(v=vs.110).aspx), [Path](https://msdn.microsoft.com/en-us/library/system.io.path(v=vs.110).aspx), [Directory](https://msdn.microsoft.com/en-us/library/system.io.directory(v=vs.110).aspx), [Directory Info](https://msdn.microsoft.com/en-us/library/system.io.directoryinfo(v=vs.110).aspx), ect. 
+Unity IO is made to try to remove the pain of working with Unity's file system. For anyone who has done extended work has figured out Unity makes this a huge pain. All the functionality you need is spread across multiple classes including [FileUtil](https://docs.unity3d.com/ScriptReference/FileUtil.html), [AssetDatabase](https://docs.unity3d.com/ScriptReference/AssetDatabase.html), [Resources](https://docs.unity3d.com/ScriptReference/Resources.html), [File](https://msdn.microsoft.com/en-us/library/system.io.file(v=vs.110).aspx), [FileInfo](https://msdn.microsoft.com/en-us/library/system.io.fileinfo(v=vs.110).aspx), [Path](https://msdn.microsoft.com/en-us/library/system.io.path(v=vs.110).aspx), [Directory](https://msdn.microsoft.com/en-us/library/system.io.directory(v=vs.110).aspx), [Directory Info](https://msdn.microsoft.com/en-us/library/system.io.directoryinfo(v=vs.110).aspx), ect. 
 
 ### Goals
 
- * Simple to use API
- * Support Unity's meta files. 
- * Allow for complex chaining with conditionals execution. 
+ * Simple to use API.
+ * Support Unity's meta files.
+ * Allow for complex chaining with conditional execution.
  * Allow of loading, creating, destroying of Unity Assets.
 
 
@@ -29,14 +29,14 @@ public void CreatingRootDirectory()
 	IO.Root.CreateDirectory("Favorite Animals");
 }
 ```
-```IO.Root``` is the ```/Assets``` folder at the root of your Unity project. In the example above we are asking UnityIO to create a new folder called Favorite Animals  at ```Assets/Favorite Animales```. 
+```IO.Root``` is the ```/Assets``` folder at the root of your Unity project. In the example above we are asking UnityIO to create a new folder called Favorite Animals at ```Assets/Favorite Animals```. 
 ``` csharp
 /// <summary>
 /// A few more ways to create folders
 /// </summary>
 public void CreateNestedCatFolder()
 {
-    // Create in a chain
+    // Create in a chain.
     var catsFolder1 = IO.Root.CreateDirectory("Favorite Animals").CreateDirectory("Cats");
     
     // Break it down into two parts.
@@ -46,7 +46,7 @@ public void CreateNestedCatFolder()
     // Do it in one step.
     var catsFolder3 = IO.Root.CreateDirectory("Favorite Animals/Cats");
     
-    // Do it in one step with the helper
+    // Do it in one step with the helper.
     var catsFolder4 = IO.Root.CreateDirectory("Favorite Animals" + IO.PATH_SPLITTER + "Cats");
 }
 ```
@@ -76,7 +76,7 @@ As with creating folder there are more than way to do things. The first example 
 
 Take that cats!
 
-You might be asking what happens if you tell it to delete a directory  that does not exist.
+You might be asking what happens if you tell it to delete a directory that does not exist.
 
 ```scharp
 /// <summary>
@@ -122,7 +122,7 @@ public void ILikeChains()
     IO.Root["Favorite Animals"].IfDirectoryExists("Dogs").IfDirectoryExists("With Four Legs").IfDirectoryExists("Who stink").Delete();
 }
 ```
- In this case only the first folder exists so the first conditional will return a NullFile class which has all the same functions but none of them have any effect. So that way your code will execute only as far as it can get. You don't have to worry about null checking since the code can't break if a file is missing. You have the power to chain as many of these as you want. 
+In this case only the first folder exists so the first conditional will return a NullFile class which has all the same functions but none of them have any effect. So that way your code will execute only as far as it can get. You don't have to worry about null checking since the code can't break if a file is missing. You have the power to chain as many of these as you want. 
  ``` csharp
 /// <summary>
 /// Find, Create, and Destroy
@@ -147,7 +147,7 @@ public void RenameDirectory()
     IO.Root["My Dir"].Rename("Super Dir");
 }
 ```
-This is all you have to do just make sure you don't include any ```/``` in your name as they are already preserved. If a directory already exists with that name this function will throw an ```DirectroyAlreadyExistsException()``` so make sure you check before you try to create one.
+This is all you have to do just make sure you don't include any ```/``` in your name as they are already preserved. If a directory already exists with that name this function will throw an ```DirectoryAlreadyExistsException()```, so make sure you check before you try to create one.
 
 ### Duplicate a Directory
 As with moving duplicate is just as easy.
