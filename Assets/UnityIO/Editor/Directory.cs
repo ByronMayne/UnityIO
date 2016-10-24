@@ -286,7 +286,7 @@ namespace UnityIO.Classes
             int length = moveDirectroy.Length - start;
             string name = moveDirectroy.Substring(start, length);
 
-            if (!UnityEditorInternal.InternalEditorUtility.IsValidFileName(name))
+			if (!IO.IsValidFileName(name))
             {
                 throw new InvalidNameException("The name '" + name + "' contains invalid characters");
             }
@@ -315,7 +315,7 @@ namespace UnityIO.Classes
             }
 
             // And it's a valid name./
-            if (!InternalEditorUtility.IsValidFileName(newName))
+            if (!IO.IsValidFileName(newName))
             {
                 throw new InvalidNameException("The name '" + newName + "' contains invalid characters");
             }
