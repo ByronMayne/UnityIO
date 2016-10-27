@@ -257,5 +257,10 @@ namespace UnityIO.Classes
         {
             throw new NotImplementedException();
         }
+
+        public IFile CreateFile<T>(string name, T asset) where T : UnityEngine.Object
+        {
+            return SHARED_INSTANCE;
+        }
     }
 }

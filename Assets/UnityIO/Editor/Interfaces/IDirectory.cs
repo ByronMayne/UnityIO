@@ -19,6 +19,7 @@ namespace UnityIO.Interfaces
 
         bool IsEmpty(bool assetsOnly);
 
+        // Directories
         IDirectory this[string name] { get; }
         IDirectory CreateDirectory(string name);
 
@@ -26,10 +27,14 @@ namespace UnityIO.Interfaces
         // Conditionals 
         IDirectory IfSubDirectoryExists(string name);
         IDirectory IfSubDirectoryDoesNotExist(string name);
-        IFile IfFileExists(string name);
         IDirectory IfEmpty(bool assetsOnly);
         IDirectory IfNotEmpty(bool assetsOnly);
 
+        // IFIle
+        IFile IfFileExists(string name);
+        IFile CreateFile<T>(string name, T asset) where T : Object;
+
+        // IFiles
         IFiles GetFiles();
         IFiles GetFiles(bool recursive);
         IFiles GetFiles(string filter);

@@ -88,6 +88,21 @@ namespace UnityIO.Classes
         }
 
         /// <summary>
+        /// Creates a new file in this directory with the name an extension
+        /// sent in.
+        /// </summary>
+        /// <typeparam name="T">The type of Unity asset you want to create.</typeparam>
+        /// <param name="name">The name of the asset and extension that you want to call it.</param>
+        /// <param name="asset">The asset data itself.</param>
+        /// <returns>The new IFile.</returns>
+        public IFile CreateFile<T>(string name, T asset) where T : Object
+        {
+            File newFile = new File(m_Path + "/" + name);
+            AssetDatabase.CreateAsset(asset, newFile.Path);
+            return newFile;
+        }
+
+        /// <summary>
         /// Deletes this directory and all it's sub directories and children. 
         /// </summary>
         public void Delete()
