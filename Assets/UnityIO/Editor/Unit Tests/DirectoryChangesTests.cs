@@ -1,5 +1,6 @@
-﻿using NUnit.Framework;
-using UnityEditor;
+﻿// Disable unused warning
+#pragma warning disable 0168
+using NUnit.Framework;
 using UnityIO;
 using UnityIO.Exceptions;
 

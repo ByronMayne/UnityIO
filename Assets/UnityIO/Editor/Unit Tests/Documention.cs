@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Disable unused warning
+#pragma warning disable 0168
 using UnityIO;
 
 

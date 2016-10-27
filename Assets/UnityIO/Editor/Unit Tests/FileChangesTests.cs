@@ -1,9 +1,10 @@
-﻿using NUnit.Framework;
+﻿// Disable unused warning
+#pragma warning disable 0168
+using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
 using UnityIO;
 using UnityIO.Classes;
-using UnityIO.Exceptions;
 using UnityIO.Interfaces;
 
 public class FileChangesTests

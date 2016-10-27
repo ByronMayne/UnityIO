@@ -1,6 +1,6 @@
-﻿using NUnit.Framework;
-using UnityEngine;
-using UnityIO;
+﻿// Disable unused warning
+#pragma warning disable 0168
+using NUnit.Framework;
 
 public class EnumerationTests : AssertionHelper
 {
