@@ -30,6 +30,7 @@ SOFTWARE.
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityIO.Interfaces;
 
@@ -324,6 +325,16 @@ namespace UnityIO.Classes
         public bool Equals(IDirectory other)
         {
             return other is NullFile;
+        }
+
+        public AssetImporter GetImporter()
+        {
+            return null;
+        }
+
+        public T GetImporter<T>() where T : AssetImporter
+        {
+            return null;
         }
     }
 }

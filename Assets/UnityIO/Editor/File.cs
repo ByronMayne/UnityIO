@@ -227,5 +227,21 @@ namespace UnityIO.Classes
         {
             return AssetDatabase.LoadAssetAtPath<T>(Path);
         }
+
+        /// <summary>
+        /// Returns back the Unity <see cref="AssetImporter"/> for this asset if it exists.
+        /// </summary>
+        public AssetImporter GetImporter()
+        {
+            return AssetImporter.GetAtPath(Path);
+        }
+
+        /// <summary>
+        /// Returns back the Unity <see cref="AssetImporter"/> for this asset if it exists.
+        /// </summary>
+        public T GetImporter<T>() where T : AssetImporter
+        {
+            return AssetImporter.GetAtPath(Path) as T;
+        }
     }
 }
