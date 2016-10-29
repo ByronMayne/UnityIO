@@ -50,14 +50,17 @@ public class GetFilesTests : UnityIOTestBase
     }
 
     [Test(Description = "Test to make sure the meta information about the file is correct")]
-    public void GetFileMeta()
+    public void FileNameProperties()
     {
         // Setup our test. 
         var loadingDir = SetupAssetLoadingTest();
         // We are going to try to only find files ending with .anim
         var file = loadingDir.GetFiles(filter: "*.anim").FirstOrDefault();
-        UnityEngine.Debug.Log("Directory: " + file.Directory);
-        UnityEngine.Debug.Log("Extension: " + file.Extension);
-        UnityEngine.Debug.Log("NameWithoutExtension: " + file.NameWithoutExtension);
+        // Make sure it's the correct directory.
+        Assert.AreEqual(loadingDir.Path, file.Directory.Path, "The directory of the file does not match.");
+        // Make sure it's the correct extension.
+        Assert.AreEqual(".anim", file.Extension, "The extension of this class should be '.anim'.");
+        // Make sure it's the correct extension.
+        Assert.AreEqual("Misc Animation", file.NameWithoutExtension, "The name of this class is not correct.");
     }
 }
