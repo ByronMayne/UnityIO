@@ -4,7 +4,7 @@ Arther: Byron Mayne
 Twitter: @ByMayne
 
 
-IT License
+MIT License
 
 Copyright(c) 2016 Byron Mayne
 
