@@ -36,6 +36,11 @@ namespace UnityIO.Classes
     public class Files : List<File>, IFiles
     {
         /// <summary>
+        /// A delegate used for modifying files. 
+        /// </summary>
+        public delegate void FileActionDelegate(IFile file);
+
+        /// <summary>
         /// Returns a list of all assets contained within that
         /// are of the type T.
         /// </summary>
@@ -66,6 +71,23 @@ namespace UnityIO.Classes
             else
             {
                 return NullFile.SHARED_INSTANCE;
+            }
+        }
+
+        /// <summary>
+        /// Does an action on all files in this list of files. 
+        /// </summary>
+        /// <param name="action">The action you want to take.</param>
+        public void ForEach(FileActionDelegate action)
+        {
+            if(action == null)
+            {
+                throw new System.ArgumentNullException("Can't run a null action on all files");
+            }
+
+            for (int i = Count - 1; i >= 0; i--)
+            {
+                action(this[i]);
             }
         }
     }
