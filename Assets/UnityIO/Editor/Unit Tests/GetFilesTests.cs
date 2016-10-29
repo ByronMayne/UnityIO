@@ -3,24 +3,13 @@ using NUnit.Framework;
 using UnityIO;
 using UnityIO.Interfaces;
 
-public class GetFilesTests
+public class GetFilesTests : UnityIOTestBase
 {
-    public const string UNIT_TEST_LOADING_TEST_ASSETS = "UnityIO/Editor/Unit Tests/Loading Assets";
-
-
-    public static IDirectory SetupTest()
-    {
-        // We can only test if our testing directory exists
-        Assume.That(IO.Root.SubDirectoryExists(UNIT_TEST_LOADING_TEST_ASSETS), "The testing directory this test is looking for does not exists at path '" + UNIT_TEST_LOADING_TEST_ASSETS + "'.");
-        // Get our loading area
-        return IO.Root[UNIT_TEST_LOADING_TEST_ASSETS];
-    }
-
     [Test(Description = "Check if you can find assets only at the top level in " + UNIT_TEST_LOADING_TEST_ASSETS)]
     public void GetTopLevelFiles()
     {
         // Setup our test. 
-        var loadingDir = SetupTest();
+        var loadingDir = SetupAssetLoadingTest();
         // Load all our assets
         var files = loadingDir.GetFiles();
         // Should only be root level which has a total of 3 files.
@@ -31,7 +20,7 @@ public class GetFilesTests
     public void GetRecursiveFiles()
     {
         // Setup our test. 
-        var loadingDir = SetupTest();
+        var loadingDir = SetupAssetLoadingTest();
         // Get all
         var files = loadingDir.GetFiles(recursive: true);
         // Should be 10 assets
@@ -42,7 +31,7 @@ public class GetFilesTests
     public void GetTopLevelWithFilters()
     {
         // Setup our test. 
-        var loadingDir = SetupTest();
+        var loadingDir = SetupAssetLoadingTest();
         // We are going to try to only find files ending with .anim
         var files = loadingDir.GetFiles(filter:"*.anim");
         // There should be four. 
@@ -53,10 +42,22 @@ public class GetFilesTests
     public void GetRecursiveWithFilters()
     {
         // Setup our test. 
-        var loadingDir = SetupTest();
+        var loadingDir = SetupAssetLoadingTest();
         // We are going to try to only find files ending with .anim
         var files = loadingDir.GetFiles(filter: "*.anim", recursive:true);
         // There should be four. 
         Assert.AreEqual(files.Count, 4, "There should be 1 file at the root that ends with .anim in our testing directory");
+    }
+
+    [Test(Description = "Test to make sure the meta information about the file is correct")]
+    public void GetFileMeta()
+    {
+        // Setup our test. 
+        var loadingDir = SetupAssetLoadingTest();
+        // We are going to try to only find files ending with .anim
+        var file = loadingDir.GetFiles(filter: "*.anim").FirstOrDefault();
+        UnityEngine.Debug.Log("Directory: " + file.Directory);
+        UnityEngine.Debug.Log("Extension: " + file.Extension);
+        UnityEngine.Debug.Log("NameWithoutExtension: " + file.NameWithoutExtension);
     }
 }

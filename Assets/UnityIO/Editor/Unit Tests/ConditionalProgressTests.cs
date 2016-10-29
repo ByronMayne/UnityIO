@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityIO;
 using Object = UnityEngine.Object;
 
-public class ConditionalProgressTests
+public class ConditionalProgressTests : UnityIOTestBase
 {
     [Test]
     public void ConditionFolderRoot()
@@ -66,13 +66,13 @@ public class ConditionalProgressTests
     public void IfFileExists()
     {
         // Get our testingDir
-        var testingDir = GetFilesTests.SetupTest();
+        var testingDir = SetupAssetLoadingTest();
         // Load our asset only if it exists.
         GameObject loadedAsset = testingDir.IfFileExists("Misc Prefab").LoadAsset<GameObject>();
         // Our Asset should exist
         Assert.IsNotNull(loadedAsset, "We should have been able to load this asset");
         // Log output
-        System.Console.WriteLine("Loaded " + loadedAsset.name + " successfully");
+        TestLog("Loaded " + loadedAsset.name + " successfully");
         // Load an invalid object.
         GameObject invalidObject = testingDir.IfFileExists("Fake Prefab").LoadAsset<GameObject>();
         // It should be null
