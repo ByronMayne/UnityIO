@@ -503,5 +503,27 @@ namespace UnityIO.Classes
         {
             return directory.Path;
         }
+
+        /// <summary>
+        /// Checks to see if an object points to the same path. 
+        /// </summary>
+        public override bool Equals(object obj)
+        {
+            if (obj is IDirectory)
+            {
+                return string.Compare(((IDirectory)obj).Path, Path) == 0;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Returns the hash code for this class.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return m_Path.GetHashCode();
+        }
+
     }
 }
