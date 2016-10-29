@@ -53,7 +53,6 @@ namespace UnityIO.Classes
             m_Extension = sIO.Path.GetExtension(path);
             m_FileName = sIO.Path.GetFileNameWithoutExtension(path);
             m_Directory = sIO.Path.GetDirectoryName(path);
-
         }
 
         /// <summary>
@@ -63,7 +62,7 @@ namespace UnityIO.Classes
         {
             get
             {
-                return null;
+                return new Directory(m_Directory);
             }
         }
 

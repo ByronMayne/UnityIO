@@ -419,5 +419,13 @@ namespace UnityIO.Classes
                 yield return new Directory(subFolder[i]);
             }
         }
+
+        /// <summary>
+        /// When converted to a string it will return it's full path.
+        /// </summary>
+        public override string ToString()
+        {
+            return m_Path;
+        }
     }
 }
