@@ -427,5 +427,38 @@ namespace UnityIO.Classes
         {
             return m_Path;
         }
+
+        /// <summary>
+        /// A test used to check if two directory classes point to the same class.
+        /// </summary>
+        public static bool operator ==(Directory lhs, Directory rhs)
+        {
+            return string.CompareOrdinal(lhs.Path, rhs.Path) == 0;
+        }
+
+        /// <summary>
+        /// A test used to check if two directory classes don't point to the same type.
+        /// </summary>
+        public static bool operator !=(Directory lhs, Directory rhs)
+        {
+            return string.CompareOrdinal(lhs.Path, rhs.Path) == 0;
+        }
+
+        
+        /// <summary>
+        /// Allows us to explicitly convert a string to a new directory.
+        /// </summary>
+        public static explicit operator Directory(string directory)
+        {
+            return new Directory(directory);
+        }
+
+        /// <summary>
+        /// Allows us to implicitly convert a directory to a string.
+        /// </summary>
+        public static implicit operator string(Directory directory)
+        {
+            return directory.Path;
+        }
     }
 }
