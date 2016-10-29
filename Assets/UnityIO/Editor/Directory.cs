@@ -1,5 +1,4 @@
-﻿using System;
-using UnityIO.Interfaces;
+﻿using UnityIO.Interfaces;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -7,7 +6,6 @@ using System.Collections;
 using System.Collections.Generic;
 using sIO = System.IO;
 using UnityIO.Exceptions;
-using UnityEditorInternal;
 
 namespace UnityIO.Classes
 {
@@ -426,6 +424,22 @@ namespace UnityIO.Classes
         public override string ToString()
         {
             return m_Path;
+        }
+
+        /// <summary>
+        /// Implementation of ICompair interface. 
+        /// </summary>
+        public int Compare(IDirectory x, IDirectory y)
+        {
+            return string.Compare(x.Path, y.Path);
+        }
+
+        /// <summary>
+        /// Checks to see if the two directories point to the same path. Implementation of <see cref="IEquatable<IDirectory>"/>
+        /// </summary>
+        public bool Equals(IDirectory other)
+        {
+            return string.CompareOrdinal(Path, other.Path) == 0;
         }
 
         /// <summary>

@@ -286,5 +286,15 @@ namespace UnityIO.Classes
         {
             return SHARED_INSTANCE;
         }
+
+        public int Compare(IDirectory x, IDirectory y)
+        {
+            return -10;
+        }
+
+        public bool Equals(IDirectory other)
+        {
+            return other is NullFile;
+        }
     }
 }

@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
 using System.Collections.Generic;
+using Object = UnityEngine.Object;
 
 namespace UnityIO.Interfaces
 {
-    public interface IDirectory : IEnumerable<IDirectory>
+    public interface IDirectory : IEnumerable<IDirectory>, IComparer<IDirectory>, IEquatable<IDirectory>
     {
         string Path { get; }
 
