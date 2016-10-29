@@ -47,6 +47,30 @@ namespace UnityIO.Classes
             }
         }
 
+        public string Name
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+
+        public string NameWithoutExtension
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+
+        public string Extension
+        {
+            get
+            {
+                return string.Empty;
+            }
+        }
+
         public File this[int index]
         {
             get

@@ -97,7 +97,7 @@ namespace UnityIO.Classes
         /// <returns>The new IFile.</returns>
         public IFile CreateFile<T>(string name, T asset) where T : Object
         {
-            File newFile = new File(m_Path + "/" + name);
+            File newFile = new File(m_Path + name);
             AssetDatabase.CreateAsset(asset, newFile.Path);
             return newFile;
         }

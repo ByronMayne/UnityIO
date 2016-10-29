@@ -1,8 +1,5 @@
-﻿// Disable unused warning
-#pragma warning disable 0168
-using System.Collections.Generic;
+﻿
 using NUnit.Framework;
-using UnityEngine;
 using UnityIO;
 using UnityIO.Interfaces;
 
