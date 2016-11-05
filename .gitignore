@@ -29,3 +29,5 @@ sysinfo.txt
 *.unitypackage
 proj.cs/bin/
 proj.cs/obj/
+proj.unity/Temp/
+proj.unity/Library/
