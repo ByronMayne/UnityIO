@@ -1,0 +1,16 @@
+External References
+
+
+ID: 1 (ClassID: 1049) AnnotationManager
+	m_ObjectHideFlags 0 (unsigned int)
+	m_CurrentPreset_m_AnnotationList  (vector)
+		size 0 (int)
+
+	m_RecentlyChanged  (vector)
+		size 0 (int)
+
+	m_WorldIconSize 0.03 (float)
+	m_Use3dGizmos 1 (bool)
+	m_ShowGrid 1 (bool)
+
+

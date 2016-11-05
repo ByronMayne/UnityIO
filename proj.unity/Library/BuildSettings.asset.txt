@@ -1,0 +1,33 @@
+External References
+
+
+ID: 1 (ClassID: 141) BuildSettings
+	m_ObjectHideFlags 0 (unsigned int)
+	scenes  (vector)
+		size 0 (int)
+
+	preloadedPlugins  (vector)
+		size 0 (int)
+
+	enabledVRDevices  (vector)
+		size 0 (int)
+
+	hasPROVersion 1 (bool)
+	isNoWatermarkBuild 0 (bool)
+	isPrototypingBuild 0 (bool)
+	isEducationalBuild 0 (bool)
+	isEmbedded 0 (bool)
+	hasPublishingRights 1 (bool)
+	hasShadows 1 (bool)
+	hasSoftShadows 1 (bool)
+	hasLocalLightShadows 1 (bool)
+	hasAdvancedVersion 1 (bool)
+	enableDynamicBatching 1 (bool)
+	isDebugBuild 1 (bool)
+	usesOnMouseEvents 1 (bool)
+	hasClusterRendering 0 (bool)
+	m_GraphicsAPIs  (vector)
+		size 0 (int)
+
+
+

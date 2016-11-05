@@ -26,7 +26,7 @@ UnityIO works with the Unity asset path so all paths start from the ```Assets/``
 /// </summary>
 public void CreatingRootDirectory()
 {
-	IO.Root.CreateDirectory("Favorite Animals");
+    IO.Root.CreateDirectory("Favorite Animals");
 }
 ```
 ```IO.Root``` is the ```/Assets``` folder at the root of your Unity project. In the example above we are asking UnityIO to create a new folder called Favorite Animals at ```Assets/Favorite Animals```. 
