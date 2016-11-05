@@ -29,8 +29,9 @@ SOFTWARE.
 
 // Disable unused warning
 #pragma warning disable 0168
+using UnityEngine;
 using UnityIO;
-
+using UnityIO.Interfaces;
 
 public class Documention
 {
@@ -124,6 +125,44 @@ public class Documention
     public void CreateAndDestroy()
     {
         IO.Root["Favorite Animals"].IfSubDirectoryExists("Dogs").CreateDirectory("Delete Me").Delete(); 
+    }
+
+    /// <summary>
+    /// A simple example of getting all files from a folder called resources at Assets/Resources.
+    /// </summary>
+    public void GetResourceFiles()
+    {
+        // Get our directory
+        IDirectory resourcesDirectory = IO.Root["Resources"];
+        // Get all files.
+        IFiles files = resourcesDirectory.GetFiles(); 
+
+        // iterate over our files and print their names
+        for(int i = 0; i < files.Count; i++)
+        {
+            Debug.Log(files[i].Name);
+        }
+    }
+
+    /// <summary>
+    /// A simple example of getting all files from a folder called resources at Assets/Resources.
+    /// </summary>
+    public void GetFilesRecursively()
+    {
+        // Get our directory
+        IDirectory resourcesDirectory = IO.Root["Resources"];
+        // Get all files recursively
+        IFiles files = resourcesDirectory.GetFiles(recursive: true);
+    }
+
+    public void SearchExamples()
+    {
+        // Returns every asset with 'Player' in it's name. 
+        var playerFiles = IO.Root.GetFiles("*Player*");
+        // Get everything named with 'Player' and '.anim' extension
+        var playerAnimations = IO.Root.GetFiles("*Player*.anim");
+        // get everything named 'Player' with one extra char maybe an 's'
+        var playerChar = IO.Root.GetFiles("Player?");
     }
 
 }

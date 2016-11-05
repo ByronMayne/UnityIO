@@ -164,6 +164,79 @@ public void DuplicateADirectory()
 The ```cheeseDrive.Duplicate()``` function will create a new copy of the cheeseDrive and all it's contents. It will then rename that drive with a number on the end to make it unique. If you want more control you can just use the overloaded function to pick a valid name. If the name is already taken you well get an exception. 
 ## File Basics
 
+As with working with directories working with files is just as easy. UnityIO does it's best to try to make things as painless as possible. 
+
+### Anatomy a File
+UnityIO has two interfaces that are used when dealing with files. The first one is ```IFile``` and ```IFiles```. Ifiles is simple an extension of ```IList<IFile>``` with some extended functionality that I will cover later. IFile is the one you will be dealing with the most. IFile is implemented by ```File.cs``` and ```NullFile.cs```.
+### Getting a File
+To get a file does not require to much work. In the example below we go to the directory we want and ask for all the files in there.
+``` csharp
+// Normally we just use var for the return types but these examples we are using
+// the interface types to make it more clear so we have to include the following.
+using UnityIO.Interfaces;
+
+/// <summary>
+/// A simple example of getting all files from a folder called resources 
+/// at 'Assets/Resources'
+/// </summary>
+public void GetResourceFiles()
+{
+    // Get our directory
+    IDirectory resourcesDirectory = IO.Root["Resources"];
+    // Get all files.
+    IFiles files = resourcesDirectory.GetFiles(); 
+}
+```
+The code above looks for the directory ```Assets/Resources``` and returns all files that are in there. This code returns us back an ```IFiles``` which we can then just loop over to grab each file one by one. 
+```csharp
+// Get our directory
+IDirectory resourcesDirectory = IO.Root["Resources"];
+// Get all files.
+IFiles files = resourcesDirectory.GetFiles(); 
+// iterate over our files and print their names
+for(int i = 0; i < files.Count; i++)
+{
+    Debug.Log(files[i].Name);
+}
+```
+Above we are using our IFiles and printing the names to the UnityEngine.Debug console. Lets say we wanted
+to also get all files recursively we can do that too.
+```csharp
+public void GetFilesRecursively()
+{
+    // Get our directory
+    IDirectory resourcesDirectory = IO.Root["Resources"];
+    // Get all files recursively
+    IFiles files = resourcesDirectory.GetFiles(recursive:true);
+}
+```
+
+#### Searching for files
+Sometimes we also might want to only select files if they match a name. UnityIO under the hood uses System.IO to find files
+so it has the ability to use two unique wild cards. ```*```(asterisk) means Zero or more characters in that position. ```?``` (question mark) means Zero or one character in that position.
+This search can not use Unity's tags like ```t:```, ```l:```, or ```ref:```.  
+
+Below are a few examples of some search functions.
+```csharp
+// Returns every asset with 'Player' in it's name. 
+var playerFiles = IO.Root.GetFiles("*Player*");
+```
+``` csharp
+// Get everything named with 'Player' and '.anim' extension
+var playerAnimations = IO.Root.GetFiles("*Player*.anim");
+```
+```csharp
+// get everything named 'Player' with one extra char maybe an 's'
+var playerChar = IO.Root.GetFiles("Player?");
+```
+
+```GetFiles()``` has a few different overrides that lets you combine both the search filter and the recursive bool.
+
+Notes:
+ * At one point I might add Regex searches to this feature but I am not sure if that is overkill. Let me know with feedback if you would like that feature. 
+ * You might notice that you don't have the open to filter by Unity types. This was done so the code does not have to be rigid. I just did not want to have to write a huge case statement for all valid Unity types an extensions that match.
+ * When you call ```GetFiles``` the assets themselves have not been loaded into memory we are only working with the paths.
+
 ### Deleting a File
 //TODO: 
 
