@@ -238,8 +238,33 @@ Notes:
  * When you call ```GetFiles``` the assets themselves have not been loaded into memory we are only working with the paths.
 
 ### Deleting a File
-//TODO: 
+Once you have your file you might just want to be able to delete it. 
+```csharp
+/// <summary>
+/// Grabs all the files in the root directory and deletes them. 
+/// </summary>
+public void DeleteAFile()
+{
+    // Get all our files. 
+    var files = IO.Root.GetFiles();
+    // Loop over them all and delete them
+    for (int i = 0; i < files.Count; i++)
+    {
+        // Delete the file.
+        files[i].Delete();
+    }
+}
+```
+This is great but lets say you want to delete a file only if it exists. Well just like the IDirectory class IFile has the option to only do tasks if a condition is met.
+```csharp
+/// Only delete our file if it exists. 
+IO.Root.IfFileExists("DeleteMe.txt").Delete(); 
+```
+As expected this will only delete the file if it happens to exist on disk and otherwise have no effect. 
 
+Notes:
+* All deletion uses AssetDatabase so the meta files are cleaned up too. 
+* The files get deleted synchronously so if you check if it exists in the next line of code it will be cleared.  
 ### Renaming a File
 //TODO: 
 
