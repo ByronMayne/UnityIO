@@ -52,6 +52,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\proj.unity\Assets\UnityIO\Editor\Unit Tests\Documention.cs">
+      <Link>Documentation\Documention.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="../proj.unity/Assets/**/*.cs" Exclude="../proj.unity/Assets/**/Documention.cs">
       <Link>%(RecursiveDir)</Link>
