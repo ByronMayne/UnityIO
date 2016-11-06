@@ -151,6 +151,15 @@ namespace UnityIO.Classes
         /// Moves the files from it's current directory to another. 
         /// </summary>
         /// <param name="directroy">The directory you want to move it too</param>
+        public void Move(IDirectory targetDirectory)
+        {
+            Move(targetDirectory.Path);
+        }
+
+        /// <summary>
+        /// Moves the files from it's current directory to another. 
+        /// </summary>
+        /// <param name="directroy">The directory you want to move it too</param>
         public void Move(string targetDirectory)
         {
             // Make sure we have a valid path

@@ -321,27 +321,37 @@ namespace UnityIO.Classes
         /// Moves a directory from one path to another. If a directory of the 
         /// same name already exists there it will give it a unique name. 
         /// </summary>
-        /// <param name="moveDirectroy">The directory you want to move too</param>
-        public void Move(string moveDirectroy)
+        /// <param name="moveDirectroy">The directory you want to move this directory in too</param>
+        public void Move(IDirectory targetDirectory)
         {
-            int start = moveDirectroy.LastIndexOf('/');
-            int length = moveDirectroy.Length - start;
-            string name = moveDirectroy.Substring(start, length);
+            Move(targetDirectory.Path);
+        }
+
+        /// <summary>
+        /// Moves a directory from one path to another. If a directory of the 
+        /// same name already exists there it will give it a unique name. 
+        /// </summary>
+        /// <param name="moveDirectroy">The directory you want to move too</param>
+        public void Move(string targetDirectory)
+        {
+            int start = targetDirectory.LastIndexOf('/');
+            int length = targetDirectory.Length - start;
+            string name = targetDirectory.Substring(start, length);
 
 			if (!IO.IsValidFileName(name))
             {
                 throw new InvalidNameException("The name '" + name + "' contains invalid characters");
             }
 
-            string error = AssetDatabase.ValidateMoveAsset(m_Path, moveDirectroy);
+            string error = AssetDatabase.ValidateMoveAsset(m_Path, targetDirectory);
 
             if(!string.IsNullOrEmpty(error))
             {
-                throw new MoveException(error, m_Path, moveDirectroy);
+                throw new MoveException(error, m_Path, targetDirectory);
             }
             else
             {
-                AssetDatabase.MoveAsset(m_Path, moveDirectroy);
+                AssetDatabase.MoveAsset(m_Path, targetDirectory);
             }
         }
 

@@ -41,7 +41,9 @@ namespace UnityIO.Interfaces
         void Duplicate();
         void Duplicate(string newName);
 
-        void Move(string newPath);
+        void Move(string targetDirectory);
+        void Move(IDirectory targetDirectory);
+
         void Rename(string newName);
 
         void DeleteSubDirectory(string directroyName);

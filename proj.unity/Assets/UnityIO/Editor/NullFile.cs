@@ -218,7 +218,12 @@ namespace UnityIO.Classes
             return SHARED_INSTANCE;
         }
 
-        public void Move(string newDirectory)
+        public void Move(string moveDirectory)
+        {
+
+        }
+
+        public void Move(IDirectory moveDirectory)
         {
 
         }

@@ -284,4 +284,4 @@ IFile fileToMove = IO.Root.GetFiles("DeleteMe.txt").FirstOrDefault();
 // Move it
 fileToRename.Move(IO.Root["Resources"].Path);
 ```
-This will take the ```Assets/DeleteMe.txt``` and move it too ```Assets/Resources/DeleteMe.txt```. If a file already exists in that directory with the same name an exception will be thrown. 
+This will take the ```Assets/DeleteMe.txt``` and move it too ```Assets/Resources/DeleteMe.txt```. If a file already exists in that directory it will be given a unique name by append incrementing numbers to the end.
