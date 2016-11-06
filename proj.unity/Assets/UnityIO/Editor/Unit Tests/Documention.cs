@@ -97,7 +97,7 @@ public class Documention
     {
         var favoriteAnimals = IO.Root["Favorite Animals"];
 
-        if(favoriteAnimals.SubDirectoryExists("Dogs"))
+        if (favoriteAnimals.SubDirectoryExists("Dogs"))
         {
             favoriteAnimals.DeleteSubDirectory("Dogs");
         }
@@ -124,7 +124,7 @@ public class Documention
     /// </summary>
     public void CreateAndDestroy()
     {
-        IO.Root["Favorite Animals"].IfSubDirectoryExists("Dogs").CreateDirectory("Delete Me").Delete(); 
+        IO.Root["Favorite Animals"].IfSubDirectoryExists("Dogs").CreateDirectory("Delete Me").Delete();
     }
 
     /// <summary>
@@ -135,10 +135,10 @@ public class Documention
         // Get our directory
         IDirectory resourcesDirectory = IO.Root["Resources"];
         // Get all files.
-        IFiles files = resourcesDirectory.GetFiles(); 
+        IFiles files = resourcesDirectory.GetFiles();
 
         // iterate over our files and print their names
-        for(int i = 0; i < files.Count; i++)
+        for (int i = 0; i < files.Count; i++)
         {
             Debug.Log(files[i].Name);
         }
@@ -165,4 +165,36 @@ public class Documention
         var playerChar = IO.Root.GetFiles("Player?");
     }
 
+    /// <summary>
+    /// Grabs all the files in the root directory and deletes them. 
+    /// </summary>
+    public void DeleteAFile()
+    {
+        // Get all our files. 
+        var files = IO.Root.GetFiles();
+        // Loop over them all and delete them
+        for (int i = 0; i < files.Count; i++)
+        {
+            // Delete the file.
+            files[i].Delete();
+        }
+
+        var file = IO.Root.GetFiles("DELETEME.txt").FirstOrDefault();
+
+        /// Only delete our file if it exists. 
+        IO.Root.IfFileExists("DeleteMe.txt").Delete();
+
+        // Get the file we want to use.
+        IFile fileToRename = IO.Root.GetFiles("DeleteMe.txt").FirstOrDefault();
+        // Rename it
+        fileToRename.Rename("DontDeleteMe.txt");
+
+        IO.Root.GetFiles("DeleteMe.txt").FirstOrDefault().Rename("Delete All Of The Things.txt");
+
+        // Get the file we want to use.
+        IFile fileToMove = IO.Root.GetFiles("DeleteMe.txt").FirstOrDefault();
+        // Move it
+        fileToRename.Move(IO.Root["Resources"].Path);
+
+    }
 }

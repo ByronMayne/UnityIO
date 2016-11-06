@@ -265,8 +265,23 @@ As expected this will only delete the file if it happens to exist on disk and ot
 Notes:
 * All deletion uses AssetDatabase so the meta files are cleaned up too. 
 * The files get deleted synchronously so if you check if it exists in the next line of code it will be cleared.  
+* 
 ### Renaming a File
-//TODO: 
+Sometimes you just want to change the file you are working with to do that try the following code. 
 
+``` csharp
+// Get the file we want to use.
+IFile fileToRename = IO.Root.GetFiles("DeleteMe.txt").FirstOrDefault();
+// Rename it
+fileToRename.Rename("DontDeleteMe.txt");
+```
+You might also notice that we used the function ```FirstOrDefault``` this is a function on ```IFiles``` the returns the first file in the list or our null file (which just takes no actions. Read about it below). One thing you should take note of is ```Rename()``` is for renaming and not moving files, use ```Move()``` for that or an exception will be thrown.
 ### Moving a File
-//TODO: 
+Moving a file is the same as renaming but you can move the file outside it's current directory. 
+```csharp
+// Get the file we want to use.
+IFile fileToMove = IO.Root.GetFiles("DeleteMe.txt").FirstOrDefault();
+// Move it
+fileToRename.Move(IO.Root["Resources"].Path);
+```
+This will take the ```Assets/DeleteMe.txt``` and move it too ```Assets/Resources/DeleteMe.txt```. If a file already exists in that directory with the same name an exception will be thrown. 
