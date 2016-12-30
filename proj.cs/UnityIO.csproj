@@ -56,8 +56,59 @@
       <Link>Documentation\Documention.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="../proj.unity/Assets/**/*.cs" Exclude="../proj.unity/Assets/**/Documention.cs">
-      <Link>%(RecursiveDir)</Link>
+    <Compile Include="../proj.unity/Assets/UnityIO\Editor\ContextMenus.cs">
+      <Link>UnityIO\Editor\</Link>
+    </Compile>
+    <Compile Include="../proj.unity/Assets/UnityIO\Editor\Directory.cs">
+      <Link>UnityIO\Editor\</Link>
+    </Compile>
+    <Compile Include="../proj.unity/Assets/UnityIO\Editor\Exceptions.cs">
+      <Link>UnityIO\Editor\</Link>
+    </Compile>
+    <Compile Include="../proj.unity/Assets/UnityIO\Editor\File.cs">
+      <Link>UnityIO\Editor\</Link>
+    </Compile>
+    <Compile Include="../proj.unity/Assets/UnityIO\Editor\Files.cs">
+      <Link>UnityIO\Editor\</Link>
+    </Compile>
+    <Compile Include="../proj.unity/Assets/UnityIO\Editor\Interfaces\IDirectory.cs">
+      <Link>UnityIO\Editor\Interfaces\</Link>
+    </Compile>
+    <Compile Include="../proj.unity/Assets/UnityIO\Editor\Interfaces\IFile.cs">
+      <Link>UnityIO\Editor\Interfaces\</Link>
+    </Compile>
+    <Compile Include="../proj.unity/Assets/UnityIO\Editor\Interfaces\IFiles.cs">
+      <Link>UnityIO\Editor\Interfaces\</Link>
+    </Compile>
+    <Compile Include="../proj.unity/Assets/UnityIO\Editor\NullFile.cs">
+      <Link>UnityIO\Editor\</Link>
+    </Compile>
+    <Compile Include="../proj.unity/Assets/UnityIO\Editor\Unit Tests\ConditionalProgressTests.cs">
+      <Link>UnityIO\Editor\Unit Tests\</Link>
+    </Compile>
+    <Compile Include="../proj.unity/Assets/UnityIO\Editor\Unit Tests\CreatingDirectoryTests.cs">
+      <Link>UnityIO\Editor\Unit Tests\</Link>
+    </Compile>
+    <Compile Include="../proj.unity/Assets/UnityIO\Editor\Unit Tests\DirectoryChangesTests.cs">
+      <Link>UnityIO\Editor\Unit Tests\</Link>
+    </Compile>
+    <Compile Include="../proj.unity/Assets/UnityIO\Editor\Unit Tests\EnumerationTests.cs">
+      <Link>UnityIO\Editor\Unit Tests\</Link>
+    </Compile>
+    <Compile Include="../proj.unity/Assets/UnityIO\Editor\Unit Tests\FileChangesTests.cs">
+      <Link>UnityIO\Editor\Unit Tests\</Link>
+    </Compile>
+    <Compile Include="../proj.unity/Assets/UnityIO\Editor\Unit Tests\GetFilesTests.cs">
+      <Link>UnityIO\Editor\Unit Tests\</Link>
+    </Compile>
+    <Compile Include="../proj.unity/Assets/UnityIO\Editor\Unit Tests\PathValidationTests.cs">
+      <Link>UnityIO\Editor\Unit Tests\</Link>
+    </Compile>
+    <Compile Include="../proj.unity/Assets/UnityIO\Editor\Unit Tests\UnityIOTestBase.cs">
+      <Link>UnityIO\Editor\Unit Tests\</Link>
+    </Compile>
+    <Compile Include="../proj.unity/Assets/UnityIO\Editor\UnityIO.cs">
+      <Link>UnityIO\Editor\</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>
