@@ -35,6 +35,7 @@ using UnityIO.Interfaces;
 
 public class Documention
 {
+#pragma warning disable 0219
     /// <summary>
     /// Creates a directory the root of our project
     /// </summary>

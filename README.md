@@ -285,3 +285,54 @@ IFile fileToMove = IO.Root.GetFiles("DeleteMe.txt").FirstOrDefault();
 fileToRename.Move(IO.Root["Resources"].Path);
 ```
 This will take the ```Assets/DeleteMe.txt``` and move it too ```Assets/Resources/DeleteMe.txt```. If a file already exists in that directory it will be given a unique name by append incrementing numbers to the end.
+
+### Utility
+There are a few helper functions that come bundled with UnityIO that can be quite useful.
+
+#### Root
+```csharp
+IO.Root
+```
+Used in many of the example above this is a shorthand to allow you to grab the root of the current Unity project you are working in. 
+
+#### Convert Paths
+UnityIO uses all local Unity asset paths under the hood ie. ```Assets/blah/blah.png``` but if you are going to be interacting with any of C#'s System.IO libraries you will need the full system path. You can get this in a few ways.
+``` csharp
+// Gets the full system path of a file instance
+string fileSystemPath = IFile.systemPath;
+
+// Gets the full system path of a directory instance
+string directorySystemPath = IDirectory.systemPath;
+```
+This is very useful if you already have created instances for ```IFiles``` and ```IDirectories``` but if you just have a raw path to convert this is not useful. To convert raw paths you can use the following.
+```csharp
+public void GetSystemPath(string assetPath)
+{
+    // Convert our asset path to a system path 
+    return IO.AssetPathToSystemPath(assetPath); 
+}
+```
+or the reverse
+
+```csharp
+public void GetAssetPath(string systemPath)
+{
+    // Convert our system path to our asset path. 
+    return IO.SystemToAssetPath(systemPath); 
+}
+```
+Both of these can be used without creating any new classes. Each of these functions checks it's input to verify if it's valid before trying to convert them. If the input is not valid an exception will be thrown so it's best to make sure you are not sending in null or empty strings. 
+
+## Meta
+
+Handcrafted by Byron Mayne [[twitter](https://twitter.com/byMayne) &bull; [github](https://github.com/ByronMayne)]
+
+Released under the [MIT License](http://www.opensource.org/licenses/mit-license.php).
+
+If you have any feedback or suggestions for UnityIO feel free to contact me. 
+
+
+
+
+
+

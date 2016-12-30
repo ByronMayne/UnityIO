@@ -37,6 +37,11 @@ namespace UnityIO.Interfaces
     {
         string Path { get; }
 
+        /// <summary>
+        /// Gets the system path of this file. 
+        /// </summary>
+        string SystemPath { get; }
+
         void Delete();
         void Duplicate();
         void Duplicate(string newName);

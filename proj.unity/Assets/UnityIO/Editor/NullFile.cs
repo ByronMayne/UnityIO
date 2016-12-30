@@ -45,6 +45,11 @@ namespace UnityIO.Classes
             get { return "Null"; }
         }
 
+        public string SystemPath
+        {
+            get { return "Null"; }
+        }
+
         public IDirectory this[string name]
         {
             get

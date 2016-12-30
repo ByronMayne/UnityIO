@@ -52,6 +52,14 @@ namespace UnityIO.Classes
         }
 
         /// <summary>
+        /// Gets the location of this directory starting from the root of the computer.
+        /// </summary>
+        public string SystemPath
+        {
+            get { return IO.AssetPathToSystemPath(m_Path); }
+        }
+
+        /// <summary>
         /// Creates a new Directory objects.
         /// </summary>
         /// <param name="directoryPath"></param>

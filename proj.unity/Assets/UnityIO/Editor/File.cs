@@ -50,6 +50,14 @@ namespace UnityIO.Classes
         }
 
         /// <summary>
+        /// Gets the path to this file starting from the root of your system.
+        /// </summary>
+        public string SystemPath
+        {
+            get { return IO.AssetPathToSystemPath(Path); }
+        }
+
+        /// <summary>
         /// Gets the name of this file with it's extension.
         /// </summary>
         public string Name
@@ -142,7 +150,7 @@ namespace UnityIO.Classes
             // Get our path. 
             string copyDir = AssetDatabase.GenerateUniqueAssetPath(directory + "/" + newName + extension);
             // Copy our asset
-            Debug.Log(AssetDatabase.CopyAsset(Path, copyDir));
+            AssetDatabase.CopyAsset(Path, copyDir);
             // Return new IFile
             return new File(copyDir);
         }

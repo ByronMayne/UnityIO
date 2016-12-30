@@ -44,6 +44,11 @@ namespace UnityIO.Interfaces
         string Path { get; }
 
         /// <summary>
+        /// Gets the system path of this file. 
+        /// </summary>
+        string SystemPath { get; }
+
+        /// <summary>
         /// Gets the name of this file with it's extension included.
         /// </summary>
         string Name { get; }
