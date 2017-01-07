@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 968976298, guid: 0372e646380ebfa46988c9dafb1b2002, type: 3}
+  m_Name: Example(Clone)
+  m_EditorClassIdentifier: 
+  m_PackageName: UnityIO
+  m_Version: 1.0.0.0
+  m_Assemblies:
+  - m_AssemblyName: UnityIO
+    m_CompiledScripts:
+    - /proj.unity/Assets/UnityIO/Editor/ContextMenus.cs
+    - /proj.unity/Assets/UnityIO/Editor/Directory.cs
+    - /proj.unity/Assets/UnityIO/Editor/Exceptions.cs
+    - /proj.unity/Assets/UnityIO/Editor/File.cs
+    - /proj.unity/Assets/UnityIO/Editor/Files.cs
+    - /proj.unity/Assets/UnityIO/Editor/Interfaces/IDirectory.cs
+    - /proj.unity/Assets/UnityIO/Editor/Interfaces/IFile.cs
+    - /proj.unity/Assets/UnityIO/Editor/Interfaces/IFiles.cs
+    - /proj.unity/Assets/UnityIO/Editor/NullFile.cs
+    - /proj.unity/Assets/UnityIO/Editor/UnityIO.cs
+    m_References:
+    - System
+    - UnityEngine
+    - UnityEditor
+    m_EditorCompatible: 1
+    m_CompatibleWithAnyPlatform: 0
+    m_BuildTargets: 13
+  - m_AssemblyName: UnityIO.UnitTests
+    m_CompiledScripts:
+    - /proj.unity/Assets/UnityIO/Editor/Unit Tests/ConditionalProgressTests.cs
+    - /proj.unity/Assets/UnityIO/Editor/Unit Tests/CreatingDirectoryTests.cs
+    - /proj.unity/Assets/UnityIO/Editor/Unit Tests/DirectoryChangesTests.cs
+    - /proj.unity/Assets/UnityIO/Editor/Unit Tests/EnumerationTests.cs
+    - /proj.unity/Assets/UnityIO/Editor/Unit Tests/FileChangesTests.cs
+    - /proj.unity/Assets/UnityIO/Editor/Unit Tests/GetFilesTests.cs
+    - /proj.unity/Assets/UnityIO/Editor/Unit Tests/PathValidationTests.cs
+    - /proj.unity/Assets/UnityIO/Editor/Unit Tests/UnityIOTestBase.cs
+    m_References:
+    - System
+    - UnityEngine
+    - UnityEditor
+    - UnityIO
+    m_EditorCompatible: 1
+    m_CompatibleWithAnyPlatform: 0
+    m_BuildTargets: 13
