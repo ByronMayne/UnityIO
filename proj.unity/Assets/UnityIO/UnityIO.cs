@@ -33,7 +33,6 @@ using UnityIO.Classes;
 
 namespace UnityIO
 {
-
     public class IO
     {
 		/// <summary>
@@ -49,7 +48,6 @@ namespace UnityIO
         /// The starting part of a path that is required for it to be an Asset Path. 
         /// </summary>
         public const string ROOT_FOLDER_NAME = "Assets";
-
 
         /// <summary>
         /// A function used to make sure that paths being sent to UnityIO are the correct type. One common
@@ -121,13 +119,13 @@ namespace UnityIO
             }
 
             // Make sure we are in the right directory
-            if(!systemPath.StartsWith(Application.dataPath))
+            if(!systemPath.StartsWith(AssetDatabase.rootDirectory))
             {
-                throw new System.InvalidOperationException(string.Format("The path {0} does not start with {1} which is our current directory. This can't be converted", systemPath, Application.dataPath));
+                throw new System.InvalidOperationException(string.Format("The path {0} does not start with {1} which is our current directory. This can't be converted", systemPath, AssetDatabase.rootDirectory));
             }
 
             // Get the number of chars in our system directory path
-            int systemDirNameLength = Application.dataPath.Length;
+            int systemDirNameLength = AssetDatabase.rootDirectory.Length;
 
             // Subtract the name of the asset folder since we want to keep that part. 
             systemDirNameLength -= ROOT_FOLDER_NAME.Length;
@@ -179,7 +177,7 @@ namespace UnityIO
             assetPath = assetPath.Substring(ROOT_FOLDER_NAME.Length, pathLength);
 
             // Combine them
-            systemPath = Application.dataPath + assetPath;
+            systemPath = AssetDatabase.rootDirectory + assetPath;
 
             // Return the result
             return systemPath;
