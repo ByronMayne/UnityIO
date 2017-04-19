@@ -28,10 +28,8 @@ SOFTWARE.
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 using UnityIO.Interfaces;
 using UnityEngine;
-using UnityEditor;
 using UnityIO.Exceptions;
 using sIO = System.IO;
-using UnityEditorInternal;
 
 namespace UnityIO.Classes
 {
@@ -139,7 +137,7 @@ namespace UnityIO.Classes
                 throw new InvalidNameException("When you duplicate an asset it should not have an extension " + newName);
             }
             // Make sure it's a valid name. 
-            if (!InternalEditorUtility.IsValidFileName(newName))
+            if (!AssetDatabase.IsValidFileName(newName))
             {
                 throw new InvalidNameException("The name '" + newName + "' contains invalid characters");
             }
@@ -243,22 +241,6 @@ namespace UnityIO.Classes
         public T LoadAsset<T>() where T : UnityEngine.Object
         {
             return AssetDatabase.LoadAssetAtPath<T>(Path);
-        }
-
-        /// <summary>
-        /// Returns back the Unity <see cref="AssetImporter"/> for this asset if it exists.
-        /// </summary>
-        public AssetImporter GetImporter()
-        {
-            return AssetImporter.GetAtPath(Path);
-        }
-
-        /// <summary>
-        /// Returns back the Unity <see cref="AssetImporter"/> for this asset if it exists.
-        /// </summary>
-        public T GetImporter<T>() where T : AssetImporter
-        {
-            return AssetImporter.GetAtPath(Path) as T;
         }
     }
 }

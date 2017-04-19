@@ -28,7 +28,6 @@ SOFTWARE.
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
 using UnityIO.Interfaces;
-using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using System.Collections;
@@ -184,7 +183,7 @@ namespace UnityIO.Classes
             {
                 if (!serachResult[i].EndsWith(".meta"))
                 {
-                    string unityPath = FileUtil.GetProjectRelativePath(serachResult[i]);
+                    string unityPath = AssetDatabase.GetProjectRelativePath(serachResult[i]);
                     iFiles.Add(new File(unityPath));
                 }
             }

@@ -336,15 +336,5 @@ namespace UnityIO.Classes
         {
             return other is NullFile;
         }
-
-        public AssetImporter GetImporter()
-        {
-            return null;
-        }
-
-        public T GetImporter<T>() where T : AssetImporter
-        {
-            return null;
-        }
     }
 }

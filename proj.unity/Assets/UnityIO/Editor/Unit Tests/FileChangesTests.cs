@@ -35,6 +35,7 @@ using UnityEngine;
 using UnityIO;
 using UnityIO.Classes;
 using UnityIO.Interfaces;
+using AssetDatabase = UnityEditor.AssetDatabase;
 
 public class FileChangesTests
 {

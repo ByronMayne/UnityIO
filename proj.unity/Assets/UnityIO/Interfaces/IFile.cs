@@ -26,8 +26,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-
-using UnityEditor;
 using UnityEngine;
 
 namespace UnityIO.Interfaces
@@ -115,15 +113,5 @@ namespace UnityIO.Interfaces
         /// </summary>
         /// <typeparam name="T">The type of object you want to load</typeparam>
         T LoadAsset<T>() where T : Object;
-
-        /// <summary>
-        /// Gets the <see cref="AssetImporter"/> for this asset. 
-        /// </summary>
-        AssetImporter GetImporter();
-
-        /// <summary>
-        /// Gets the asset importer for this asset. 
-        /// </summary>
-        T GetImporter<T>() where T : AssetImporter;
     }
 }

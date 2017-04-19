@@ -16,7 +16,7 @@ namespace UnityIO
             // Get the system path
             string systemPath = Application.dataPath;
             // Get asset path
-            string asssetPath = AssetDatabase.GetAssetPath(selectedObject);
+            string asssetPath = UnityEditor.AssetDatabase.GetAssetPath(selectedObject);
             // Make sure we have a path
             if(string.IsNullOrEmpty(asssetPath))
             {
@@ -37,7 +37,7 @@ namespace UnityIO
             // Get our object. 
             Object selectedObject = Selection.activeObject;
             // return it's path
-            string unityPath = AssetDatabase.GetAssetPath(selectedObject);
+            string unityPath = UnityEditor.AssetDatabase.GetAssetPath(selectedObject);
             // COpy to buffer
             EditorGUIUtility.systemCopyBuffer = unityPath;
         }
@@ -54,7 +54,7 @@ namespace UnityIO
             }
 
             // Things that exist in the scene don't have an asset path. 
-            return !string.IsNullOrEmpty(AssetDatabase.GetAssetPath(selected));
+            return !string.IsNullOrEmpty(UnityEditor.AssetDatabase.GetAssetPath(selected));
         }
     }
 }
