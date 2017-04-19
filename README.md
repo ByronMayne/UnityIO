@@ -1,6 +1,8 @@
+[![Gitter Chat](https://img.shields.io/badge/Gitter-Join%20Chat-red.svg)](https://gitter.im/UnityIO/Lobby)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/ByronMayne/UnityIO/blob/master/LICENSE)
-![Mac](https://img.shields.io/badge/Tested-Mac-green.svg)
-![Windows](https://img.shields.io/badge/Tested-Windows-green.svg)
+
+
+
 
 # Unity IO
 
