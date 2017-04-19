@@ -8,14 +8,29 @@ using uAssetDatabase = UnityEditor.AssetDatabase;
 
 using System;
 using Object = UnityEngine.Object;
-
-
-
+using UnityEngine;
 
 namespace UnityIO
 {
     public static class AssetDatabase
     {
+        /// <summary>
+        /// Returns the root directory of our application <see cref="Application.dataPath"/>. In the editor
+        /// this is the path to the root of the Unity project and on device
+        /// this is the <see cref="Application.persistentDataPath"/>.
+        /// </summary>
+        public static string rootDirectory
+        {
+            get
+            {
+#if !RELEASE_BUILD
+                return Application.dataPath;
+#else
+                return Application.persistentDataPath;
+#endif
+            }
+        }
+
         /// <summary>
         /// Returns the first asset object of type at given path assetPath.
         /// </summary>
