@@ -47,9 +47,9 @@ public class FileChangesTests
         // Creating our working Directory
         m_WorkingDirectroy = IO.Root.CreateDirectory(GetType().Name);
         // Create a prefab to work with.
-        PrefabUtility.CreatePrefab(m_WorkingDirectroy.Path + "/Cube.prefab", GameObject.CreatePrimitive(PrimitiveType.Cube));
-        PrefabUtility.CreatePrefab(m_WorkingDirectroy.Path + "/Cylinder.prefab", GameObject.CreatePrimitive(PrimitiveType.Cylinder));
-        PrefabUtility.CreatePrefab(m_WorkingDirectroy.Path + "/Plane.prefab", GameObject.CreatePrimitive(PrimitiveType.Plane));
+        PrefabUtility.CreatePrefab(m_WorkingDirectroy.path + "/Cube.prefab", GameObject.CreatePrimitive(PrimitiveType.Cube));
+        PrefabUtility.CreatePrefab(m_WorkingDirectroy.path + "/Cylinder.prefab", GameObject.CreatePrimitive(PrimitiveType.Cylinder));
+        PrefabUtility.CreatePrefab(m_WorkingDirectroy.path + "/Plane.prefab", GameObject.CreatePrimitive(PrimitiveType.Plane));
     }
 
     [Test]
@@ -63,9 +63,9 @@ public class FileChangesTests
         // Duplicate our prefab
         var secondCube = cube.Duplicate();
         // Check if our first one still exists
-        Assert.IsNotNull(AssetDatabase.LoadAssetAtPath<GameObject>(cube.Path));
+        Assert.IsNotNull(AssetDatabase.LoadAssetAtPath<GameObject>(cube.path));
         // And our second one is alive.
-        Assert.IsNotNull(AssetDatabase.LoadAssetAtPath<GameObject>(secondCube.Path));
+        Assert.IsNotNull(AssetDatabase.LoadAssetAtPath<GameObject>(secondCube.path));
     }
 
     [Test]
@@ -79,9 +79,9 @@ public class FileChangesTests
         // Duplicate our prefab
         var secondCube = cube.Duplicate("Super Box");
         // Check if our first one still exists
-        Assert.IsNotNull(AssetDatabase.LoadAssetAtPath<GameObject>(m_WorkingDirectroy.Path + "/Cube.prefab"));
+        Assert.IsNotNull(AssetDatabase.LoadAssetAtPath<GameObject>(m_WorkingDirectroy.path + "/Cube.prefab"));
         // And our second one is alive.
-        Assert.IsNotNull(AssetDatabase.LoadAssetAtPath<GameObject>(m_WorkingDirectroy.Path + "/Super Box.prefab"));
+        Assert.IsNotNull(AssetDatabase.LoadAssetAtPath<GameObject>(m_WorkingDirectroy.path + "/Super Box.prefab"));
     }
 
 
@@ -96,9 +96,9 @@ public class FileChangesTests
         // Duplicate our prefab
         cube.Rename("Super Tube");
         // Check to make sure the original item does not exist
-        Assert.IsNull(AssetDatabase.LoadAssetAtPath<GameObject>(m_WorkingDirectroy.Path + "/Cylinder.prefab"), "Our old prefab still exists");
+        Assert.IsNull(AssetDatabase.LoadAssetAtPath<GameObject>(m_WorkingDirectroy.path + "/Cylinder.prefab"), "Our old prefab still exists");
         // Check if the rename happened.
-        Assert.IsNotNull(AssetDatabase.LoadAssetAtPath<GameObject>(m_WorkingDirectroy.Path + "/Super Tube.prefab"), "The renamed prefab could not be found");
+        Assert.IsNotNull(AssetDatabase.LoadAssetAtPath<GameObject>(m_WorkingDirectroy.path + "/Super Tube.prefab"), "The renamed prefab could not be found");
     }
 
 
@@ -113,11 +113,11 @@ public class FileChangesTests
         // Should not be null;
         Assert.IsNotInstanceOf<NullFile>(cube);
         // Duplicate our prefab
-        cube.Move(moveTo.Path);
+        cube.Move(moveTo.path);
         // Check to make sure the original item does not exist
-        Assert.IsNull(AssetDatabase.LoadAssetAtPath<GameObject>(m_WorkingDirectroy.Path + "/Plane.prefab"), "Our old prefab still exists");
+        Assert.IsNull(AssetDatabase.LoadAssetAtPath<GameObject>(m_WorkingDirectroy.path + "/Plane.prefab"), "Our old prefab still exists");
         // Check if the rename happened.
-        Assert.IsNotNull(AssetDatabase.LoadAssetAtPath<GameObject>(m_WorkingDirectroy.Path + "/MoveTo/Plane.prefab"), "The renamed prefab could not be found");
+        Assert.IsNotNull(AssetDatabase.LoadAssetAtPath<GameObject>(m_WorkingDirectroy.path + "/MoveTo/Plane.prefab"), "The renamed prefab could not be found");
     }
 
     [Test]
@@ -125,13 +125,13 @@ public class FileChangesTests
     public void DeleteFile()
     {
         // Create a prefab to delete. 
-        PrefabUtility.CreatePrefab(m_WorkingDirectroy.Path + "/Delete Me.prefab", GameObject.CreatePrimitive(PrimitiveType.Plane));
+        PrefabUtility.CreatePrefab(m_WorkingDirectroy.path + "/Delete Me.prefab", GameObject.CreatePrimitive(PrimitiveType.Plane));
         // Get our file
         var deleteMeFile = m_WorkingDirectroy.GetFiles("*Delete Me*").FirstOrDefault();
         // Delete it
         deleteMeFile.Delete();
         // Check to make sure the original item does not exist
-        Assert.IsNull(AssetDatabase.LoadAssetAtPath<GameObject>(m_WorkingDirectroy.Path + "/Delete Me.prefab"), "Our old prefab still exists");
+        Assert.IsNull(AssetDatabase.LoadAssetAtPath<GameObject>(m_WorkingDirectroy.path + "/Delete Me.prefab"), "Our old prefab still exists");
     }
 
 

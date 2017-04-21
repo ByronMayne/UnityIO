@@ -85,10 +85,10 @@ public class GetFilesTests : UnityIOTestBase
         // We are going to try to only find files ending with .anim
         var file = loadingDir.GetFiles(filter: "*.anim").FirstOrDefault();
         // Make sure it's the correct directory.
-        Assert.AreEqual(loadingDir.Path, file.Directory.Path, "The directory of the file does not match.");
+        Assert.AreEqual(loadingDir.path, file.directory.path, "The directory of the file does not match.");
         // Make sure it's the correct extension.
-        Assert.AreEqual(".anim", file.Extension, "The extension of this class should be '.anim'.");
+        Assert.AreEqual(".anim", file.extension, "The extension of this class should be '.anim'.");
         // Make sure it's the correct extension.
-        Assert.AreEqual("Misc Animation", file.NameWithoutExtension, "The name of this class is not correct.");
+        Assert.AreEqual("Misc Animation", file.nameWithoutExtension, "The name of this class is not correct.");
     }
 }

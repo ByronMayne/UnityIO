@@ -40,12 +40,12 @@ namespace UnityIO.Classes
     {
         public static NullFile SHARED_INSTANCE = new NullFile();
 
-        public string Path
+        public string path
         {
             get { return "Null"; }
         }
 
-        public string SystemPath
+        public string systemPath
         {
             get { return "Null"; }
         }
@@ -58,7 +58,7 @@ namespace UnityIO.Classes
             }
         }
 
-        public IDirectory Directory
+        public IDirectory directory
         {
             get
             {
@@ -82,7 +82,7 @@ namespace UnityIO.Classes
             }
         }
 
-        public string Name
+        public string name
         {
             get
             {
@@ -90,7 +90,7 @@ namespace UnityIO.Classes
             }
         }
 
-        public string NameWithoutExtension
+        public string nameWithoutExtension
         {
             get
             {
@@ -98,7 +98,7 @@ namespace UnityIO.Classes
             }
         }
 
-        public string Extension
+        public string extension
         {
             get
             {
@@ -106,7 +106,7 @@ namespace UnityIO.Classes
             }
         }
 
-        public File this[int index]
+        public IFile this[int index]
         {
             get
             {
@@ -277,12 +277,12 @@ namespace UnityIO.Classes
             return null;
         }
 
-        public int IndexOf(File item)
+        public int IndexOf(IFile item)
         {
             return 0;
         }
 
-        public void Insert(int index, File item)
+        public void Insert(int index, IFile item)
         {
             
         }
@@ -292,7 +292,7 @@ namespace UnityIO.Classes
            
         }
 
-        public void Add(File item)
+        public void Add(IFile item)
         {
            
         }
@@ -302,22 +302,22 @@ namespace UnityIO.Classes
             
         }
 
-        public bool Contains(File item)
+        public bool Contains(IFile item)
         {
             return false;
         }
 
-        public void CopyTo(File[] array, int arrayIndex)
+        public void CopyTo(IFile[] array, int arrayIndex)
         {
             
         }
 
-        public bool Remove(File item)
+        public bool Remove(IFile item)
         {
             return false;
         }
 
-        IEnumerator<File> IEnumerable<File>.GetEnumerator()
+        IEnumerator<IFile> IEnumerable<IFile>.GetEnumerator()
         {
             throw new NotImplementedException();
         }

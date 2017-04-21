@@ -45,7 +45,7 @@ namespace UnityIO.Classes
         /// Gets the full path to this directory starting from the root of the 
         /// Unity project. 
         /// </summary>
-        public string Path
+        public string path
         {
             get { return m_Path; }
         }
@@ -53,7 +53,7 @@ namespace UnityIO.Classes
         /// <summary>
         /// Gets the location of this directory starting from the root of the computer.
         /// </summary>
-        public string SystemPath
+        public string systemPath
         {
             get { return IO.AssetPathToSystemPath(m_Path); }
         }
@@ -132,7 +132,7 @@ namespace UnityIO.Classes
         public IFile CreateFile<T>(string name, T asset) where T : Object
         {
             File newFile = new File(m_Path + name);
-            AssetDatabase.CreateAsset(asset, newFile.Path);
+            AssetDatabase.CreateAsset(asset, newFile.path);
             return newFile;
         }
 
@@ -331,7 +331,7 @@ namespace UnityIO.Classes
         /// <param name="moveDirectroy">The directory you want to move this directory in too</param>
         public void Move(IDirectory targetDirectory)
         {
-            Move(targetDirectory.Path);
+            Move(targetDirectory.path);
         }
 
         /// <summary>
@@ -477,7 +477,7 @@ namespace UnityIO.Classes
         /// </summary>
         public int Compare(IDirectory x, IDirectory y)
         {
-            return string.Compare(x.Path, y.Path);
+            return string.Compare(x.path, y.path);
         }
 
         /// <summary>
@@ -485,7 +485,7 @@ namespace UnityIO.Classes
         /// </summary>
         public bool Equals(IDirectory other)
         {
-            return string.CompareOrdinal(Path, other.Path) == 0;
+            return string.CompareOrdinal(path, other.path) == 0;
         }
 
         /// <summary>
@@ -493,7 +493,7 @@ namespace UnityIO.Classes
         /// </summary>
         public static bool operator ==(Directory lhs, Directory rhs)
         {
-            return string.CompareOrdinal(lhs.Path, rhs.Path) == 0;
+            return string.CompareOrdinal(lhs.path, rhs.path) == 0;
         }
 
         /// <summary>
@@ -501,7 +501,7 @@ namespace UnityIO.Classes
         /// </summary>
         public static bool operator !=(Directory lhs, Directory rhs)
         {
-            return string.CompareOrdinal(lhs.Path, rhs.Path) == 0;
+            return string.CompareOrdinal(lhs.path, rhs.path) == 0;
         }
 
         
@@ -518,7 +518,7 @@ namespace UnityIO.Classes
         /// </summary>
         public static implicit operator string(Directory directory)
         {
-            return directory.Path;
+            return directory.path;
         }
 
         /// <summary>
@@ -528,7 +528,7 @@ namespace UnityIO.Classes
         {
             if (obj is IDirectory)
             {
-                return string.Compare(((IDirectory)obj).Path, Path) == 0;
+                return string.Compare(((IDirectory)obj).path, path) == 0;
             }
             return false;
         }

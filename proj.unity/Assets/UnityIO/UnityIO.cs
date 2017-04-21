@@ -88,13 +88,13 @@ namespace UnityIO
 		}
 
         /// <summary>
-        /// Gets the root directory for the Unity projects asset folder.
+        /// Gets the root directory that is defined by <see cref="AssetDatabase.rootDirectory"/>
         /// </summary>
         public static IDirectory Root
         {
             get
             {
-                return new Directory(ROOT_FOLDER_NAME);
+                return new Directory(AssetDatabase.rootDirectory);
             }
 
         }
@@ -138,6 +138,27 @@ namespace UnityIO
 
             // Return
             return assetPath;
+        }
+
+        /// <summary>
+        /// Appends a string to the end of the file name. This is before the extension.
+        /// </summary>
+        public static string AppendName(string assetPath, string appendedText)
+        {
+            // Create a holder for our name 
+            char[] appendedPath = new char[assetPath.Length + appendedText.Length];
+            // Get the index of our extension
+            int extensionIndex = assetPath.LastIndexOf('.');
+            // Copy it into our new path
+            assetPath.CopyTo(0, appendedPath, 0, extensionIndex);
+            // Append our new text
+            appendedText.CopyTo(0, appendedPath, extensionIndex + 1, appendedText.Length);
+            // Get the length of our starting extension
+            int extensionLength = assetPath.Length - extensionIndex;
+            // Add back on the extension
+            assetPath.CopyTo(extensionIndex, appendedPath, extensionIndex + appendedText.Length, extensionLength);
+            // Return the result
+            return new string(appendedPath);
         }
 
         /// <summary>

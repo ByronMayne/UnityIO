@@ -42,7 +42,7 @@ namespace UnityIO.Classes
         /// <summary>
         /// Gets the full path to this file starting from the Assets folder. 
         /// </summary>
-        public string Path
+        public string path
         {
             get { return m_Directory + "/" + m_FileName + m_Extension; }
         }
@@ -50,15 +50,15 @@ namespace UnityIO.Classes
         /// <summary>
         /// Gets the path to this file starting from the root of your system.
         /// </summary>
-        public string SystemPath
+        public string systemPath
         {
-            get { return IO.AssetPathToSystemPath(Path); }
+            get { return IO.AssetPathToSystemPath(path); }
         }
 
         /// <summary>
         /// Gets the name of this file with it's extension.
         /// </summary>
-        public string Name
+        public string name
         {
             get { return m_FileName + m_Extension; }
         }
@@ -66,7 +66,7 @@ namespace UnityIO.Classes
         /// <summary>
         /// Gets the name of this file without it's extension.
         /// </summary>
-        public string NameWithoutExtension
+        public string nameWithoutExtension
         {
             get { return m_FileName; }
         }
@@ -74,7 +74,7 @@ namespace UnityIO.Classes
         /// <summary>
         /// Gets the extension of this file. 
         /// </summary>
-        public string Extension
+        public string extension
         {
             get { return m_Extension; }
         }
@@ -92,7 +92,7 @@ namespace UnityIO.Classes
         /// <summary>
         /// Returns the directory that this file exists in.
         /// </summary>
-        public IDirectory Directory
+        public IDirectory directory
         {
             get
             {
@@ -106,15 +106,15 @@ namespace UnityIO.Classes
         public void Delete()
         {
             // Deletes the asset
-            AssetDatabase.DeleteAsset(Path);
+            AssetDatabase.DeleteAsset(path);
         }
 
         public IFile Duplicate()
         {
             // Get our path. 
-            string copyDir = AssetDatabase.GenerateUniqueAssetPath(Path);
+            string copyDir = AssetDatabase.GenerateUniqueAssetPath(path);
             // Copy our asset
-            AssetDatabase.CopyAsset(Path, copyDir);
+            AssetDatabase.CopyAsset(path, copyDir);
             // Return new IFile
             return new File(copyDir);
         }
@@ -129,7 +129,7 @@ namespace UnityIO.Classes
         {
             if(string.IsNullOrEmpty(newName))
             {
-                throw new System.ArgumentNullException("You can't send a empty or null string to rename an asset. Trying to rename " + Path);
+                throw new System.ArgumentNullException("You can't send a empty or null string to rename an asset. Trying to rename " + path);
             }
             // Make sure we don't have an extension. 
             if(!string.IsNullOrEmpty(sIO.Path.GetExtension(newName)))
@@ -142,13 +142,13 @@ namespace UnityIO.Classes
                 throw new InvalidNameException("The name '" + newName + "' contains invalid characters");
             }
             // Get our current directory
-            string directory = System.IO.Path.GetDirectoryName(Path);
+            string directory = System.IO.Path.GetDirectoryName(path);
             // and the extension
-            string extension = System.IO.Path.GetExtension(Path);
+            string extension = System.IO.Path.GetExtension(path);
             // Get our path. 
             string copyDir = AssetDatabase.GenerateUniqueAssetPath(directory + "/" + newName + extension);
             // Copy our asset
-            AssetDatabase.CopyAsset(Path, copyDir);
+            AssetDatabase.CopyAsset(path, copyDir);
             // Return new IFile
             return new File(copyDir);
         }
@@ -159,7 +159,7 @@ namespace UnityIO.Classes
         /// <param name="directroy">The directory you want to move it too</param>
         public void Move(IDirectory targetDirectory)
         {
-            Move(targetDirectory.Path);
+            Move(targetDirectory.path);
         }
 
         /// <summary>
@@ -177,24 +177,24 @@ namespace UnityIO.Classes
             }
 
             // Get the current name of our file.
-            string name = System.IO.Path.GetFileName(Path);
+            string name = System.IO.Path.GetFileName(path);
 
             // Append the name to the end. Move can't rename.
             targetDirectory = targetDirectory + "/" + name;
 
             // Check to see if there will be an error.
-            string error = AssetDatabase.ValidateMoveAsset(Path, targetDirectory);
+            string error = AssetDatabase.ValidateMoveAsset(path, targetDirectory);
 
             // CHeck
             if (!string.IsNullOrEmpty(error))
             {
                 // We messed up.
-                throw new MoveException(error, Path, targetDirectory);
+                throw new MoveException(error, path, targetDirectory);
             }
             else
             {
                 // Move it we are good to go.
-                AssetDatabase.MoveAsset(Path, targetDirectory);
+                AssetDatabase.MoveAsset(path, targetDirectory);
             }
         }
 
@@ -210,19 +210,19 @@ namespace UnityIO.Classes
 
             if (newName.Contains("/"))
             {
-                throw new RenameException("Rename can't be used to change a files location use Move(string newPath) instead.", Path, newName);
+                throw new RenameException("Rename can't be used to change a files location use Move(string newPath) instead.", path, newName);
             }
 
-            string path = m_Directory + "/" + newName;
+            string tempPath = m_Directory + "/" + newName;
 
-            Object preExistingAsset = AssetDatabase.LoadAssetAtPath<Object>(path);
+            Object preExistingAsset = AssetDatabase.LoadAssetAtPath<Object>(tempPath);
 
             if (preExistingAsset != null)
             {
-                throw new FileAlreadyExistsException("Rename can't be completed since an asset already exists with that name at path " + path);
+                throw new FileAlreadyExistsException("Rename can't be completed since an asset already exists with that name at path " + tempPath);
             }
 
-            AssetDatabase.RenameAsset(Path, newName);
+            AssetDatabase.RenameAsset(tempPath, newName);
         }
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace UnityIO.Classes
         /// <returns>Returns the asset</returns>
         public UnityEngine.Object LoadAsset()
         {
-            return AssetDatabase.LoadAssetAtPath(Path, typeof(Object));
+            return AssetDatabase.LoadAssetAtPath(path, typeof(Object));
         }
 
         /// <summary>
@@ -240,7 +240,7 @@ namespace UnityIO.Classes
         /// <returns>Returns the asset</returns>
         public T LoadAsset<T>() where T : UnityEngine.Object
         {
-            return AssetDatabase.LoadAssetAtPath<T>(Path);
+            return AssetDatabase.LoadAssetAtPath<T>(path);
         }
     }
 }

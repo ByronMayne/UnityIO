@@ -35,12 +35,12 @@ namespace UnityIO.Interfaces
 {
     public interface IDirectory : IEnumerable<IDirectory>, IComparer<IDirectory>, IEquatable<IDirectory>
     {
-        string Path { get; }
+        string path { get; }
 
         /// <summary>
         /// Gets the system path of this file. 
         /// </summary>
-        string SystemPath { get; }
+        string systemPath { get; }
 
         void Delete();
         void Duplicate();

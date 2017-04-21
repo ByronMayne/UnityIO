@@ -33,7 +33,7 @@ using UnityIO.Classes;
 
 namespace UnityIO.Interfaces
 {
-    public interface IFiles : IList<File>
+    public interface IFiles : IList<IFile>
     {
         IList<T> LoadAllofType<T>() where T : Object;
         IFile FirstOrDefault();

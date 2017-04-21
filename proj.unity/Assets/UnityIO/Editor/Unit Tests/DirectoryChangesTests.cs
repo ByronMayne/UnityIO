@@ -64,7 +64,7 @@ public class DirectoryChangesTests
         // Add a sub folder
         newFolder.CreateDirectory("Sub");
         // duplicate our first one
-        newFolder.Duplicate(IO.Root.Path + "/New DDWN");
+        newFolder.Duplicate(IO.Root.path + "/New DDWN");
         // Make sure the original and it's sub directory are still in tack.
         Assert.True(IO.Root.SubDirectoryExists("DDWN"), "The original folder should be in the same place");
         // And it's sub folder
@@ -156,7 +156,7 @@ public class DirectoryChangesTests
         // Rename it with invalid characters.
         try
         {
-            newDir.Move(rwc.Path + "/" + charactersToTest);
+            newDir.Move(rwc.path + "/" + charactersToTest);
         }
         catch (System.Exception e)
         {

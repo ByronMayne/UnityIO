@@ -39,27 +39,27 @@ namespace UnityIO.Interfaces
         /// <summary>
         /// Gets the path to this file starting from the root of the Unity project. 
         /// </summary>
-        string Path { get; }
-
-        /// <summary>
-        /// Gets the system path of this file. 
-        /// </summary>
-        string SystemPath { get; }
+        string path { get; }
 
         /// <summary>
         /// Gets the name of this file with it's extension included.
         /// </summary>
-        string Name { get; }
+        string name { get; }
 
         /// <summary>
         /// Gets the name of this file without it's extension.
         /// </summary>
-        string NameWithoutExtension { get; }
+        string nameWithoutExtension { get; }
 
         /// <summary>
         /// Gets the extension of this file.
         /// </summary>
-        string Extension { get; }
+        string extension { get; }
+
+        /// <summary>
+        /// Returns the back directory that this file exists in.
+        /// </summary>
+        IDirectory directory { get; }
 
         /// <summary>
         /// Deletes this file.
@@ -96,11 +96,6 @@ namespace UnityIO.Interfaces
         /// Copies the file on disk and renames it. Name must be unique or an exception is thrown. 
         /// </summary>
         IFile Duplicate(string newName);
-
-        /// <summary>
-        /// Returns the back directory that this file exists in.
-        /// </summary>
-        IDirectory Directory { get; }
 
         /// <summary>
         /// Loads the <see cref="UnityEngine.Object"/> asset that this file points too. 

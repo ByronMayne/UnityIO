@@ -9,10 +9,11 @@ using uAssetDatabase = UnityEditor.AssetDatabase;
 using System;
 using Object = UnityEngine.Object;
 using UnityEngine;
+using System.IO;
 
 namespace UnityIO
 {
-    public static class AssetDatabase
+    internal static class AssetDatabase
     {
         /// <summary>
         /// Returns the root directory of our application <see cref="Application.dataPath"/>. In the editor
@@ -32,6 +33,15 @@ namespace UnityIO
         }
 
         /// <summary>
+        /// Returns true if this path is relative to the current project
+        /// and false if it's not. 
+        /// </summary>
+        public static bool IsRelativePath(string path)
+        {
+            return path.StartsWith(rootDirectory);
+        }
+
+        /// <summary>
         /// Returns the first asset object of type at given path assetPath.
         /// </summary>
         /// <typeparam name="T">The type you want to load</typeparam>
@@ -39,9 +49,14 @@ namespace UnityIO
         /// <returns>The loaded object</returns>
         public static T LoadAssetAtPath<T>(string assetPath) where T : Object
         {
-#if !RELEASE_BUILD
-            return uAssetDatabase.LoadAssetAtPath<T>(assetPath);
-#endif
+
+            if(IsRelativePath(assetPath))
+            {
+                #if !RELEASE_BUILD
+                return uAssetDatabase.LoadAssetAtPath<T>(assetPath);
+                #endif
+            }
+            return null;
         }
 
         /// <summary>
@@ -54,6 +69,8 @@ namespace UnityIO
         {
 #if !RELEASE_BUILD
             return uAssetDatabase.LoadAssetAtPath(assetPath, type);
+#else
+             return null;
 #endif
         }
 
@@ -65,17 +82,47 @@ namespace UnityIO
         {
 #if !RELEASE_BUILD
             return uAssetDatabase.DeleteAsset(assetPath);
+#else
+            // Convert to system path
+            string systemPath = IO.AssetPathToSystemPath(assetPath);
+            // Check if it exists
+            if(File.Exists(systemPath))
+            {
+                // Delete it
+                File.Delete(systemPath);
+                // Return true
+                return true; 
+            }
+            else
+            {
+                return false;
+            }
 #endif
+
         }
 
         /// <summary>
         /// Creates a new unique path for an asset.
         /// </summary>
-        public static string GenerateUniqueAssetPath(string path)
+        public static string GenerateUniqueAssetPath(string assetPath)
         {
-#if !RELEASE_BUILD
-            return uAssetDatabase.GenerateUniqueAssetPath(path);
-#endif
+            // Get our system path since we need the full one. 
+            string systemPath = IO.AssetPathToSystemPath(assetPath);
+            // Create a holder for a unique one. 
+            string uniquePath = systemPath;
+
+            // Loop till max int (We should never have that many folder but we don't want to loop forever). 
+            for (int i = 0; i < int.MaxValue; i++)
+            {
+                // If the file does not exist we can break. 
+                if(!File.Exists(uniquePath))
+                {
+                    break;
+                }
+                // One with that name already exists so we append our number to the file name. 
+                uniquePath = IO.AppendName(systemPath, " " + i.ToString());
+            }
+            return uniquePath;
         }
 
         /// <summary>
@@ -86,6 +133,15 @@ namespace UnityIO
         {
 #if !RELEASE_BUILD
             return uAssetDatabase.CopyAsset(path, newPath);
+#else
+             // Convert our path to a system path 
+            string sourceFilePath = IO.AssetPathToSystemPath(path);
+            // Get a unique one for our detestation path. 
+            string destSystemPath = GenerateUniqueAssetPath(newPath);
+            // Copy the file. 
+            File.Copy(sourceFilePath, destSystemPath, false);
+            // Return our result
+            return true.
 #endif
         }
 
@@ -96,18 +152,31 @@ namespace UnityIO
         /// <returns>True if it's valid and false if it's not.</returns>
         public static bool IsValidFileName(string fileName)
         {
-#if !RELEASE_BUILD
-            return InternalEditorUtility.IsValidFileName(fileName);
-#endif
+            char[] invalidChars = Path.GetInvalidFileNameChars();
+
+            for(int i = 0; i < invalidChars.Length; i++)
+            {
+                if(fileName.IndexOf(invalidChars[i]) > -1)
+                {
+                    return false;
+                }
+            }
+
+            return true; 
         }
 
         /// <summary>
         /// returns true if it exists, false otherwise false.
         /// </summary>
-        public static bool IsValidFolder(string path)
+        public static bool IsValidFolder(string assetPath)
         {
 #if !RELEASE_BUILD
-            return uAssetDatabase.IsValidFolder(path);
+            return uAssetDatabase.IsValidFolder(assetPath);
+#else
+            // Convert our path to a system path 
+            string sourceFilePath = IO.AssetPathToSystemPath(assetPath);
+            // Return if it exists or not.
+            return Directory.Exists(sourceFilePath);
 #endif
         }
 
@@ -121,6 +190,23 @@ namespace UnityIO
         {
 #if !RELEASE_BUILD
             return uAssetDatabase.ValidateMoveAsset(oldPath, newPath);
+
+
+#else
+            oldPath = IO.AssetPathToSystemPath(oldPath);
+            newPath = IO.AssetPathToSystemPath(newPath);
+
+            if(File.Exists(newPath))
+            {
+                return "File Already Exists";
+            }
+
+            if(AssetDatabase.IsValidFileName(newPath))
+            {
+                return "Not valid file name";
+            }
+
+            return string.Empty;
 #endif
         }
 
@@ -134,6 +220,10 @@ namespace UnityIO
         {
 #if !RELEASE_BUILD
             return uAssetDatabase.MoveAsset(oldPath, newPath);
+#else
+            oldPath = IO.AssetPathToSystemPath(oldPath);
+            newPath = IO.AssetPathToSystemPath(newPath);
+            File.Move(oldPath, newPath);
 #endif
         }
 
@@ -148,6 +238,7 @@ namespace UnityIO
 #if !RELEASE_BUILD
             return uAssetDatabase.RenameAsset(pathName, newName);
 #endif
+            
         }
 
         /// <summary>

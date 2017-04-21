@@ -141,7 +141,7 @@ public class Documention
         // iterate over our files and print their names
         for (int i = 0; i < files.Count; i++)
         {
-            Debug.Log(files[i].Name);
+            Debug.Log(files[i].name);
         }
     }
 
@@ -195,7 +195,7 @@ public class Documention
         // Get the file we want to use.
         IFile fileToMove = IO.Root.GetFiles("DeleteMe.txt").FirstOrDefault();
         // Move it
-        fileToRename.Move(IO.Root["Resources"].Path);
+        fileToRename.Move(IO.Root["Resources"].path);
 
     }
 }

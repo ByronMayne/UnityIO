@@ -33,7 +33,7 @@ using UnityEngine;
 
 namespace UnityIO.Classes
 {
-    public class Files : List<File>, IFiles
+    public class Files : List<IFile>, IFiles
     {
         /// <summary>
         /// A delegate used for modifying files. 
