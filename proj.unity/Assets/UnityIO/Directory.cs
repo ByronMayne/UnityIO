@@ -59,41 +59,6 @@ namespace UnityIO.Classes
         }
 
         /// <summary>
-        /// Our internal function which is used by all of the GetFilesFunctions. Used to search
-        /// for files in the current directory. 
-        /// </summary>
-        /// <param name="filter">Which filter should be used to search</param>
-        /// <param name="recursive">If we should also search sub directories.</param>
-        /// <returns></returns>
-        protected override IFiles GetFiles_Internal(string filter, bool recursive)
-        {
-            // Create an option
-            sIO.SearchOption options;
-            // Set it's values.
-            if (recursive)
-            {
-                options = sIO.SearchOption.AllDirectories;
-            }
-            else
-            {
-                options = sIO.SearchOption.TopDirectoryOnly;
-            }
-
-            // Create a result.
-            IFiles iFiles = new Files();
-
-            // Find all files on disk. 
-            string[] serachResult = sIO.Directory.GetFiles(path, filter, options);
-            // Loop over them all and add them to files result. 
-            for (int i = 0; i < serachResult.Length; i++)
-            {
-                iFiles.Add(new File(serachResult[i]));
-            }
-            // Return it.
-            return iFiles;
-        }
-
-        /// <summary>
         /// Creates the directory on disk if it does not already exist. If sent in a nested directory the
         /// full path will be created. 
         /// </summary>
@@ -140,47 +105,7 @@ namespace UnityIO.Classes
             }
         }
 
-        /// <summary>
-        /// Copies a whole directory and all it's contents. 
-        /// </summary>
-        protected static void Internal_Duplicate(string sourceDirName, string destDirName, bool copySubDirs)
-        {
-            // Get the subdirectories for the specified directory.
-            sIO.DirectoryInfo dir = new sIO.DirectoryInfo(sourceDirName);
 
-            if (!dir.Exists)
-            {
-                throw new DirectoryNotFoundException(
-                    "Source directory does not exist or could not be found: "
-                    + sourceDirName);
-            }
-
-            sIO.DirectoryInfo[] dirs = dir.GetDirectories();
-            // If the destination directory doesn't exist, create it.
-            if (!sIO.Directory.Exists(destDirName))
-            {
-                UnityEngine.Debug.Log("SRC: " + sourceDirName);
-                sIO.Directory.CreateDirectory(destDirName);
-            }
-
-            // Get the files in the directory and copy them to the new location.
-            sIO.FileInfo[] files = dir.GetFiles();
-            foreach (sIO.FileInfo file in files)
-            {
-                string temppath = sIO.Path.Combine(destDirName, file.Name);
-                file.CopyTo(temppath, false);
-            }
-
-            // If copying subdirectories, copy them and their contents to new location.
-            if (copySubDirs)
-            {
-                foreach (sIO.DirectoryInfo subdir in dirs)
-                {
-                    string temppath = sIO.Path.Combine(destDirName, subdir.Name);
-                    Internal_Duplicate(subdir.FullName, temppath, copySubDirs);
-                }
-            }
-        }
 
         /// <summary>
         /// Moves a directory from one path to another. If a directory of the 
@@ -247,9 +172,86 @@ namespace UnityIO.Classes
         /// <summary>
         /// Returns a new Directory object based on the path sent in.
         /// </summary>
-        protected override IDirectory Internal_Create(string path)
+        protected override IDirectory Internal_Create(string directoryPath)
         {
-            return new Directory(path);
+            return new Directory(directoryPath);
+        }
+
+        /// <summary>
+        /// Our internal function which is used by all of the GetFilesFunctions. Used to search
+        /// for files in the current directory. 
+        /// </summary>
+        /// <param name="filter">Which filter should be used to search</param>
+        /// <param name="recursive">If we should also search sub directories.</param>
+        /// <returns></returns>
+        protected override IFiles GetFiles_Internal(string filter, bool recursive)
+        {
+            // Create an option
+            sIO.SearchOption options;
+            // Set it's values.
+            if (recursive)
+            {
+                options = sIO.SearchOption.AllDirectories;
+            }
+            else
+            {
+                options = sIO.SearchOption.TopDirectoryOnly;
+            }
+
+            // Create a result.
+            IFiles iFiles = new Files();
+
+            // Find all files on disk. 
+            string[] serachResult = sIO.Directory.GetFiles(path, filter, options);
+            // Loop over them all and add them to files result. 
+            for (int i = 0; i < serachResult.Length; i++)
+            {
+                iFiles.Add(new File(serachResult[i]));
+            }
+            // Return it.
+            return iFiles;
+        }
+
+        /// <summary>
+        /// Copies a whole directory and all it's contents. 
+        /// </summary>
+        protected static void Internal_Duplicate(string sourceDirName, string destDirName, bool copySubDirs)
+        {
+            // Get the subdirectories for the specified directory.
+            sIO.DirectoryInfo dir = new sIO.DirectoryInfo(sourceDirName);
+
+            if (!dir.Exists)
+            {
+                throw new DirectoryNotFoundException(
+                    "Source directory does not exist or could not be found: "
+                    + sourceDirName);
+            }
+
+            sIO.DirectoryInfo[] dirs = dir.GetDirectories();
+            // If the destination directory doesn't exist, create it.
+            if (!sIO.Directory.Exists(destDirName))
+            {
+                UnityEngine.Debug.Log("SRC: " + sourceDirName);
+                sIO.Directory.CreateDirectory(destDirName);
+            }
+
+            // Get the files in the directory and copy them to the new location.
+            sIO.FileInfo[] files = dir.GetFiles();
+            foreach (sIO.FileInfo file in files)
+            {
+                string temppath = sIO.Path.Combine(destDirName, file.Name);
+                file.CopyTo(temppath, false);
+            }
+
+            // If copying subdirectories, copy them and their contents to new location.
+            if (copySubDirs)
+            {
+                foreach (sIO.DirectoryInfo subdir in dirs)
+                {
+                    string temppath = sIO.Path.Combine(destDirName, subdir.Name);
+                    Internal_Duplicate(subdir.FullName, temppath, copySubDirs);
+                }
+            }
         }
     }
 }

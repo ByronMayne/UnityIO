@@ -1,96 +1,42 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+using UnityIO.BaseClasses;
 using UnityIO.Exceptions;
 using UnityIO.Interfaces;
 using sIO = System.IO;
 
 namespace UnityIO.Classes
 {
-    public class AssetPath
+    public class AssetPath : BaseFile, IFile
     {
-        private string m_Directory;
-        private string m_Extension;
-        private string m_FileName;
-
         /// <summary>
-        /// Gets the full path to this file starting from the Assets folder. 
+        /// Returns the directory that this file exists in.
         /// </summary>
-        public string path
+        public override IDirectory directory
         {
-            get { return m_Directory + "/" + m_FileName + m_Extension; }
-        }
-
-        /// <summary>
-        /// Gets the path to this file starting from the root of your system.
-        /// </summary>
-        public string systemPath
-        {
-            get { return IO.AssetPathToSystemPath(path); }
-        }
-
-        /// <summary>
-        /// Gets the name of this file with it's extension.
-        /// </summary>
-        public string name
-        {
-            get { return m_FileName + m_Extension; }
-        }
-
-        /// <summary>
-        /// Gets the name of this file without it's extension.
-        /// </summary>
-        public string nameWithoutExtension
-        {
-            get { return m_FileName; }
-        }
-
-        /// <summary>
-        /// Gets the extension of this file. 
-        /// </summary>
-        public string extension
-        {
-            get { return m_Extension; }
+            get
+            {
+                return new AssetDirectory(m_Directory);
+            }
         }
 
         /// <summary>
         /// Creates a new instance of a file. 
         /// </summary>
-        public AssetPath(string path)
+        public AssetPath(string path) : base(path)
         {
-            m_Extension = sIO.Path.GetExtension(path);
-            m_FileName = sIO.Path.GetFileNameWithoutExtension(path);
-            m_Directory = sIO.Path.GetDirectoryName(path);
-        }
-
-        /// <summary>
-        /// Returns the directory that this file exists in.
-        /// </summary>
-        public IDirectory directory
-        {
-            get
-            {
-                return new Directory(m_Directory);
-            }
+            // Nothing to do here
         }
 
         /// <summary>
         /// Delete this file from disk.
         /// </summary>
-        public void Delete()
+        public override void Delete()
         {
             // Deletes the asset
             AssetDatabase.DeleteAsset(path);
-        }
-
-        public IFile Duplicate()
-        {
-            // Get our path. 
-            string copyDir = AssetDatabase.GenerateUniqueAssetPath(path);
-            // Copy our asset
-            AssetDatabase.CopyAsset(path, copyDir);
-            // Return new IFile
-            return new File(copyDir);
         }
 
         /// <summary>
@@ -99,7 +45,7 @@ namespace UnityIO.Classes
         /// </summary>
         /// <param name="newName">The new name of the file (excluding the extension)</param>
         /// <returns></returns>
-        public IFile Duplicate(string newName)
+        public override IFile Duplicate(string newName)
         {
             if (string.IsNullOrEmpty(newName))
             {
@@ -124,23 +70,14 @@ namespace UnityIO.Classes
             // Copy our asset
             AssetDatabase.CopyAsset(path, copyDir);
             // Return new IFile
-            return new File(copyDir);
+            return new AssetPath(copyDir);
         }
 
         /// <summary>
         /// Moves the files from it's current directory to another. 
         /// </summary>
         /// <param name="directroy">The directory you want to move it too</param>
-        public void Move(IDirectory targetDirectory)
-        {
-            Move(targetDirectory.path);
-        }
-
-        /// <summary>
-        /// Moves the files from it's current directory to another. 
-        /// </summary>
-        /// <param name="directroy">The directory you want to move it too</param>
-        public void Move(string targetDirectory)
+        public override void Move(string targetDirectory)
         {
             // Make sure we have a valid path
             IO.ValidatePath(targetDirectory);
@@ -173,48 +110,20 @@ namespace UnityIO.Classes
         }
 
         /// <summary>
-        /// Renames this file to a new name. 
+        /// Checks to see if this file exists on disk based on the
+        /// path sent in.
         /// </summary>
-        public void Rename(string newName)
+        protected override bool Exists(string path)
         {
-            if (!UnityEditorInternal.InternalEditorUtility.IsValidFileName(newName))
-            {
-                throw new InvalidNameException("The name '" + newName + "' contains invalid characters");
-            }
-
-            if (newName.Contains("/"))
-            {
-                throw new RenameException("Rename can't be used to change a files location use Move(string newPath) instead.", path, newName);
-            }
-
-            string tempPath = m_Directory + "/" + newName;
-
-            Object preExistingAsset = AssetDatabase.LoadAssetAtPath<Object>(tempPath);
-
-            if (preExistingAsset != null)
-            {
-                throw new FileAlreadyExistsException("Rename can't be completed since an asset already exists with that name at path " + tempPath);
-            }
-
-            AssetDatabase.RenameAsset(tempPath, newName);
+            return AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(path) != null;
         }
 
         /// <summary>
-        /// Loads the Unity asset at the files path. 
+        /// Returns a new instance of this type.
         /// </summary>
-        /// <returns>Returns the asset</returns>
-        public UnityEngine.Object LoadAsset()
+        protected override IFile Internal_Create(string path)
         {
-            return AssetDatabase.LoadAssetAtPath(path, typeof(Object));
-        }
-
-        /// <summary>
-        /// Loads the Unity asset at the files path. 
-        /// </summary>
-        /// <returns>Returns the asset</returns>
-        public T LoadAsset<T>() where T : UnityEngine.Object
-        {
-            return AssetDatabase.LoadAssetAtPath<T>(path);
+            return new AssetPath(path);
         }
     }
 }

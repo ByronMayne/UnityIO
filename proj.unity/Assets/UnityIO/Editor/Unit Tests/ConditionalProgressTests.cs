@@ -38,7 +38,9 @@ using Object = UnityEngine.Object;
 public class ConditionalProgressTests : UnityIOTestBase
 {
     [Test]
-    public void ConditionFolderRoot()
+    [TestCase(true, TestName = "Unity Directory")]
+    [TestCase(false, TestName = "System Directory")]
+    public void ConditionFolderRoot(bool isUnity)
     {
         // Only create Sub Directory if Conditional Progress exists.
         IO.Root.IfSubDirectoryExists("Conditional Progress").CreateSubDirectory("Sub Directory");
@@ -55,7 +57,9 @@ public class ConditionalProgressTests : UnityIOTestBase
     }
 
     [Test]
-    public void EmptyCheck()
+    [TestCase(true, TestName = "Unity Directory")]
+    [TestCase(false, TestName = "System Directory")]
+    public void EmptyCheck(bool isUnity)
     {
         // Create a new directory
         IO.Root.CreateSubDirectory("If Empty");
@@ -72,7 +76,9 @@ public class ConditionalProgressTests : UnityIOTestBase
     }
 
     [Test]
-    public void ConditionEmptyTest()
+    [TestCase(true, TestName="Unity Directory")]
+    [TestCase(false, TestName="System Directory")]
+    public void ConditionEmptyTest(bool isUnity)
     {
         // Create a new directory
         IO.Root.CreateSubDirectory("Conditional Empty").CreateSubDirectory("Sub Directory");
