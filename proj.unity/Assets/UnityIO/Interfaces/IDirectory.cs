@@ -37,14 +37,11 @@ namespace UnityIO.Interfaces
     {
         string path { get; }
 
-        /// <summary>
-        /// Gets the system path of this file. 
-        /// </summary>
-        string systemPath { get; }
-
         void Delete();
-        void Duplicate();
-        void Duplicate(string newName);
+
+        IDirectory CreateSubDirectory(string path);
+        IDirectory Duplicate();
+        IDirectory Duplicate(string newName);
 
         void Move(string targetDirectory);
         void Move(IDirectory targetDirectory);
@@ -54,22 +51,23 @@ namespace UnityIO.Interfaces
         void DeleteSubDirectory(string directroyName);
         bool SubDirectoryExists(string directoryName);
 
-        bool IsEmpty(bool assetsOnly);
+        bool IsEmpty(bool directoriesCount);
+        bool Exists();
 
         // Directories
         IDirectory this[string name] { get; }
-        IDirectory CreateDirectory(string name);
-
+   
 
         // Conditionals 
         IDirectory IfSubDirectoryExists(string name);
         IDirectory IfSubDirectoryDoesNotExist(string name);
-        IDirectory IfEmpty(bool assetsOnly);
-        IDirectory IfNotEmpty(bool assetsOnly);
+        IDirectory IfEmpty(bool directoriesCount);
+        IDirectory IfNotEmpty(bool directoriesCount);
+        IDirectory IfExists();
+        IDirectory IfDoesNotExist();
 
         // IFIle
         IFile IfFileExists(string name);
-        IFile CreateFile<T>(string name, T asset) where T : Object;
 
         // IFiles
         IFiles GetFiles();

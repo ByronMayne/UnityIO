@@ -319,7 +319,7 @@ namespace UnityIO.Classes
 
         IEnumerator<IFile> IEnumerable<IFile>.GetEnumerator()
         {
-            throw new NotImplementedException();
+            yield return this;
         }
 
         public IFile CreateFile<T>(string name, T asset) where T : UnityEngine.Object
@@ -335,6 +335,51 @@ namespace UnityIO.Classes
         public bool Equals(IDirectory other)
         {
             return other is NullFile;
+        }
+
+        public void Duplicate(IDirectory dstDirectory)
+        {
+            
+        }
+
+        public IDirectory CreateSubDirectory(string name)
+        {
+            return this;
+        }
+
+        public bool Exists()
+        {
+            return false;
+        }
+
+        public IDirectory MakeUniquePath()
+        {
+            return this; 
+        }
+
+        public IDirectory IfExists()
+        {
+            return this;
+        }
+
+        public IDirectory IfDoesNotExist()
+        {
+            return this;
+        }
+
+        IDirectory IDirectory.Duplicate()
+        {
+            throw new NotImplementedException();
+        }
+
+        IDirectory IDirectory.Duplicate(string newName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IFile MakeUnique()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -41,24 +41,6 @@ namespace UnityIO.Classes
         public delegate void FileActionDelegate(IFile file);
 
         /// <summary>
-        /// Returns a list of all assets contained within that
-        /// are of the type T.
-        /// </summary>
-        public IList<T> LoadAllofType<T>() where T : Object
-        {
-            List<T> result = new List<T>();
-            for (int i = 0; i < Count; i++)
-            {
-                T loadedObj = this[i].LoadAsset<T>();
-                if (loadedObj != null)
-                {
-                    result.Add(loadedObj);
-                }
-            }
-            return result;
-        }
-
-        /// <summary>
         /// Returns the first file in the list of files or if no files
         /// exist returns a null file.
         /// </summary>

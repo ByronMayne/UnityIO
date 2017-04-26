@@ -40,9 +40,9 @@ public class DirectoryChangesTests
     public void DuplicateDirectory()
     {
         // Create our first folder
-        var newFolder = IO.Root.CreateDirectory("DD");
+        var newFolder = IO.Root.CreateSubDirectory("DD");
         // Add a sub folder
-        newFolder.CreateDirectory("Sub Directory");
+        newFolder.CreateSubDirectory("Sub Directory");
         // duplicate our first one
         newFolder.Duplicate();
         // Make sure the original and it's sub directory are still in tack.
@@ -50,9 +50,9 @@ public class DirectoryChangesTests
         // And it's sub folder
         Assert.True(IO.Root.SubDirectoryExists("DD/Sub Directory"), "The sub folder should be in the same place");
         // Make sure the original and it's sub directory are still in tack.
-        Assert.True(IO.Root.SubDirectoryExists("DD 1"), "The original folder should be in the same place");
+        Assert.True(IO.Root.SubDirectoryExists("DD_01"), "The original folder should be in the same place");
         // And it's sub folder
-        Assert.True(IO.Root.SubDirectoryExists("DD 1/Sub Directory"), "The sub folder should be in the same place");
+        Assert.True(IO.Root.SubDirectoryExists("DD_01/Sub Directory"), "The sub folder should be in the same place");
     }
 
     [Test]
@@ -60,11 +60,11 @@ public class DirectoryChangesTests
     public void DuplicateDirectoryWithName()
     {
         // Create our first folder
-        var newFolder = IO.Root.CreateDirectory("DDWN");
+        var newFolder = IO.Root.CreateSubDirectory("DDWN");
         // Add a sub folder
-        newFolder.CreateDirectory("Sub");
+        newFolder.CreateSubDirectory("Sub");
         // duplicate our first one
-        newFolder.Duplicate(IO.Root.path + "/New DDWN");
+        newFolder.Duplicate("New DDWN");
         // Make sure the original and it's sub directory are still in tack.
         Assert.True(IO.Root.SubDirectoryExists("DDWN"), "The original folder should be in the same place");
         // And it's sub folder
@@ -80,9 +80,9 @@ public class DirectoryChangesTests
     public void Rename()
     {
         // Create a folder
-        var newFolder = IO.Root.CreateDirectory("RNT");
+        var newFolder = IO.Root.CreateSubDirectory("RNT");
         // Create a sub
-        newFolder.CreateDirectory("Sub");
+        newFolder.CreateSubDirectory("Sub");
         // Rename it
         newFolder.Rename("RNT Renamed");
         // Old one should not exist
@@ -97,98 +97,49 @@ public class DirectoryChangesTests
     public void RenameWithConflict()
     {
         // Create a folder
-        var rwc = IO.Root.CreateDirectory("RWC");
+        var rwc = IO.Root.CreateSubDirectory("RWC");
         // Create a second one
-        var rwc2 = IO.Root.CreateDirectory("RWC2");
+        var rwc2 = IO.Root.CreateSubDirectory("RWC2");
         // Rename the second one to cause an exception since that directory already exists.
         rwc2.Rename("RWC");
     }
 
     [Test]
     [Sequential]
+    [ExpectedException(typeof(MoveException))]
     [Description("Checks to see if an exception is thrown when we try to rename a directory and the name has invalid characters.")]
     public void RenameWithInvalidName([Values("/", "\\", "<", ">", ":", "|", "\"")] string charactersToTest)
     {
-        // The exception that was thrown.
-        System.Exception thorwnException = null;
         // Create a working directory
-        var rwc = IO.Root.CreateDirectory("RWIN");
+        var rwc = IO.Root.CreateSubDirectory("RWIN");
         // Create a file to rename
-        var newDir = rwc.CreateDirectory("Awesome");
+        var newDir = rwc.CreateSubDirectory("Awesome");
         // Rename it with invalid characters.
-        try
-        {
-            newDir.Rename(charactersToTest);
-        }
-        catch (System.Exception e)
-        {
-            thorwnException = e;
-        }
-
-        if (thorwnException is InvalidNameException)
-        {
-            Assert.Pass("The correct exception was thrown for the invalid character '" + charactersToTest + "'.");
-        }
-        else
-        {
-            if(thorwnException != null)
-            {
-                Assert.Fail("The expected exception was not captured for the invalid character '" + charactersToTest + "'. The Exception thrown was " + thorwnException.ToString());
-            }
-            else
-            {
-                Assert.Fail("No exception was thrown for invalid character '" + charactersToTest + "'");
-            }
-        }
+        newDir.Rename(charactersToTest);
     }
 
     [Test]
     [Sequential]
+    [ExpectedException(typeof(MoveException))]
     [Description("Checks to see if an exception is thrown when we try to rename a directory and the name has invalid characters.")]
-    public void MoveWithInvalidName([Values("/", "\\", "<", ">", ":", "|", "\"")] string charactersToTest)
+    public void MoveWithInvalidName([Values("\\", "<", ">", ":", "|", "\"")] string charactersToTest)
     {
-        // The exception that was thrown.
-        System.Exception thorwnException = null;
         // Create a working directory
-        var rwc = IO.Root.CreateDirectory("RWIN");
+        var rwc = IO.Root.CreateSubDirectory("RWIN");
         // Create a file to rename
-        var newDir = rwc.CreateDirectory("Awesome");
+        var newDir = rwc.CreateSubDirectory("Awesome");
         // Rename it with invalid characters.
-        try
-        {
-            newDir.Move(rwc.path + "/" + charactersToTest);
-        }
-        catch (System.Exception e)
-        {
-            thorwnException = e;
-        }
-
-        if (thorwnException is InvalidNameException)
-        {
-            Assert.Pass("The correct exception was thrown for the invalid character '" + charactersToTest + "'.");
-        }
-        else
-        {
-            if (thorwnException != null)
-            {
-                Assert.Fail("The expected exception was not captured for the invalid character '" + charactersToTest + "'. The Exception thrown was " + thorwnException.ToString());
-            }
-            else
-            {
-                Assert.Fail("No exception was thrown for invalid character '" + charactersToTest + "'");
-            }
-        }
+        newDir.Move(rwc.path + "/" + charactersToTest);
     }
-
 
 
     [TearDown]
     public void TearDown()
     {
         IO.Root.IfSubDirectoryExists("DD").Delete();
-        IO.Root.IfSubDirectoryExists("DD 1").Delete();
-        IO.Root.IfSubDirectoryExists("DDWN").Delete();
-        IO.Root.IfSubDirectoryExists("New DDWN").Delete();
+        IO.Root.IfSubDirectoryExists("DD_01").Delete();
+        //IO.Root.IfSubDirectoryExists("DDWN").Delete();
+        //IO.Root.IfSubDirectoryExists("New DDWN").Delete();
         IO.Root.IfSubDirectoryExists("RNT").Delete();
         IO.Root.IfSubDirectoryExists("RNT Renamed").Delete();
         IO.Root.IfSubDirectoryExists("RWC").Delete();

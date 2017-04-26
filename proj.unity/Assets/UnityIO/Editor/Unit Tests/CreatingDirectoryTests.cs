@@ -34,11 +34,10 @@ using UnityIO;
 
 public class CreatingDirectory
 {
-
     [Test]
     public void CreateRootLevelDirectory()
     {
-        IO.Root.CreateDirectory("CreateRootLevelDirectory");
+        IO.Root.CreateSubDirectory("CreateRootLevelDirectory");
         Assert.True(IO.Root.SubDirectoryExists("CreateRootLevelDirectory"));
         IO.Root.DeleteSubDirectory("CreateRootLevelDirectory");
     }
@@ -46,7 +45,7 @@ public class CreatingDirectory
     [Test]
     public void CreateNestedDirectoryOneStep()
     {
-        IO.Root.CreateDirectory("CreateNestedDirectoryOneStep/Folder One");
+        IO.Root.CreateSubDirectory("CreateNestedDirectoryOneStep/Folder One");
         Assert.True(IO.Root.SubDirectoryExists("CreateNestedDirectoryOneStep/Folder One"));
         IO.Root.DeleteSubDirectory("CreateNestedDirectoryOneStep");
     }
@@ -54,7 +53,7 @@ public class CreatingDirectory
     [Test]
     public void CreateNestedDirectoryMultiStep()
     {
-        IO.Root.CreateDirectory("CreateNestedDirectoryMultiStep").CreateDirectory("Folder One").CreateDirectory("Folder Two");
+        IO.Root.CreateSubDirectory("CreateNestedDirectoryMultiStep").CreateSubDirectory("Folder One").CreateSubDirectory("Folder Two");
         Assert.True(IO.Root.SubDirectoryExists("CreateNestedDirectoryMultiStep/Folder One"));
         Assert.True(IO.Root.SubDirectoryExists("CreateNestedDirectoryMultiStep/Folder One/Folder Two"));
         IO.Root.DeleteSubDirectory("CreateNestedDirectoryMultiStep");
@@ -64,9 +63,9 @@ public class CreatingDirectory
     public void CreateNestedPreExistingRoot()
     {
         // Create the root by itself. 
-        IO.Root.CreateDirectory("CreateNestedDirectoryMultiStep");
+        IO.Root.CreateSubDirectory("CreateNestedDirectoryMultiStep");
         // Create it again with a child 
-        IO.Root.CreateDirectory("CreateNestedDirectoryMultiStep").CreateDirectory("MultiFolder_Temp");
+        IO.Root.CreateSubDirectory("CreateNestedDirectoryMultiStep").CreateSubDirectory("MultiFolder_Temp");
         // Check if the child exists at the root
         bool directroyExistsInRoot = IO.Root.SubDirectoryExists("MultiFolder_Temp");
         // Clean up the root folder
@@ -76,5 +75,4 @@ public class CreatingDirectory
         // Fail or pass the test.
         Assert.False(directroyExistsInRoot);
     }
-
 }

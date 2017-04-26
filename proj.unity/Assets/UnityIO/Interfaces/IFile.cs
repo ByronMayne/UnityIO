@@ -87,6 +87,12 @@ namespace UnityIO.Interfaces
         void Move(IDirectory directory);
 
         /// <summary>
+        /// If this file exists on disk a new name will be created.
+        /// </summary>
+        /// <returns></returns>
+        IFile MakeUnique();
+
+        /// <summary>
         /// Copies the file on disk and will force it to have a unique name (appending a number to
         /// the end.
         /// </summary>
@@ -96,17 +102,5 @@ namespace UnityIO.Interfaces
         /// Copies the file on disk and renames it. Name must be unique or an exception is thrown. 
         /// </summary>
         IFile Duplicate(string newName);
-
-        /// <summary>
-        /// Loads the <see cref="UnityEngine.Object"/> asset that this file points too. 
-        /// </summary>
-        /// <returns></returns>
-        Object LoadAsset();
-
-        /// <summary>
-        /// Load a type of <see cref="UnityEngine.Object"/> from disk that this file points too. 
-        /// </summary>
-        /// <typeparam name="T">The type of object you want to load</typeparam>
-        T LoadAsset<T>() where T : Object;
     }
 }

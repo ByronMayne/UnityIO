@@ -28,131 +28,34 @@ SOFTWARE.
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
 using UnityIO.Interfaces;
-using UnityEngine;
-using Object = UnityEngine.Object;
-using System.Collections;
 using System.Collections.Generic;
 using sIO = System.IO;
 using UnityIO.Exceptions;
+using UnityIO.BaseClasses;
+using System;
 
 namespace UnityIO.Classes
 {
-    public class Directory : IDirectory
+    public class Directory : BaseDirectory, IDirectory
     {
-        private string m_Path;
-
-        /// <summary>
-        /// Gets the full path to this directory starting from the root of the 
-        /// Unity project. 
-        /// </summary>
-        public string path
-        {
-            get { return m_Path; }
-        }
-
-        /// <summary>
-        /// Gets the location of this directory starting from the root of the computer.
-        /// </summary>
-        public string systemPath
-        {
-            get { return IO.AssetPathToSystemPath(m_Path); }
-        }
-
         /// <summary>
         /// Creates a new Directory objects.
         /// </summary>
         /// <param name="directoryPath"></param>
-        public Directory(string directoryPath)
+        public Directory(string directoryPath) : base(directoryPath)
         {
-            IO.ValidatePath(directoryPath);
-            m_Path = directoryPath;
-        }
-
-        /// <summary>
-        /// Returns back a sub directory of this directory if it exists 
-        /// otherwise returns a null file object. 
-        /// </summary>
-        /// <param name="name">The directory you want to find</param>
-        /// <returns>The sub directory or a null directory object</returns>
-        public IDirectory this[string directoryPath]
-        {
-            get
-            {
-                IO.ValidatePath(directoryPath);
-                if (SubDirectoryExists(directoryPath))
-                {
-                    return new Directory(m_Path + IO.PATH_SPLITTER + directoryPath);
-                }
-                else
-                {
-                    throw  new DirectoryNotFoundException("UnityIO: A directory was not found at " + directoryPath);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Creates the directory on disk if it does not already exist. If sent in a nested directory the
-        /// full path will be created. 
-        /// </summary>
-        /// <param name="directoryPath">The path to the directory that you want to create.</param>
-        /// <returns></returns>
-        public IDirectory CreateDirectory(string directoryPath)
-        {
-            string workingPath = m_Path;
-            IDirectory directory = null;
-            if (!SubDirectoryExists(directoryPath))
-            {
-                string[] paths = directoryPath.Split(IO.PATH_SPLITTER);
-                for (int i = 0; i < paths.Length; i++)
-                {
-                    if (!SubDirectoryExists(workingPath + IO.PATH_SPLITTER + paths[i]))
-                    {
-                        AssetDatabase.CreateFolder(workingPath, paths[i]);
-                    }
-                    workingPath += IO.PATH_SPLITTER + paths[i];
-                }
-                directory = new Directory(workingPath);
-            }
-            else
-            {
-                directory = new Directory(m_Path + IO.PATH_SPLITTER + directoryPath);
-            }
-       
-            return directory;
-        }
-
-        /// <summary>
-        /// Creates a new file in this directory with the name an extension
-        /// sent in.
-        /// </summary>
-        /// <typeparam name="T">The type of Unity asset you want to create.</typeparam>
-        /// <param name="name">The name of the asset and extension that you want to call it.</param>
-        /// <param name="asset">The asset data itself.</param>
-        /// <returns>The new IFile.</returns>
-        public IFile CreateFile<T>(string name, T asset) where T : Object
-        {
-            File newFile = new File(m_Path + name);
-            AssetDatabase.CreateAsset(asset, newFile.path);
-            return newFile;
+            // Nothing to do here. 
         }
 
         /// <summary>
         /// Deletes this directory and all it's sub directories and children. 
         /// </summary>
-        public void Delete()
+        public override void Delete()
         {
-            AssetDatabase.DeleteAsset(m_Path);
-        }
-
-        /// <summary>
-        /// Finds a sub directory of this directory and deletes it if
-        /// it does exist otherwise has no effect. 
-        /// </summary>
-        /// <param name="directroyName">The sub directory you want to delete.</param>
-        public void DeleteSubDirectory(string directroyName)
-        {
-            IDirectory directoryToDelete = this[directroyName];
-            directoryToDelete.Delete();
+            if (Exists())
+            {
+                sIO.Directory.Delete(path, true);
+            }
         }
 
         /// <summary>
@@ -160,11 +63,13 @@ namespace UnityIO.Classes
         /// for files in the current directory. 
         /// </summary>
         /// <param name="filter">Which filter should be used to search</param>
-        /// <param name="recursive">If we should also search sub directoires.</param>
+        /// <param name="recursive">If we should also search sub directories.</param>
         /// <returns></returns>
-        private IFiles GetFiles_Internal(string filter, bool recursive)
+        protected override IFiles GetFiles_Internal(string filter, bool recursive)
         {
+            // Create an option
             sIO.SearchOption options;
+            // Set it's values.
             if (recursive)
             {
                 options = sIO.SearchOption.AllDirectories;
@@ -174,164 +79,107 @@ namespace UnityIO.Classes
                 options = sIO.SearchOption.TopDirectoryOnly;
             }
 
-            string systemPath = Application.dataPath.Replace("Assets", m_Path);
-
+            // Create a result.
             IFiles iFiles = new Files();
 
-            string[] serachResult = sIO.Directory.GetFiles(systemPath, filter, options);
+            // Find all files on disk. 
+            string[] serachResult = sIO.Directory.GetFiles(path, filter, options);
+            // Loop over them all and add them to files result. 
             for (int i = 0; i < serachResult.Length; i++)
             {
-                if (!serachResult[i].EndsWith(".meta"))
-                {
-                    string unityPath = AssetDatabase.GetProjectRelativePath(serachResult[i]);
-                    iFiles.Add(new File(unityPath));
-                }
+                iFiles.Add(new File(serachResult[i]));
             }
-
+            // Return it.
             return iFiles;
         }
 
         /// <summary>
-        /// Gets all the Unity files that are at the top level of this directory.
+        /// Creates the directory on disk if it does not already exist. If sent in a nested directory the
+        /// full path will be created. 
         /// </summary>
-        public IFiles GetFiles()
+        /// <param name="directoryPath">The path to the directory that you want to create.</param>
+        public override IDirectory CreateSubDirectory(string directoryName)
         {
-            return GetFiles_Internal("*", recursive:false);
-        }
-
-        /// <summary>
-        /// Gets all the Unity files that are at the top level of this directory with a filter.
-        /// </summary>
-        public IFiles GetFiles(string filter)
-        {
-            return GetFiles_Internal(filter, recursive:false);
-        }
-
-        /// <summary>
-        /// Gets all the Unity files that are in this directory with an option to look recessively.
-        /// </summary>
-        public IFiles GetFiles(bool recursive)
-        {
-            return GetFiles_Internal("*", recursive);
-        }
-
-        /// <summary>
-        /// Gets all the Unity files that are in this directory with an option to look recessively with a filter.
-        /// </summary>
-        public IFiles GetFiles(string filter, bool recursive)
-        {
-            return GetFiles_Internal(filter, recursive);
-        }
-
-        /// <summary>
-        /// If the directory exists this will return that directory. If the directory does not
-        /// exist it will return a NullFile directory which will make all the following function
-        /// calls not have any effect. This allows you to chain requests and only continue execution
-        /// if the directory exists. 
-        /// </summary>
-        /// <param name="directoryPath">The path to the directory you are trying to find.</param>
-        /// <returns>The IDirectory class or a NullFile if ti does not exist.</returns>
-        public IDirectory IfSubDirectoryExists(string directoryPath)
-        {
-            if (SubDirectoryExists(directoryPath))
+            if(SubDirectoryExists(directoryName))
             {
-                return this[directoryPath];
+                return this[directoryName];
             }
             else
             {
-                return NullFile.SHARED_INSTANCE;
+                // Create our path 
+                string directoryPath = path + IO.PATH_SPLITTER + directoryName;
+                // Create it on disk
+                sIO.Directory.CreateDirectory(directoryPath);
+                // Return the result
+                return Internal_Create(directoryPath);
             }
-        }
-
-        /// <summary>
-        /// If the directory does not exist this will return the current directory otherwise if it
-        /// does it will return a null file. 
-        /// </summary>
-        /// <param name="directoryPath">The path to the directory you are trying to find.</param>
-        /// <returns>This directory class or a NullFile if ti does exist.</returns>
-        public IDirectory IfSubDirectoryDoesNotExist(string directoryPath)
-        {
-            if (!SubDirectoryExists(directoryPath))
-            {
-                return this;
-            }
-            else
-            {
-                return NullFile.SHARED_INSTANCE;
-            }
-        }
-
-        /// <summary>
-        /// Finds if this files exists in this directory. 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public IFile IfFileExists(string fileName)
-        {
-            // Get all files with our filter
-            IFile file = GetFiles(filter:"*" + fileName + "*", recursive: false).FirstOrDefault();
-            return file;
-        }
-
-        /// <summary>
-        /// Returns true if the sub directory exists and false 
-        /// if it does not.
-        /// </summary>
-        /// <param name="directoryName">The directory you want to check if it exists.</param>
-        /// <returns>True if it exists and false if it does not.</returns>
-        public bool SubDirectoryExists(string directoryPath)
-        {
-            IO.ValidatePath(directoryPath);
-            return AssetDatabase.IsValidFolder(m_Path + '/' + directoryPath);
-        }
-
-        /// <summary>
-        /// Checks this directory to see if any assets are contained inside of it
-        /// or any of it's sub folder. 
-        /// </summary>
-        /// <param name="assetOnly">If this directory contains only other empty sub directories it will be considered empty otherwise it will not be.</param>
-        /// <returns>true if it's empty and false if it's not</returns>
-        public bool IsEmpty(bool assetOnly = false)
-        {
-            // This is the only way in Unity to check if a folder has anything.
-            int assetCount = AssetDatabase.FindAssets(string.Empty, new string[] { m_Path }).Length;
-
-            if (!assetOnly)
-            {
-                assetCount += AssetDatabase.GetSubFolders(m_Path).Length;
-            }
-
-            return assetCount == 0;
-        }
-
-        /// <summary>
-        /// Duplicates the current directory in the same place but gives it a unique
-        /// name by adding an incrementing number at the end. 
-        /// </summary>
-        public void Duplicate()
-        {
-            string copyDir = AssetDatabase.GenerateUniqueAssetPath(m_Path);
-            AssetDatabase.CopyAsset(m_Path, copyDir);
         }
 
         /// <summary>
         /// Duplicates a directory and renames it. The new name is the full name
         /// mapped from the root of the assets folder.
         /// </summary>
-        public void Duplicate(string copyDirectroy)
+        public sealed override IDirectory Duplicate(string destDirName)
         {
-            string uniquePath = AssetDatabase.GenerateUniqueAssetPath(copyDirectroy);
-            AssetDatabase.CopyAsset(m_Path, uniquePath);
+            if (Exists())
+            {
+                // If it's just a name we will create a path for them
+                if(destDirName.IndexOf(IO.PATH_SPLITTER) == -1)
+                {
+                    destDirName = PathUtility.Rename(path, destDirName);
+                }
+
+                // Do the copy
+                Internal_Duplicate(path, destDirName, true);
+                // Return the result
+                return Internal_Create(destDirName);
+            }
+            else
+            {
+                throw new DirectoryNotFoundException("Can't duplicate a directory that does not exist");
+            }
         }
 
         /// <summary>
-        /// Moves a directory from one path to another. If a directory of the 
-        /// same name already exists there it will give it a unique name. 
+        /// Copies a whole directory and all it's contents. 
         /// </summary>
-        /// <param name="moveDirectroy">The directory you want to move this directory in too</param>
-        public void Move(IDirectory targetDirectory)
+        protected static void Internal_Duplicate(string sourceDirName, string destDirName, bool copySubDirs)
         {
-            Move(targetDirectory.path);
+            // Get the subdirectories for the specified directory.
+            sIO.DirectoryInfo dir = new sIO.DirectoryInfo(sourceDirName);
+
+            if (!dir.Exists)
+            {
+                throw new DirectoryNotFoundException(
+                    "Source directory does not exist or could not be found: "
+                    + sourceDirName);
+            }
+
+            sIO.DirectoryInfo[] dirs = dir.GetDirectories();
+            // If the destination directory doesn't exist, create it.
+            if (!sIO.Directory.Exists(destDirName))
+            {
+                UnityEngine.Debug.Log("SRC: " + sourceDirName);
+                sIO.Directory.CreateDirectory(destDirName);
+            }
+
+            // Get the files in the directory and copy them to the new location.
+            sIO.FileInfo[] files = dir.GetFiles();
+            foreach (sIO.FileInfo file in files)
+            {
+                string temppath = sIO.Path.Combine(destDirName, file.Name);
+                file.CopyTo(temppath, false);
+            }
+
+            // If copying subdirectories, copy them and their contents to new location.
+            if (copySubDirs)
+            {
+                foreach (sIO.DirectoryInfo subdir in dirs)
+                {
+                    string temppath = sIO.Path.Combine(destDirName, subdir.Name);
+                    Internal_Duplicate(subdir.FullName, temppath, copySubDirs);
+                }
+            }
         }
 
         /// <summary>
@@ -339,208 +187,69 @@ namespace UnityIO.Classes
         /// same name already exists there it will give it a unique name. 
         /// </summary>
         /// <param name="moveDirectroy">The directory you want to move too</param>
-        public void Move(string targetDirectory)
+        public override void Move(string destDirName)
         {
-            int start = targetDirectory.LastIndexOf('/');
-            int length = targetDirectory.Length - start;
-            string name = targetDirectory.Substring(start, length);
-
-			if (!IO.IsValidFileName(name))
+            if (!string.IsNullOrEmpty(destDirName))
             {
-                throw new InvalidNameException("The name '" + name + "' contains invalid characters");
+                throw new MoveException("No detestation directory was defined.", path, destDirName);
             }
 
-            string error = AssetDatabase.ValidateMoveAsset(m_Path, targetDirectory);
+            if (!IO.IsValidFileName(destDirName))
+            {
+                throw new InvalidNameException("The name '" + destDirName + "' contains invalid characters");
+            }
 
-            if(!string.IsNullOrEmpty(error))
+            // Make sure we have a valid path
+            IO.ValidatePath(destDirName);
+
+            // If we exist on disk we also want to move it. 
+            if (Exists())
             {
-                throw new MoveException(error, m_Path, targetDirectory);
+                sIO.Directory.Move(path, destDirName);
             }
-            else
-            {
-                AssetDatabase.MoveAsset(m_Path, targetDirectory);
-            }
+
+            // Set our new path
+            path = destDirName;
         }
 
         /// <summary>
-        /// Renames our directory to the name of our choice.
+        /// Returns true if we have any sub directories and false 
+        /// if we don't.
         /// </summary>
-        public void Rename(string newName)
+        public override bool HasSubDirectories()
         {
-            // Make sure we sent an argument.
-            if (string.IsNullOrEmpty(newName))
-            {
-                throw new System.ArgumentNullException("You can't send a empty or null string to rename an asset. Trying to rename " + m_Path);
-            }
-
-            // And it's a valid name./
-            if (!IO.IsValidFileName(newName))
-            {
-                throw new InvalidNameException("The name '" + newName + "' contains invalid characters");
-            }
-
-            if (newName.Contains("/"))
-            {
-                throw new RenameException("Rename can't be used to change a files location use Move(string newPath) instead.", m_Path, newName);
-            }
-
-            int slashIndex = m_Path.LastIndexOf('/') + 1;
-            string subPath = m_Path.Substring(0, slashIndex);
-            string newPath = subPath + newName;
-
-            Object preExistingAsset = AssetDatabase.LoadAssetAtPath<Object>(newPath);
-
-            if(preExistingAsset != null)
-            {
-                throw new DirectroyAlreadyExistsException("Rename can't be completed since an asset already exists with that name at path " + newPath);
-            }
-
-            AssetDatabase.RenameAsset(m_Path, newName);
+            var result = sIO.Directory.GetDirectories(path, "*", System.IO.SearchOption.TopDirectoryOnly);
+            return result.Length > 0;
         }
 
         /// <summary>
-        /// Returns this directory if it's empty otherwise it returns
-        /// a null directory which will then ignore all other commands. 
+        /// Returns true if this object directory on disk. 
         /// </summary>
-        /// <param name="assetsOnly">If false sub directories folders will not count as content inside the folder. If true a folder
-        /// just filled with empty folders will count as not being empty.</param>
-        /// <returns>This directory if it's not empty otherwise a null file directory.</returns>
-        public IDirectory IfEmpty(bool assetsOnly)
+        protected override bool Exists(string filePath)
         {
-            if(IsEmpty(assetsOnly))
-            {
-                return this;
-            }
-            else
-            {
-                return NullFile.SHARED_INSTANCE;
-            }
-        }
-
-        /// <summary>
-        /// Returns this directory if it's not empty otherwise it returns
-        /// a null directory which will then ignore all other commands. 
-        /// </summary>
-        /// <param name="assetsOnly">If false sub directories folders will not count as content inside the folder. If true a folder
-        /// just filled with empty folders will count as not being empty.</param>
-        /// <returns>This directory if it's not empty otherwise a null file directory.</returns>
-        public IDirectory IfNotEmpty(bool assetsOnly)
-        {
-            if (!IsEmpty(assetsOnly))
-            {
-                return this;
-            }
-            else
-            {
-                return NullFile.SHARED_INSTANCE;
-            }
+            return sIO.Directory.Exists(filePath);
         }
 
         /// <summary>
         /// Loops over our directory recessively. 
         /// </summary>
-        IEnumerator<IDirectory> IEnumerable<IDirectory>.GetEnumerator()
+        public override IEnumerator<IDirectory> GetEnumerator()
         {
-            string[] subFolder = AssetDatabase.GetSubFolders(m_Path);
-            yield return this;
-            for (int i = 0; i < subFolder.Length; i++)
+            // Get all directories 
+            string[] directories = sIO.Directory.GetDirectories(path, "*", System.IO.SearchOption.AllDirectories);
+            // Loop over them all
+            for (int i = 0; i < directories.Length; i++)
             {
-                IEnumerable<IDirectory> enumerable = new Directory(subFolder[i]);
-                IEnumerator<IDirectory> enumerator = enumerable.GetEnumerator();
-                while (enumerator.MoveNext())
-                {
-                    yield return enumerator.Current;
-                }
-            }
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            string[] subFolder = AssetDatabase.GetSubFolders(m_Path);
-
-            for (int i = 0; i < subFolder.Length; i++)
-            {
-                yield return new Directory(subFolder[i]);
+                yield return Internal_Create(directories[i]);
             }
         }
 
         /// <summary>
-        /// When converted to a string it will return it's full path.
+        /// Returns a new Directory object based on the path sent in.
         /// </summary>
-        public override string ToString()
+        protected override IDirectory Internal_Create(string path)
         {
-            return m_Path;
+            return new Directory(path);
         }
-
-        /// <summary>
-        /// Implementation of ICompair interface. 
-        /// </summary>
-        public int Compare(IDirectory x, IDirectory y)
-        {
-            return string.Compare(x.path, y.path);
-        }
-
-        /// <summary>
-        /// Checks to see if the two directories point to the same path. Implementation of <see cref="IEquatable<IDirectory>"/>
-        /// </summary>
-        public bool Equals(IDirectory other)
-        {
-            return string.CompareOrdinal(path, other.path) == 0;
-        }
-
-        /// <summary>
-        /// A test used to check if two directory classes point to the same class.
-        /// </summary>
-        public static bool operator ==(Directory lhs, Directory rhs)
-        {
-            return string.CompareOrdinal(lhs.path, rhs.path) == 0;
-        }
-
-        /// <summary>
-        /// A test used to check if two directory classes don't point to the same type.
-        /// </summary>
-        public static bool operator !=(Directory lhs, Directory rhs)
-        {
-            return string.CompareOrdinal(lhs.path, rhs.path) == 0;
-        }
-
-        
-        /// <summary>
-        /// Allows us to explicitly convert a string to a new directory.
-        /// </summary>
-        public static explicit operator Directory(string directory)
-        {
-            return new Directory(directory);
-        }
-
-        /// <summary>
-        /// Allows us to implicitly convert a directory to a string.
-        /// </summary>
-        public static implicit operator string(Directory directory)
-        {
-            return directory.path;
-        }
-
-        /// <summary>
-        /// Checks to see if an object points to the same path. 
-        /// </summary>
-        public override bool Equals(object obj)
-        {
-            if (obj is IDirectory)
-            {
-                return string.Compare(((IDirectory)obj).path, path) == 0;
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// Returns the hash code for this class.
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode()
-        {
-            return m_Path.GetHashCode();
-        }
-
     }
 }

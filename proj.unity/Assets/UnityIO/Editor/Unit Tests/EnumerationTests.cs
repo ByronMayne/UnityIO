@@ -46,6 +46,6 @@ public class EnumerationTests : UnityIOTestBase
             count++;
         }
         // Test if our count is correct.
-        Assert.AreEqual(count, 4, "There should be four files in the testing directory at " + GetFilesTests.UNIT_TEST_LOADING_TEST_ASSETS);
+        Assert.AreEqual(count, 3, "There should be three sub directories in the testing directory at " + GetFilesTests.UNIT_TEST_LOADING_TEST_ASSETS);
     }
 }

@@ -35,9 +35,6 @@ namespace UnityIO.Interfaces
 {
     public interface IFiles : IList<IFile>
     {
-        IList<T> LoadAllofType<T>() where T : Object;
         IFile FirstOrDefault();
     }
-
-
 }

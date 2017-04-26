@@ -39,6 +39,7 @@ using AssetDatabase = UnityEditor.AssetDatabase;
 
 public class FileChangesTests
 {
+    /*
     private IDirectory m_WorkingDirectroy; 
 
     [SetUp]
@@ -141,4 +142,5 @@ public class FileChangesTests
     {
         IO.Root.IfSubDirectoryExists(GetType().Name).Delete();
     }
+    */
 }
