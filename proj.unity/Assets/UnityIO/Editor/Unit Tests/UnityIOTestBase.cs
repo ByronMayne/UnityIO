@@ -31,11 +31,27 @@ using NUnit.Framework;
 using System;
 using UnityEngine;
 using UnityIO;
+using UnityIO.Classes;
 using UnityIO.Interfaces;
 
 public class UnityIOTestBase
 {
     public const string UNIT_TEST_LOADING_TEST_ASSETS = "UnityIO/Editor/Unit Tests/Loading Assets";
+
+    private bool m_IsUnityTest = false;
+
+
+    public static IDirectory GetRoot(bool isUnityTest)
+    {
+        if(isUnityTest)
+        {
+            return new AssetDirectory(Application.dataPath);
+        }
+        else
+        {
+            return new Directory(Application.dataPath);
+        }
+    }
 
     /// <summary>
     /// Returns back an IDirectory for testing asset loading. 
@@ -44,9 +60,9 @@ public class UnityIOTestBase
     public static IDirectory SetupAssetLoadingTest()
     {
         // We can only test if our testing directory exists
-        Assume.That(IO.Root.SubDirectoryExists(UNIT_TEST_LOADING_TEST_ASSETS), "The testing directory this test is looking for does not exists at path '" + UNIT_TEST_LOADING_TEST_ASSETS + "'.");
+        Assume.That(GetRoot(true).SubDirectoryExists(UNIT_TEST_LOADING_TEST_ASSETS), "The testing directory this test is looking for does not exists at path '" + UNIT_TEST_LOADING_TEST_ASSETS + "'.");
         // Get our loading area
-        return IO.Root[UNIT_TEST_LOADING_TEST_ASSETS];
+        return GetRoot(true)[UNIT_TEST_LOADING_TEST_ASSETS];
     }
 
     /// <summary>

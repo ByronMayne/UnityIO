@@ -38,60 +38,63 @@ using Object = UnityEngine.Object;
 public class ConditionalProgressTests : UnityIOTestBase
 {
     [Test]
-    [TestCase(true, TestName = "Unity Directory")]
-    [TestCase(false, TestName = "System Directory")]
+    [TestCase(true, TestName = "Unity")]
+    [TestCase(false, TestName = "System")]
     public void ConditionFolderRoot(bool isUnity)
     {
+        var root = GetRoot(isUnity);
         // Only create Sub Directory if Conditional Progress exists.
-        IO.Root.IfSubDirectoryExists("Conditional Progress").CreateSubDirectory("Sub Directory");
+        root.IfSubDirectoryExists("Conditional Progress").CreateSubDirectory("Sub Directory");
         // It should not exists
-        Assert.False(IO.Root.SubDirectoryExists("Conditional Progress/Sub Directory"));
+        Assert.False(root.SubDirectoryExists("Conditional Progress/Sub Directory"));
         // Then really create it
-        IO.Root.CreateSubDirectory("Conditional Progress");
+        root.CreateSubDirectory("Conditional Progress");
         // Then try conditional again
-        IO.Root.IfSubDirectoryExists("Conditional Progress").CreateSubDirectory("Sub Directory");
+        root.IfSubDirectoryExists("Conditional Progress").CreateSubDirectory("Sub Directory");
         // It should not exists since we created the parent directory
-        Assert.True(IO.Root.SubDirectoryExists("Conditional Progress/Sub Directory"));
+        Assert.True(root.SubDirectoryExists("Conditional Progress/Sub Directory"));
         // Cleanup
-        IO.Root.IfSubDirectoryExists("Conditional Progress").Delete();
+        root.IfSubDirectoryExists("Conditional Progress").Delete();
     }
 
     [Test]
-    [TestCase(true, TestName = "Unity Directory")]
-    [TestCase(false, TestName = "System Directory")]
+    [TestCase(true, TestName = "Unity")]
+    [TestCase(false, TestName = "System")]
     public void EmptyCheck(bool isUnity)
     {
+        var root = GetRoot(isUnity);
         // Create a new directory
-        IO.Root.CreateSubDirectory("If Empty");
+        root.CreateSubDirectory("If Empty");
         // Check if it's empty
-        Assert.True(IO.Root["If Empty"].IsEmpty(directoriesCount: true), "This should empty");
+        Assert.True(root["If Empty"].IsEmpty(directoriesCount: true), "This should empty");
         // Add a sub folder
-        IO.Root["If Empty"].CreateSubDirectory("Sub Directory");
+        root["If Empty"].CreateSubDirectory("Sub Directory");
         // This should be false since we say we want to include sub folders.
-        Assert.False(IO.Root["If Empty"].IsEmpty(directoriesCount: true), "This should have passed because we have one folder.");
+        Assert.False(root["If Empty"].IsEmpty(directoriesCount: true), "This should have passed because we have one folder.");
         // This should be false because we only care about Assets. 
-        Assert.False(IO.Root["If Empty"].IsEmpty(directoriesCount: false), "This should empty");
+        Assert.False(root["If Empty"].IsEmpty(directoriesCount: false), "This should empty");
         // Cleanup
-        IO.Root["If Empty"].Delete();
+        root["If Empty"].Delete();
     }
 
     [Test]
-    [TestCase(true, TestName="Unity Directory")]
-    [TestCase(false, TestName="System Directory")]
+    [TestCase(true, TestName="Unity")]
+    [TestCase(false, TestName="System")]
     public void ConditionEmptyTest(bool isUnity)
     {
+        var root = GetRoot(isUnity);
         // Create a new directory
-        IO.Root.CreateSubDirectory("Conditional Empty").CreateSubDirectory("Sub Directory");
+        root.CreateSubDirectory("Conditional Empty").CreateSubDirectory("Sub Directory");
         // Destroy it if it's empty (it's not).
-        IO.Root["Conditional Empty"].IfEmpty(directoriesCount: true).Delete();
+        root["Conditional Empty"].IfEmpty(directoriesCount: true).Delete();
         // Check if it was deleted (it should not have been).
-        Assert.True(IO.Root.SubDirectoryExists("Conditional Empty"), "The folder should not have been deleted");
+        Assert.True(root.SubDirectoryExists("Conditional Empty"), "The folder should not have been deleted");
         // Delete the next level instead this should work.
-        IO.Root["Conditional Empty/Sub Directory"].IfEmpty(directoriesCount: true).Delete();
+        root["Conditional Empty/Sub Directory"].IfEmpty(directoriesCount: true).Delete();
         // Check if it was deleted (it should have been).
-        bool directroyStillExists = IO.Root.SubDirectoryExists("Conditional Empty/Sub Directory");
+        bool directroyStillExists = root.SubDirectoryExists("Conditional Empty/Sub Directory");
         // Clean up if the test failed
-        IO.Root["Conditional Empty"].Delete();
+        root["Conditional Empty"].Delete();
         // Finish Test
         Assert.False(directroyStillExists);
     }

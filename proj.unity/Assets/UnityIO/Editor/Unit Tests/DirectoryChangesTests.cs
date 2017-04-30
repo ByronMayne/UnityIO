@@ -33,85 +33,100 @@ using NUnit.Framework;
 using UnityIO;
 using UnityIO.Exceptions;
 
-public class DirectoryChangesTests
+public class DirectoryChangesTests : UnityIOTestBase
 {
     [Test]
+    [TestCase(true, TestName = "Unity")]
+    [TestCase(false, TestName = "System")]
     [Description("Tests to see if a a directory with one sub directory can be copied and get auto renamed")]
-    public void DuplicateDirectory()
+    public void DuplicateDirectory(bool isUnity)
     {
+        var root = GetRoot(isUnity);
         // Create our first folder
-        var newFolder = IO.Root.CreateSubDirectory("DD");
+        var newFolder = root.CreateSubDirectory("DD");
         // Add a sub folder
         newFolder.CreateSubDirectory("Sub Directory");
         // duplicate our first one
         newFolder.Duplicate();
         // Make sure the original and it's sub directory are still in tack.
-        Assert.True(IO.Root.SubDirectoryExists("DD"), "The original folder should be in the same place");
+        Assert.True(root.SubDirectoryExists("DD"), "The original folder should be in the same place");
         // And it's sub folder
-        Assert.True(IO.Root.SubDirectoryExists("DD/Sub Directory"), "The sub folder should be in the same place");
+        Assert.True(root.SubDirectoryExists("DD/Sub Directory"), "The sub folder should be in the same place");
         // Make sure the original and it's sub directory are still in tack.
-        Assert.True(IO.Root.SubDirectoryExists("DD_01"), "The original folder should be in the same place");
+        Assert.True(root.SubDirectoryExists("DD_01"), "The original folder should be in the same place");
         // And it's sub folder
-        Assert.True(IO.Root.SubDirectoryExists("DD_01/Sub Directory"), "The sub folder should be in the same place");
+        Assert.True(root.SubDirectoryExists("DD_01/Sub Directory"), "The sub folder should be in the same place");
     }
 
     [Test]
+    [TestCase(true, TestName = "Unity")]
+    [TestCase(false, TestName = "System")]
     [Description("Tests to see if a a directory with one sub directory can be copied and get a new named assigned by the user")]
-    public void DuplicateDirectoryWithName()
+    public void DuplicateDirectoryWithName(bool isUnity)
     {
+        var root = GetRoot(isUnity);
         // Create our first folder
-        var newFolder = IO.Root.CreateSubDirectory("DDWN");
+        var newFolder = root.CreateSubDirectory("DDWN");
         // Add a sub folder
         newFolder.CreateSubDirectory("Sub");
         // duplicate our first one
         newFolder.Duplicate("New DDWN");
         // Make sure the original and it's sub directory are still in tack.
-        Assert.True(IO.Root.SubDirectoryExists("DDWN"), "The original folder should be in the same place");
+        Assert.True(root.SubDirectoryExists("DDWN"), "The original folder should be in the same place");
         // And it's sub folder
-        Assert.True(IO.Root.SubDirectoryExists("DDWN/Sub"), "The sub folder should be in the same place");
+        Assert.True(root.SubDirectoryExists("DDWN/Sub"), "The sub folder should be in the same place");
         // Make sure the original and it's sub directory are still in tack.
-        Assert.True(IO.Root.SubDirectoryExists("New DDWN"), "The original folder should be in the same place");
+        Assert.True(root.SubDirectoryExists("New DDWN"), "The original folder should be in the same place");
         // And it's sub folder
-        Assert.True(IO.Root.SubDirectoryExists("New DDWN/Sub"), "The sub folder should be in the same place");
+        Assert.True(root.SubDirectoryExists("New DDWN/Sub"), "The sub folder should be in the same place");
     }
 
     [Test]
+    [TestCase(true, TestName = "Unity")]
+    [TestCase(false, TestName = "System")]
     [Description("Checks to see if a directory can be renamed")]
-    public void Rename()
+    public void Rename(bool isUnity)
     {
+        var root = GetRoot(isUnity);
         // Create a folder
-        var newFolder = IO.Root.CreateSubDirectory("RNT");
+        var newFolder = root.CreateSubDirectory("RNT");
         // Create a sub
         newFolder.CreateSubDirectory("Sub");
         // Rename it
         newFolder.Rename("RNT Renamed");
         // Old one should not exist
-        Assert.False(IO.Root.SubDirectoryExists("RNT"), "The original folder should not exist anymore");
+        Assert.False(root.SubDirectoryExists("RNT"), "The original folder should not exist anymore");
         // Check if the rename is there
-        Assert.True(IO.Root.SubDirectoryExists("RNT Renamed"), "The original folder should not exist anymore");
+        Assert.True(root.SubDirectoryExists("RNT Renamed"), "The original folder should not exist anymore");
     }
 
     [Test]
+    [TestCase(true, TestName = "Unity")]
+    [TestCase(false, TestName = "System")]
     [ExpectedException(ExpectedException = typeof(DirectroyAlreadyExistsException))]
     [Description("Checks to see if an exception is thrown when we try to rename a directory and one already exists with that name")]
-    public void RenameWithConflict()
+    public void RenameWithConflict(bool isUnity)
     {
+        var root = GetRoot(isUnity);
         // Create a folder
-        var rwc = IO.Root.CreateSubDirectory("RWC");
+        var rwc = root.CreateSubDirectory("RWC");
         // Create a second one
-        var rwc2 = IO.Root.CreateSubDirectory("RWC2");
+        var rwc2 = root.CreateSubDirectory("RWC2");
         // Rename the second one to cause an exception since that directory already exists.
         rwc2.Rename("RWC");
     }
 
     [Test]
     [Sequential]
+    [TestCase(true, TestName = "Unity")]
+    [TestCase(false, TestName = "System")]
     [ExpectedException(typeof(MoveException))]
     [Description("Checks to see if an exception is thrown when we try to rename a directory and the name has invalid characters.")]
-    public void RenameWithInvalidName([Values("/", "\\", "<", ">", ":", "|", "\"")] string charactersToTest)
+    public void RenameWithInvalidName(bool isUnity, [Values("/", "\\", "<", ">", ":", "|", "\"")] string charactersToTest)
     {
+        var root = GetRoot(isUnity);
         // Create a working directory
-        var rwc = IO.Root.CreateSubDirectory("RWIN");
+        var rwc = root.CreateSubDirectory("RWIN");
         // Create a file to rename
         var newDir = rwc.CreateSubDirectory("Awesome");
         // Rename it with invalid characters.
@@ -120,12 +135,15 @@ public class DirectoryChangesTests
 
     [Test]
     [Sequential]
+    [TestCase(true, TestName = "Unity")]
+    [TestCase(false, TestName = "System")]
     [ExpectedException(typeof(MoveException))]
     [Description("Checks to see if an exception is thrown when we try to rename a directory and the name has invalid characters.")]
-    public void MoveWithInvalidName([Values("\\", "<", ">", ":", "|", "\"")] string charactersToTest)
+    public void MoveWithInvalidName(bool isUnity, [Values("\\", "<", ">", ":", "|", "\"")] string charactersToTest)
     {
+        var root = GetRoot(isUnity);
         // Create a working directory
-        var rwc = IO.Root.CreateSubDirectory("RWIN");
+        var rwc = root.CreateSubDirectory("RWIN");
         // Create a file to rename
         var newDir = rwc.CreateSubDirectory("Awesome");
         // Rename it with invalid characters.
@@ -136,14 +154,15 @@ public class DirectoryChangesTests
     [TearDown]
     public void TearDown()
     {
-        IO.Root.IfSubDirectoryExists("DD").Delete();
-        IO.Root.IfSubDirectoryExists("DD_01").Delete();
-        //IO.Root.IfSubDirectoryExists("DDWN").Delete();
-        //IO.Root.IfSubDirectoryExists("New DDWN").Delete();
-        IO.Root.IfSubDirectoryExists("RNT").Delete();
-        IO.Root.IfSubDirectoryExists("RNT Renamed").Delete();
-        IO.Root.IfSubDirectoryExists("RWC").Delete();
-        IO.Root.IfSubDirectoryExists("RWC2").Delete();
-        IO.Root.IfSubDirectoryExists("RWIN").Delete();
+        var root = GetRoot(false);
+        root.IfSubDirectoryExists("DD").Delete();
+        root.IfSubDirectoryExists("DD_01").Delete();
+        root.IfSubDirectoryExists("DDWN").Delete();
+        root.IfSubDirectoryExists("New DDWN").Delete();
+        root.IfSubDirectoryExists("RNT").Delete();
+        root.IfSubDirectoryExists("RNT Renamed").Delete();
+        root.IfSubDirectoryExists("RWC").Delete();
+        root.IfSubDirectoryExists("RWC2").Delete();
+        root.IfSubDirectoryExists("RWIN").Delete();
     }
 }

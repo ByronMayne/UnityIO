@@ -32,46 +32,58 @@ SOFTWARE.
 using NUnit.Framework;
 using UnityIO;
 
-public class CreatingDirectory
+public class CreatingDirectory : UnityIOTestBase
 {
     [Test]
-    public void CreateRootLevelDirectory()
+    [TestCase(true, TestName = "Unity")]
+    [TestCase(false, TestName = "System")]
+    public void CreateRootLevelDirectory(bool isUnity)
     {
-        IO.Root.CreateSubDirectory("CreateRootLevelDirectory");
-        Assert.True(IO.Root.SubDirectoryExists("CreateRootLevelDirectory"));
-        IO.Root.DeleteSubDirectory("CreateRootLevelDirectory");
+        var root = GetRoot(isUnity);
+        root.CreateSubDirectory("CreateRootLevelDirectory");
+        Assert.True(root.SubDirectoryExists("CreateRootLevelDirectory"));
+        root.DeleteSubDirectory("CreateRootLevelDirectory");
     }
 
     [Test]
-    public void CreateNestedDirectoryOneStep()
+    [TestCase(true, TestName = "Unity")]
+    [TestCase(false, TestName = "System")]
+    public void CreateNestedDirectoryOneStep(bool isUnity)
     {
-        IO.Root.CreateSubDirectory("CreateNestedDirectoryOneStep/Folder One");
-        Assert.True(IO.Root.SubDirectoryExists("CreateNestedDirectoryOneStep/Folder One"));
-        IO.Root.DeleteSubDirectory("CreateNestedDirectoryOneStep");
+        var root = GetRoot(isUnity);
+        root.CreateSubDirectory("CreateNestedDirectoryOneStep/Folder One");
+        Assert.True(root.SubDirectoryExists("CreateNestedDirectoryOneStep/Folder One"));
+        root.DeleteSubDirectory("CreateNestedDirectoryOneStep");
     }
 
     [Test]
-    public void CreateNestedDirectoryMultiStep()
+    [TestCase(true, TestName = "Unity")]
+    [TestCase(false, TestName = "System")]
+    public void CreateNestedDirectoryMultiStep(bool isUnity)
     {
-        IO.Root.CreateSubDirectory("CreateNestedDirectoryMultiStep").CreateSubDirectory("Folder One").CreateSubDirectory("Folder Two");
-        Assert.True(IO.Root.SubDirectoryExists("CreateNestedDirectoryMultiStep/Folder One"));
-        Assert.True(IO.Root.SubDirectoryExists("CreateNestedDirectoryMultiStep/Folder One/Folder Two"));
-        IO.Root.DeleteSubDirectory("CreateNestedDirectoryMultiStep");
+        var root = GetRoot(isUnity);
+        root.CreateSubDirectory("CreateNestedDirectoryMultiStep").CreateSubDirectory("Folder One").CreateSubDirectory("Folder Two");
+        Assert.True(root.SubDirectoryExists("CreateNestedDirectoryMultiStep/Folder One"));
+        Assert.True(root.SubDirectoryExists("CreateNestedDirectoryMultiStep/Folder One/Folder Two"));
+        root.DeleteSubDirectory("CreateNestedDirectoryMultiStep");
     }
 
     [Test]
-    public void CreateNestedPreExistingRoot()
+    [TestCase(true, TestName = "Unity")]
+    [TestCase(false, TestName = "System")]
+    public void CreateNestedPreExistingRoot(bool isUnity)
     {
+        var root = GetRoot(isUnity);
         // Create the root by itself. 
-        IO.Root.CreateSubDirectory("CreateNestedDirectoryMultiStep");
+        root.CreateSubDirectory("CreateNestedDirectoryMultiStep");
         // Create it again with a child 
-        IO.Root.CreateSubDirectory("CreateNestedDirectoryMultiStep").CreateSubDirectory("MultiFolder_Temp");
+        root.CreateSubDirectory("CreateNestedDirectoryMultiStep").CreateSubDirectory("MultiFolder_Temp");
         // Check if the child exists at the root
-        bool directroyExistsInRoot = IO.Root.SubDirectoryExists("MultiFolder_Temp");
+        bool directroyExistsInRoot = root.SubDirectoryExists("MultiFolder_Temp");
         // Clean up the root folder
-        IO.Root["CreateNestedDirectoryMultiStep"].Delete();
+        root["CreateNestedDirectoryMultiStep"].Delete();
         // If the test failed this folder will exist so we want to cleanup 
-        IO.Root.IfSubDirectoryExists("CreateNestedDirectoryMultiStep").Delete();
+        root.IfSubDirectoryExists("CreateNestedDirectoryMultiStep").Delete();
         // Fail or pass the test.
         Assert.False(directroyExistsInRoot);
     }

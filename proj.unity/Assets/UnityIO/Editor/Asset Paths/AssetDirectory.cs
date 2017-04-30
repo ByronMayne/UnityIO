@@ -43,6 +43,18 @@ namespace UnityIO.Classes
     public class AssetDirectory : BaseDirectory, IDirectory
     {
         /// <summary>
+        /// Gets the root directory that is defined by <see cref="AssetDatabase.rootDirectory"/>
+        /// </summary>
+        public static IDirectory Root
+        {
+            get
+            {
+                return new Directory(Application.dataPath);
+            }
+
+        }
+
+        /// <summary>
         /// Creates a new Directory objects.
         /// </summary>
         /// <param name="directoryPath"></param>
