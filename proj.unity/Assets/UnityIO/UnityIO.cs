@@ -60,7 +60,10 @@ namespace UnityIO
         {
             if (IsPathWithinUnityProject(path))
             {
-                return null;
+                // Convert the path to local
+                path = SystemToAssetPath(path);
+                // Create the directory.
+                return new AssetDirectory(path);
             }
             else
             {

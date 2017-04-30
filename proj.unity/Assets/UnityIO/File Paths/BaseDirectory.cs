@@ -267,6 +267,7 @@ namespace UnityIO.BaseClasses
         {
             // Get all the files. 
             IFiles result = GetFiles(recursive: true);
+
             // If we have any we are good
             if(result.Count > 0)
             {

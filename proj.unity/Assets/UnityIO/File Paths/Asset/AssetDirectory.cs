@@ -231,10 +231,7 @@ namespace UnityIO.Classes
             }
             else
             {
-                // Create our path 
-                string directoryPath = path + IO.PATH_SPLITTER + directoryName;
-                // Create it on disk
-                return CreateDirectory(directoryPath);
+                return CreateDirectory(directoryName);
             }
         }
 
@@ -244,7 +241,8 @@ namespace UnityIO.Classes
         /// </summary>
         public override bool HasSubDirectories()
         {
-            return AssetDatabase.GetSubFolders(path).Length > 0;
+            string[] subs = AssetDatabase.GetSubFolders(path);
+            return subs.Length > 0;
         }
 
         /// <summary>

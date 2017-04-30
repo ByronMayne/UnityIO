@@ -63,17 +63,16 @@ public class ConditionalProgressTests : UnityIOTestBase
     public void EmptyCheck(bool isUnity)
     {
         var root = GetRoot(isUnity);
-        Debug.Log("Path: " + root);
         // Create a new directory
         root.CreateSubDirectory("If Empty");
         // Check if it's empty
-        Assert.True(root["If Empty"].IsEmpty(directoriesCount: true), "This should empty");
+        Assert.True(root["If Empty"].IsEmpty(directoriesCount: true), "The If Empty directory has no sub folders or files. This should return false.");
         // Add a sub folder
         root["If Empty"].CreateSubDirectory("Sub Directory");
         // This should be false since we say we want to include sub folders.
         Assert.False(root["If Empty"].IsEmpty(directoriesCount: true), "This should have passed because we have one folder.");
         // This should be false because we only care about Assets. 
-        Assert.False(root["If Empty"].IsEmpty(directoriesCount: false), "This should empty");
+        Assert.True(root["If Empty"].IsEmpty(directoriesCount: false), "The  IfEmpty folder should return false since it has a sub directory.");
         // Cleanup
         root["If Empty"].Delete();
     }

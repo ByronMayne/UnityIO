@@ -149,20 +149,4 @@ public class DirectoryChangesTests : UnityIOTestBase
         // Rename it with invalid characters.
         newDir.Move(rwc.path + "/" + charactersToTest);
     }
-
-
-    [TearDown]
-    public void TearDown()
-    {
-        var root = GetRoot(false);
-        root.IfSubDirectoryExists("DD").Delete();
-        root.IfSubDirectoryExists("DD_01").Delete();
-        root.IfSubDirectoryExists("DDWN").Delete();
-        root.IfSubDirectoryExists("New DDWN").Delete();
-        root.IfSubDirectoryExists("RNT").Delete();
-        root.IfSubDirectoryExists("RNT Renamed").Delete();
-        root.IfSubDirectoryExists("RWC").Delete();
-        root.IfSubDirectoryExists("RWC2").Delete();
-        root.IfSubDirectoryExists("RWIN").Delete();
-    }
 }

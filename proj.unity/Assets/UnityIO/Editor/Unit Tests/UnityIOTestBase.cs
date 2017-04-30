@@ -31,41 +31,61 @@ using NUnit.Framework;
 using System;
 using UnityEngine;
 using UnityIO;
-using UnityIO.BaseClasses;
-using UnityIO.Classes;
 using UnityIO.Interfaces;
+using System.Collections.Generic;
 
 public class UnityIOTestBase
 {
     public const string UNIT_TEST_LOADING_TEST_ASSETS = "UnityIO/Editor/Unit Tests/Loading Assets";
 
-    private bool m_IsUnityTest = false;
+    private HashSet<IDirectory> m_UsedDirectories = new HashSet<IDirectory>();
 
-
-    public static IDirectory GetRoot(bool isUnityTest)
+    public IDirectory GetRoot(bool isUnityTest)
     {
         // Get our path. 
         string path = Application.dataPath;
         // If we are not a Unity test we want to point to the library folder. 
         if (!isUnityTest)
         {
-            path = Application.dataPath.Replace("/Assets", "/Library/Unit Tests");
+            path = Application.dataPath.Replace("/Assets", "/Library");
         }
 
+        // Get our directory
+        IDirectory directory = IO.GetDirectory(path);
+
+        // Move up one directory
+        directory = directory.CreateSubDirectory("Unit Tests");
+
+        // Add it to our list
+        m_UsedDirectories.Add(directory);
+
         // Return back the new directory.
-        return IO.GetDirectory(path);
+        return directory;
     }
 
     /// <summary>
     /// Returns back an IDirectory for testing asset loading. 
     /// </summary>
     /// <returns></returns>
-    public static IDirectory SetupAssetLoadingTest()
+    public IDirectory SetupAssetLoadingTest()
     {
         // We can only test if our testing directory exists
         Assume.That(GetRoot(true).SubDirectoryExists(UNIT_TEST_LOADING_TEST_ASSETS), "The testing directory this test is looking for does not exists at path '" + UNIT_TEST_LOADING_TEST_ASSETS + "'.");
         // Get our loading area
         return GetRoot(true)[UNIT_TEST_LOADING_TEST_ASSETS];
+    }
+
+
+    [TearDown]
+    public void TearDown()
+    {
+        foreach(var directory in m_UsedDirectories)
+        {
+            if(directory.Exists())
+            {
+                directory.Delete();
+            }
+        }
     }
 
     /// <summary>
