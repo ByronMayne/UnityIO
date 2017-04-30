@@ -89,18 +89,6 @@ namespace UnityIO
 		}
 
         /// <summary>
-        /// Gets the root directory that is defined by <see cref="AssetDatabase.rootDirectory"/>
-        /// </summary>
-        public static IDirectory Root
-        {
-            get
-            {
-                return new Directory(AssetDatabase.rootDirectory);
-            }
-
-        }
-
-        /// <summary>
         /// Converts a a full system path to a local asset path. 
         /// <example>
         /// Input (SystemPath): C:/Users/Projects/MyProject/Asset/Images/Bear.png
@@ -160,6 +148,26 @@ namespace UnityIO
             assetPath.CopyTo(extensionIndex, appendedPath, extensionIndex + appendedText.Length, extensionLength);
             // Return the result
             return new string(appendedPath);
+        }
+
+        /// <summary>
+        /// Taking in a path this function returns if that path is contained within
+        /// the current Unity project. This will return false in all other cases. This
+        /// will not return true if given a different Unity projects path.
+        /// </summary>
+        /// <param name="path">The path you want to check is in the Unity directory</param>
+        /// <returns>True if it's in this projects Unity directory and false if not.</returns>
+        public static bool IsPathWithinUnityProject(string path)
+        {
+            // We can only have a Unity path while in the Editor.
+            if(Application.isEditor)
+            {
+                // If we start with our data path we are within this Unity project
+                return path.StartsWith(Application.dataPath);
+            }
+
+            // Not a Unity path. 
+            return false;
         }
 
         /// <summary>
