@@ -31,6 +31,7 @@ using NUnit.Framework;
 using System;
 using UnityEngine;
 using UnityIO;
+using UnityIO.BaseClasses;
 using UnityIO.Classes;
 using UnityIO.Interfaces;
 
@@ -43,14 +44,16 @@ public class UnityIOTestBase
 
     public static IDirectory GetRoot(bool isUnityTest)
     {
-        if(isUnityTest)
+        // Get our path. 
+        string path = Application.dataPath;
+        // If we are not a Unity test we want to point to the library folder. 
+        if (!isUnityTest)
         {
-            return new AssetDirectory(Application.dataPath);
+            path = Application.dataPath.Replace("/Assets", "/Library/Unit Tests");
         }
-        else
-        {
-            return new Directory(Application.dataPath);
-        }
+
+        // Return back the new directory.
+        return IO.GetDirectory(path);
     }
 
     /// <summary>

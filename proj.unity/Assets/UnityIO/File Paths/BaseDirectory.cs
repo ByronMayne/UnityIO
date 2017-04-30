@@ -40,23 +40,7 @@ namespace UnityIO.BaseClasses
     {
 
 
-        /// <summary>
-        /// Creates a new directory object. If the path is within a 
-        /// Unity directory a <see cref="AssetPath"/> will be returned otherwise
-        /// a <see cref="Directory"/> will be returned. 
-        /// </summary>
-        /// <param name="path">The path to the directory that you want to create</param>
-        public static IDirectory Create(string path)
-        {
-            if(IO.IsPathWithinUnityProject(path))
-            {
-                return null;
-            }
-            else
-            {
-                return new Directory(path);
-            }
-        }
+
 
         /// <summary>
         /// Creates a new instance of the base directory class.

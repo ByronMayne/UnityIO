@@ -30,6 +30,7 @@ SOFTWARE.
 // Disable unused warning
 #pragma warning disable 0168
 using NUnit.Framework;
+using UnityEngine;
 using UnityIO;
 
 public class PathValidationTests
@@ -55,5 +56,30 @@ public class PathValidationTests
        {
            IO.ValidatePath("Assets/Folder/");
        }, "This path ends with a leading forward slash and this should fail.");
+    }
+
+
+    [Test]
+    public void IsUnityPath()
+    {
+        // Get our data path
+        string path = Application.dataPath;
+        // Add a fake folder
+        path += "/Units";
+        // Check if the path counts
+        bool isUnityPath = IO.IsPathWithinUnityProject(path);
+        // Make sure it's equal
+        Assert.AreEqual(true, isUnityPath, "We sent in a path of '" + path + "' which should be marked as a Unity directory and it was not.");
+    }
+
+    [Test]
+    public void IsNotUnityPath()
+    {
+        // Add a fake folder
+        string path = "C://Users/Players/Units";
+        // Check if the path counts
+        bool isUnityPath = IO.IsPathWithinUnityProject(path);
+        // Make sure it's equal
+        Assert.AreEqual(false, isUnityPath, "We sent in a path of '" + path + "' which should be not be marked as a Unity directory and it was.");
     }
 }

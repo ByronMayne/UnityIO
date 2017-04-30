@@ -63,6 +63,7 @@ public class ConditionalProgressTests : UnityIOTestBase
     public void EmptyCheck(bool isUnity)
     {
         var root = GetRoot(isUnity);
+        Debug.Log("Path: " + root);
         // Create a new directory
         root.CreateSubDirectory("If Empty");
         // Check if it's empty

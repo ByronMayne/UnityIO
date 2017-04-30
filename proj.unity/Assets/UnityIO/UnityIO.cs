@@ -35,20 +35,38 @@ namespace UnityIO
 {
     public class IO
     {
-		/// <summary>
-		/// A list of chars that are not valid for file names in Unity. 
-		/// </summary>
-		public static readonly char[] INVALID_FILE_NAME_CHARS = new char[]{'/', '\\', '<', '>', ':', '|', '"'};
+        /// <summary>
+        /// A list of chars that are not valid for file names in Unity. 
+        /// </summary>
+        public static readonly char[] INVALID_FILE_NAME_CHARS = new char[] { '/', '\\', '<', '>', ':', '|', '"' };
 
-		/// <summary>
-		/// The char we use to split our paths.
-		/// </summary>
+        /// <summary>
+        /// The char we use to split our paths.
+        /// </summary>
         public const char PATH_SPLITTER = '/';
 
         /// <summary>
         /// The starting part of a path that is required for it to be an Asset Path. 
         /// </summary>
         public const string ROOT_FOLDER_NAME = "Assets";
+
+        /// <summary>
+        /// Creates a new directory object. If the path is within a 
+        /// Unity directory a <see cref="AssetPath"/> will be returned otherwise
+        /// a <see cref="Directory"/> will be returned. 
+        /// </summary>
+        /// <param name="path">The path to the directory that you want to create</param>
+        public static IDirectory GetDirectory(string path)
+        {
+            if (IsPathWithinUnityProject(path))
+            {
+                return null;
+            }
+            else
+            {
+                return new Directory(path);
+            }
+        }
 
         /// <summary>
         /// A function used to make sure that paths being sent to UnityIO are the correct type. One common
@@ -77,16 +95,16 @@ namespace UnityIO
         /// <returns><c>true</c> if is valid file name otherwise, <c>false</c>.</returns>
         /// <param name="name">Name.</param>
         public static bool IsValidFileName(string name)
-		{
-			for(int i = 0; i < INVALID_FILE_NAME_CHARS.Length; i++)
-			{
-				if(name.IndexOf(INVALID_FILE_NAME_CHARS[i]) != -1)
-				{
-					return false;
-				}
-			}
-			return true;
-		}
+        {
+            for (int i = 0; i < INVALID_FILE_NAME_CHARS.Length; i++)
+            {
+                if (name.IndexOf(INVALID_FILE_NAME_CHARS[i]) != -1)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
 
         /// <summary>
         /// Converts a a full system path to a local asset path. 
@@ -108,7 +126,7 @@ namespace UnityIO
             }
 
             // Make sure we are in the right directory
-            if(!systemPath.StartsWith(AssetDatabase.rootDirectory))
+            if (!systemPath.StartsWith(AssetDatabase.rootDirectory))
             {
                 throw new System.InvalidOperationException(string.Format("The path {0} does not start with {1} which is our current directory. This can't be converted", systemPath, AssetDatabase.rootDirectory));
             }
@@ -160,7 +178,7 @@ namespace UnityIO
         public static bool IsPathWithinUnityProject(string path)
         {
             // We can only have a Unity path while in the Editor.
-            if(Application.isEditor)
+            if (Application.isEditor)
             {
                 // If we start with our data path we are within this Unity project
                 return path.StartsWith(Application.dataPath);
@@ -191,7 +209,7 @@ namespace UnityIO
             }
 
             // Get the index of 'Asset/' part of the path 
-            if(!assetPath.StartsWith(ROOT_FOLDER_NAME + PATH_SPLITTER))
+            if (!assetPath.StartsWith(ROOT_FOLDER_NAME + PATH_SPLITTER))
             {
                 // This is returned by Unity and we must have it to convert
                 throw new System.InvalidOperationException(string.Format("Can't convert '{0}' to a System Path since it does not start with '{1}'", assetPath, ROOT_FOLDER_NAME + PATH_SPLITTER));

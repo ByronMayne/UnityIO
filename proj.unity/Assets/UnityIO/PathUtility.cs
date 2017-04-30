@@ -46,8 +46,6 @@ namespace UnityIO
             // Add back on the extension
             if (extensionIndex > -1)
             {
-                Debug.Log(path);
-                Debug.Log(extensionIndex);
                 path.CopyTo(extensionIndex, pathBuilder, extensionIndex, extensionLength);
             }
             // Return the result
