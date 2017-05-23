@@ -38,7 +38,7 @@ public class UnityIOTestBase
 {
     public const string UNIT_TEST_LOADING_TEST_ASSETS = "UnityIO/Editor/Unit Tests/Loading Assets";
 
-    private HashSet<IDirectory> m_UsedDirectories = new HashSet<IDirectory>();
+    private List<IDirectory> m_UsedDirectories = new List<IDirectory>();
 
     public IDirectory GetRoot(bool isUnityTest)
     {
