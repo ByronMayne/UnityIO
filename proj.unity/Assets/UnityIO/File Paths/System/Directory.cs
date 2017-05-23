@@ -42,7 +42,7 @@ namespace UnityIO.Classes
         /// Creates a new Directory objects.
         /// </summary>
         /// <param name="directoryPath"></param>
-        public Directory(string directoryPath) : base(directoryPath)
+        internal Directory(string directoryPath) : base(directoryPath)
         {
             // Nothing to do here. 
         }
@@ -76,7 +76,7 @@ namespace UnityIO.Classes
                 // Create it on disk
                 sIO.Directory.CreateDirectory(directoryPath);
                 // Return the result
-                return Internal_Create(directoryPath);
+                return IO.GetDirectory(directoryPath);
             }
         }
 
@@ -97,7 +97,7 @@ namespace UnityIO.Classes
                 // Do the copy
                 Internal_Duplicate(path, destDirName, true);
                 // Return the result
-                return Internal_Create(destDirName);
+                return IO.GetDirectory(destDirName);
             }
             else
             {
@@ -165,16 +165,8 @@ namespace UnityIO.Classes
             // Loop over them all
             for (int i = 0; i < directories.Length; i++)
             {
-                yield return Internal_Create(directories[i]);
+                yield return IO.GetDirectory(directories[i]);
             }
-        }
-
-        /// <summary>
-        /// Returns a new Directory object based on the path sent in.
-        /// </summary>
-        protected override IDirectory Internal_Create(string directoryPath)
-        {
-            return new Directory(directoryPath);
         }
 
         /// <summary>

@@ -38,14 +38,10 @@ namespace UnityIO.BaseClasses
 {
     public abstract class BaseDirectory : IOBase, IDirectory
     {
-
-
-
-
         /// <summary>
         /// Creates a new instance of the base directory class.
         /// </summary>
-        public BaseDirectory(string path) : base(path)
+        internal BaseDirectory(string path) : base(path)
         {
             IO.ValidatePath(path);
         }
@@ -67,7 +63,7 @@ namespace UnityIO.BaseClasses
                     // Make sure we have a valid path
                     IO.ValidatePath(path);
                     // Return it
-                    return Internal_Create(path + IO.PATH_SPLITTER + directoryName);
+                    return IO.GetDirectory(path + IO.PATH_SPLITTER + directoryName);
                 }
 
                 throw new InvalidOperationException("Directory '" + subDirectory + "' does not exist on disk. Use IfExists() before trying to access");
@@ -302,11 +298,6 @@ namespace UnityIO.BaseClasses
         /// if we don't.
         /// </summary>
         public abstract bool HasSubDirectories();
-
-        /// <summary>
-        /// Returns back a directory. This is used so that we don't have to use Generics. 
-        /// </summary>
-        protected abstract IDirectory Internal_Create(string path);
 
         /// <summary>
         /// Our internal function which is used by all of the GetFilesFunctions. Used to search

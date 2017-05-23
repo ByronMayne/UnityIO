@@ -42,7 +42,7 @@ namespace UnityIO.Classes
         /// </summary>
         public override IDirectory directory
         {
-            get { return new Directory(m_Directory); }
+            get { return IO.GetDirectory(m_Directory); }
         }
 
         /// <summary>

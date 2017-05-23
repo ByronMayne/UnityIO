@@ -72,7 +72,6 @@ namespace UnityIO.Classes
             AssetDatabase.DeleteAsset(path);
         }
 
-
         /// <summary>
         /// Creates the directory on disk if it does not already exist. If sent in a nested directory the
         /// full path will be created. 
@@ -94,11 +93,11 @@ namespace UnityIO.Classes
                     }
                     workingPath += IO.PATH_SPLITTER + paths[i];
                 }
-                directory = new Directory(workingPath);
+                directory = IO.GetDirectory(workingPath);
             }
             else
             {
-                directory = new Directory(path + IO.PATH_SPLITTER + directoryPath);
+                directory = IO.GetDirectory(path + IO.PATH_SPLITTER + directoryPath);
             }
 
             return directory;
@@ -112,7 +111,7 @@ namespace UnityIO.Classes
         {
             destDirName = AssetDatabase.GenerateUniqueAssetPath(destDirName);
             AssetDatabase.CopyAsset(path, destDirName);
-            return Internal_Create(destDirName);
+            return IO.GetDirectory(destDirName);
         }
 
         /// <summary>
@@ -152,7 +151,7 @@ namespace UnityIO.Classes
             yield return this;
             for (int i = 0; i < subFolder.Length; i++)
             {
-                IEnumerable<IDirectory> enumerable = new Directory(subFolder[i]);
+                IEnumerable<IDirectory> enumerable = IO.GetDirectory(subFolder[i]);
                 IEnumerator<IDirectory> enumerator = enumerable.GetEnumerator();
                 while (enumerator.MoveNext())
                 {
@@ -167,7 +166,7 @@ namespace UnityIO.Classes
 
             for (int i = 0; i < subFolder.Length; i++)
             {
-                yield return new Directory(subFolder[i]);
+                yield return IO.GetDirectory(subFolder[i]);
             }
         }
 
@@ -245,13 +244,6 @@ namespace UnityIO.Classes
             return subs.Length > 0;
         }
 
-        /// <summary>
-        /// Returns a new Directory object based on the path sent in.
-        /// </summary>
-        protected override IDirectory Internal_Create(string assetPath)
-        {
-            return new AssetDirectory(assetPath); 
-        }
 
         /// <summary>
         /// Returns back true if this directory exists on disk.
