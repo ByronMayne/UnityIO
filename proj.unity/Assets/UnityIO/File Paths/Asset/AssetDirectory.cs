@@ -161,7 +161,7 @@ namespace UnityIO.Classes
         }
 
         IEnumerator IEnumerable.GetEnumerator()
-        {
+        {  
             string[] subFolder = AssetDatabase.GetSubFolders(path);
 
             for (int i = 0; i < subFolder.Length; i++)

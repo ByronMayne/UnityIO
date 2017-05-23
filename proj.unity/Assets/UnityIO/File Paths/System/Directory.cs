@@ -114,14 +114,9 @@ namespace UnityIO.Classes
         /// <param name="moveDirectroy">The directory you want to move too</param>
         public override void Move(string destDirName)
         {
-            if (!string.IsNullOrEmpty(destDirName))
+            if (string.IsNullOrEmpty(destDirName))
             {
                 throw new MoveException("No detestation directory was defined.", path, destDirName);
-            }
-
-            if (!IO.IsValidFileName(destDirName))
-            {
-                throw new InvalidNameException("The name '" + destDirName + "' contains invalid characters");
             }
 
             // Make sure we have a valid path
