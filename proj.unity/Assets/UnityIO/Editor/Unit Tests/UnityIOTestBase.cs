@@ -69,10 +69,12 @@ public class UnityIOTestBase
     /// <returns></returns>
     public IDirectory SetupAssetLoadingTest()
     {
+        // Get our root
+        IDirectory root = IO.GetDirectory(Application.dataPath);
         // We can only test if our testing directory exists
-        Assume.That(GetRoot(true).SubDirectoryExists(UNIT_TEST_LOADING_TEST_ASSETS), "The testing directory this test is looking for does not exists at path '" + UNIT_TEST_LOADING_TEST_ASSETS + "'.");
+        Assume.That(root.SubDirectoryExists(UNIT_TEST_LOADING_TEST_ASSETS), "The testing directory this test is looking for does not exists at path '" + UNIT_TEST_LOADING_TEST_ASSETS + "'.");
         // Get our loading area
-        return GetRoot(true)[UNIT_TEST_LOADING_TEST_ASSETS];
+        return root[UNIT_TEST_LOADING_TEST_ASSETS];
     }
 
 
