@@ -30,6 +30,7 @@ using UnityIO.Interfaces;
 using UnityEngine;
 using UnityIO.Exceptions;
 using sIO = System.IO;
+using UnityIO.AssetDatabaseWrapper;
 
 namespace UnityIO.Classes
 {

@@ -11,7 +11,7 @@ using Object = UnityEngine.Object;
 using UnityEngine;
 using System.IO;
 
-namespace UnityIO
+namespace UnityIO.Database
 {
     internal static class AssetDatabase
     {
