@@ -94,7 +94,7 @@ namespace UnityIO
         {
             get
             {
-                return new Directory(AssetDatabase.rootDirectory);
+                return new Directory("Assets");
             }
         }
 
