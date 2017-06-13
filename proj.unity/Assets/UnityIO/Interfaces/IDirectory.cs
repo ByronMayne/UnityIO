@@ -42,6 +42,17 @@ namespace UnityIO.Interfaces
         /// </summary>
         string systemPath { get; }
 
+        /// <summary>
+        /// Returns just the name of the current directory.
+        /// </summary>
+        string name { get; }
+
+        /// <summary>
+        /// Get's the parent of this directory or a null file if this
+        /// is the root. 
+        /// </summary>
+        IDirectory parent { get; }
+
         void Delete();
         void Duplicate();
         void Duplicate(string newName);
@@ -59,6 +70,7 @@ namespace UnityIO.Interfaces
         // Directories
         IDirectory this[string name] { get; }
         IDirectory CreateDirectory(string name);
+       
 
 
         // Conditionals 

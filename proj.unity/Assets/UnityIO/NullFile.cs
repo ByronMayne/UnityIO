@@ -66,6 +66,11 @@ namespace UnityIO.Classes
             }
         }
 
+        public IDirectory parent
+        {
+            get { return this; }
+        }
+
         public int Count
         {
             get

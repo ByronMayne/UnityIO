@@ -34,6 +34,7 @@ using System.Collections;
 using System.Collections.Generic;
 using sIO = System.IO;
 using UnityIO.Exceptions;
+using UnityIO.AssetDatabaseWrapper;
 
 namespace UnityIO.Classes
 {
@@ -56,6 +57,22 @@ namespace UnityIO.Classes
         public string systemPath
         {
             get { return IO.AssetPathToSystemPath(m_Path); }
+        }
+
+        /// <summary>
+        /// Gets the name of this directory and not it's path or full path.
+        /// </summary>
+        public string name
+        {
+            get
+            {
+                // Get the starting index of the last slash
+                int start = m_Path.LastIndexOf(IO.PATH_SPLITTER) + 1;
+                // Get the total length of our name
+                int length = m_Path.Length - start;
+                // Return just the name. 
+                return m_Path.Substring(start, length);
+            }
         }
 
         /// <summary>
@@ -89,6 +106,32 @@ namespace UnityIO.Classes
                 }
             }
         }
+
+        /// <summary>
+        /// Returns back the parent of this directory and if there is no parent
+        /// this returns back the null file.
+        /// </summary>
+        public IDirectory parent
+        {
+            get
+            {
+                // Get the last index of the slash 
+                int directoryStart = m_Path.LastIndexOf(IO.PATH_SPLITTER);
+                // Make sure it's greater then -1 meaning it has a slash  
+                if (directoryStart > 0)
+                {
+                    int pathLength = m_Path.Length;
+                    // Get the newLenght 
+                    int newLength = (pathLength - (pathLength - directoryStart));
+                    // Create our new path 
+                    return new Directory(m_Path.Substring(0, newLength));
+                }
+
+                return NullFile.SHARED_INSTANCE;
+            }
+        }
+
+
 
         /// <summary>
         /// Creates the directory on disk if it does not already exist. If sent in a nested directory the
@@ -160,7 +203,7 @@ namespace UnityIO.Classes
         /// for files in the current directory. 
         /// </summary>
         /// <param name="filter">Which filter should be used to search</param>
-        /// <param name="recursive">If we should also search sub directoires.</param>
+        /// <param name="recursive">If we should also search sub directories.</param>
         /// <returns></returns>
         private IFiles GetFiles_Internal(string filter, bool recursive)
         {
